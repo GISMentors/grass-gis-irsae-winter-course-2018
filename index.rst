@@ -143,9 +143,9 @@ Units
 Lecturers
 =========
 
-* Luca Delucchi <https://www.fmach.it/eng/CRI/general-info/organisation/Chief-scientific-office/Biodiversity-molecular-ecology/Applied-ecology/LUCA-DELUCCHI>`__, 
+* Luca Delucchi `<https://www.fmach.it/eng/CRI/general-info/organisation/Chief-scientific-office/Biodiversity-molecular-ecology/Applied-ecology/LUCA-DELUCCHI>`__, 
   Fondazione Edmung Mach (FEM) in San Michele all'Adige, Italy
-* `Martin Landa <http://geo.fsv.cvut.cz/gwiki/Landa>`__, GeoForAll
+* `Martin Landa `<http://geo.fsv.cvut.cz/gwiki/Landa>`__, GeoForAll
   Lab, Czech Technical University in Prague, Czech Republic
 
 Materials proudly provided by `GISMentors
