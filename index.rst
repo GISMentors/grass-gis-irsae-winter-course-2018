@@ -1,8 +1,30 @@
-************
-Introduction
-************
 
 .. warning:: Materials under construction!
+
+Time, place, fee and registration
+=================================
+
+`IRSAE <http://www.irsae.no>`__ members `NINA <http://www.nina.no>`__ and `FEM <https://www.fmach.it/>`__ 
+offer a **3-days intense GIS workshop from 24.09.2018 to 27.09.2018** at the cosy 
+`Studenterhytta <http://www.studenterhytta.no`__ in **Oslo**. 
+With full board provided and no other distraction than beautiful nature around, 
+participants can fully focus on learning new techniques, applying them to their ongoing 
+projects and networking with the others.
+
+Topic of the course will be advanced geospatial analysis with an emphasis on handling 
+of Earth Observation and time series data using Free and Open Source Software.  
+Based on a set of 30 course units (see below), final content for the 2 1/2 days event will be 
+tailored to participants interest and prior knowledge and experience (it would take ~5 days to cover all course units).
+
+The course is kindly supported by IRSAE. Thus IRSAE students and staff will get **priority 
+access until 01.09.2018** as well as a reduced course fee.
+
+Corse fees that cover full board (food and accomodation at Studenterhytta) are 
+* for participants from IRSAE institutions
+* for participants from non-IRSAE institution.
+
+Please registrater here (registration link coming soon).
+
 
 Free and Open Source Software (FOSS)
 ====================================
@@ -67,8 +89,19 @@ Software used in this training materials
 * `GRASS GIS <http://grass.osgeo.org>`__ (recommended version 7.4) for
   geospatial raster, imagery, and vector data processing and providing
   spatial analysis.
+* `QGIS desktop <http://qgis.org>`__ (recommended version 2.18) for
+  geospatial visualization, creating hardcopy outputs, and data
+  publishing.
+* `GDAL library <http://gdal.org>`__ for reading and writing various
+  geospatial data.
+* `sentinelsat library <https://pypi.python.org/pypi/sentinelsat>`__
+  utility to search and download Copernicus Sentinel satellite images.
+* `pyModis <http://www.pymodis.org/>`__ Python based library to work
+  with MODIS data.
+* `pyWPS <http://pywps.org/>`__ implementation of the Web Processing
+  Service standard from the Open Geospatial Consortium written in
+  Python.
 
- 
 Units
 =====
 
@@ -76,11 +109,41 @@ Units
    :maxdepth: 2
 
    units/01
+   units/02
+   units/03
+   units/04
+   units/05
+   units/06
+   units/07
+   units/08
+   units/09
+   units/10
+   units/11
+   units/12
+   units/13
+   units/14
+   units/15
+   units/16
+   units/17
+   units/18
+   units/19
+   units/20
+   units/21
+   units/22
+   units/23
+   units/24
+   units/25
+   units/26
+   units/27
+   units/28
+   units/29
+   units/30
    
 Lecturers
 =========
 
-* Luca Delucchi
+* Luca Delucchi <https://www.fmach.it/eng/CRI/general-info/organisation/Chief-scientific-office/Biodiversity-molecular-ecology/Applied-ecology/LUCA-DELUCCHI`__, 
+  Fondazione Edmung Mach (FEM) in San Michele all'Adige, Italy
 * `Martin Landa <http://geo.fsv.cvut.cz/gwiki/Landa>`__, GeoForAll
   Lab, Czech Technical University in Prague, Czech Republic
 
