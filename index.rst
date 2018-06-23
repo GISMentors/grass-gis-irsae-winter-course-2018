@@ -6,7 +6,7 @@ Time, place, fee and registration
 
 `IRSAE <http://www.irsae.no>`__ members `NINA <http://www.nina.no>`__ and `FEM <https://www.fmach.it/>`__ 
 offer a **3-days intense GIS workshop from 24.09.2018 to 27.09.2018** at the cosy 
-`Studenterhytta <http://www.studenterhytta.no`__ in **Oslo**. 
+`Studenterhytta <http://www.studenterhytta.no>`__ in **Oslo**. 
 With full board provided and no other distraction than beautiful nature around, 
 participants can fully focus on learning new techniques, applying them to their ongoing 
 projects and networking with the others.
@@ -19,7 +19,8 @@ tailored to participants interest and prior knowledge and experience (it would t
 The course is kindly supported by IRSAE. Thus IRSAE students and staff will get **priority 
 access until 01.09.2018** as well as a reduced course fee.
 
-Corse fees that cover full board (food and accomodation at Studenterhytta) are 
+Corse fees that cover full board (food and accomodation at Studenterhytta) are
+
 * for participants from IRSAE institutions
 * for participants from non-IRSAE institution.
 
