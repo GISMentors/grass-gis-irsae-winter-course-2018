@@ -164,23 +164,3 @@ Let's print univariate statistics for generated raster output by
    maximum: 2.93515
    range: 2.93362
    mean: 1.0993
-
-.. _st-animation:
-      
-Space-time Data Visualization
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Time series can be visualized by specialized tool
-:grasscmd:`g.gui.timeline`. Example below.
-
-.. code-block:: bash
-                
-   g.gui.timeline inputs=lakes_1,lakes_2,lakes_3
-
-.. figure:: ../images/units/17/timeline.png
-
-   Timeline tool showing three space-time datasets.
-   
-And finally, a simple animation can be created by
-:grasscmd:`g.gui.animation` (:menuselection:`File --> Animation
-tool`).
