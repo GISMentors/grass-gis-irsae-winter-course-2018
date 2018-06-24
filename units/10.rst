@@ -1,0 +1,25 @@
+Unit 10 - Python intro
+======================
+
+:wikipedia-en:`Python` programming/scripting language is very popular
+in the field of GIS and a science in general. Python is also the main
+scripting platform for Esri product (see `arcpy
+<http://pro.arcgis.com/en/pro-app/arcpy/get-started/what-is-arcpy-.htm>`__
+package). GRASS is not an exception. In reality, many GRASS modules
+are simple Python scripts, eg. :grasscmd:`r.mask` (see *Source Code*
+section).
+
+GRASS Python environment includes various libraries, see
+:grasscmd2:`GRASS documentation <libpython/index.html>` for
+details. We will focus on three main libraries related to this
+workshop:
+
+* :grasscmd2:`GRASS Scripting Library <libpython/script_intro.html>`
+  as entering node to Python scripting capabilities in GRASS
+* object-oriented fancy :grasscmd2:`pyGRASS
+  <libpython/pygrass_index.html>`
+* space-temporal :grasscmd2:`GRASS GIS Temporal Framework
+  <libpython/temporal_framework.html>`
+
+Let's do our first steps from "safe" GRASS GUI environment which we
+already know. Switch in Layer Manager to :item:`Python` tab.
