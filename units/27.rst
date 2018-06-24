@@ -83,3 +83,30 @@ simple string on line :lcode:`80`.
 Sample process to download: `modis_v1.py
 <../_static/scripts/modis_v1.py>`__
 
+.. _process-import:
+
+We have to activate the process in :file:`demo.py` (which implements
+PyWPS demo server). Assuming that you named file with process as
+:file:`modis_v1.py`.
+
+.. code-block:: python
+
+   ...
+   from processes.modis_v1 import ModisV1
+   ...
+
+   processes = [
+    ...
+    ModisV1(),
+   ]
+
+Stop running demo PyWPS server by :kbd:`Ctrl+C` and start again.
+
+.. code-block:: bash
+
+                
+   python ./demo.py
+
+You should see your ``modis-v1`` process in the list. Click on
+``DescribeProcess`` to check input and outputs parameters description.
+
