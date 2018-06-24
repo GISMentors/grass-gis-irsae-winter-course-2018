@@ -1,0 +1,22 @@
+Unit 11 - Scripting
+===================
+
+Let's start with script created by *Graphical modeler* in :ref:`Unit
+10 <modeler-python>` saved into file. Before saving
+the script we will remove the lines below to avoid generating GUI
+dialogs when launching the script.
+
+.. code-block:: python
+
+   #%module
+   #% description: NDVI model version 2
+   #%end                
+
+Then we can try to run a script from Layer Manager |grass-script-load|
+:sup:`Launch user-defined script` main toolbar.
+
+.. note:: Before starting a script GRASS can ask you to add script
+   directory path into GRASS_ADDON_PATH. It can be useful if you will
+   run script(s) from this directory more often. Then you don't need
+   to define full path to the scripts, its name will be enough.
+   
