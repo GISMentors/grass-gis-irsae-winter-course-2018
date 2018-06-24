@@ -1,0 +1,19 @@
+Unit 08 - Modeler
+=================
+
+**Graphic Modeler** allows creating, editing, and managing complex
+models in easy-to-use graphical user interface. Using Graphical
+Modeler, that chain of processes (ie. GRASS modules) can be wrapped
+into one process (model). The model can be executed repeatedly with
+slightly different inputs or parameters.
+
+Our first model will be simple as much as possible based on :doc:`05`.
+Actually the model will perform two operations:
+
+#. set mask based on vector cloud mask file (:grasscmd:`r.mask`) and
+#. compute NDVI (:grasscmd:`i.vi`)
+
+Graphical Modeler can be launched from menu :menuselection:`File -->
+Graphical modeler` or by |grass-modeler-main| :sup:`Graphical Modeler`
+from main toolbar (or alternatively as :grasscmd:`g.gui.gmodeler`
+module from console).
