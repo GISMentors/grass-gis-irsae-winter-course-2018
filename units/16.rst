@@ -1,2 +1,34 @@
 Unit 16 - Flooding simulation
 =============================
+
+Beside DEM (see :doc:`15`) it would be nice to have also river streams
+available. We can download this data from OSM database similarly as we
+did in :doc:`02` in the case of our study area.
+
+.. note::
+   
+   .. code-block:: xml
+		   
+      [bbox:50.85374080,11.50084754,50.98991003,11.67463202];
+      (
+      way
+      ["waterway"="river"];
+      way
+      ["waterway"="stream"]
+      );
+      /*added by auto repair*/
+      (._;>;);
+      /*end of auto repair*/
+      out;
+
+   .. code-block:: bash
+
+      ogr2ogr -f GPKG study_area_rivers.gpkg -a_srs EPSG:4326 -t_srs EPSG:25833 /vsicurl_streaming/"\
+      http://overpass-api.de/api/interpreter?data=%5Bbbox%3A50%2E85374080%2C11%2E50084754%2C50%2\
+      E98991003%2C11%2E67463202%5D%3B%28way%5B%22waterway%22%3D%22river%22%5D%3Bway%5B%22waterway\
+      %22%3D%22stream%22%5D%3B%29%3B%28%2E%5F%3B%3E%3B%29%3Bout%3B%0A" lines
+
+For simplification you can find this data in sample dataset (`download
+7z-archive
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__):
+:file:`osm/jena-rivers.gpkg`.
