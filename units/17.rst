@@ -188,10 +188,3 @@ tool`), see :numref:`flooding-animation`.
 .. code-block:: bash
 
    g.gui.animation strds=lakes
-
-.. _flooding-animation:
-
-#.. figure:: ../images/units/17/flooding-anim.gif
-#   :class: large
-   
-   Example of flooding animation.
