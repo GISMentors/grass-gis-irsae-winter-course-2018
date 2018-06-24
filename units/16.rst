@@ -31,4 +31,4 @@ did in :doc:`02` in the case of our study area.
 For simplification you can find this data in sample dataset (`download
 7z-archive
 <http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__):
-:file:`osm/jena-rivers.gpkg`.
+:file:`osm/study-area-rivers.gpkg`.
