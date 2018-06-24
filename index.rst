@@ -97,6 +97,8 @@ Software used in this training materials
   publishing.
 * `GDAL library <http://gdal.org>`__ for reading and writing various
   geospatial data.
+* `R statistical language <https://cran.r-project.org/>`__ for
+  statistical analysis.
 * `sentinelsat library <https://pypi.python.org/pypi/sentinelsat>`__
   utility to search and download Copernicus Sentinel satellite images.
 * `pyModis <http://www.pymodis.org/>`__ Python based library to work
