@@ -1,2 +1,16 @@
 Unit 15 - Reprojection
 ======================
+
+In order to perform simple flooding simulation (see :doc:`16`) we need
+digital elevation model (DEM) for our area of interest (AOI).
+There are several options like global DEM datasets (SRTM,
+EU-DEM, ...), local DEMs created as a product of laser scanning
+techniques.
+
+In our example we will use EU-DEM global dataset provided by
+`Copernicus programme
+<https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem#tab-gis-data>`__. Let's
+download tile covering our region, be aware data are quite
+big (4GB), see note below. There is no need to import into GRASS the
+whole big DEM tile. By using ``-r`` flag of :grasscmd:`r.in.gdal` we
+can import just a subregion covering our AOI. 
