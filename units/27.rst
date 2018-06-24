@@ -1,3 +1,56 @@
 Unit 27 - PyWPS intro
 =====================
 
+`PyWPS <http://pywps.org>`__ is a server side implementation of the
+`OGC Web Processing Service
+<http://www.opengeospatial.org/standards/wps>`__ (OGC WPS) standard,
+using the Python programming language.
+
+**OGC Web Processing Service** standard provides rules for
+standardizing how inputs and outputs (requests and responses) for
+geospatial processing services. The standard also defines how a client
+can request the execution of a process, and how the output from the
+process is handled. It defines an interface that facilitates the
+publishing of geospatial processes and clients discovery of and
+binding to those processes. The data required by the WPS can be
+delivered across a network or they can be available at the
+server. (source: `PyWPS documentation
+<http://pywps.readthedocs.io/en/master/wps.html>`__)
+
+This unit shows how to write your own WPS processes. The processes
+will be tested in simple environment of `PyWPS demo
+<https://github.com/geopython/pywps-flask>`__. `Download
+<https://github.com/geopython/pywps-flask/archive/master.zip>`__ the
+demo and extract into your working directory.
+
+Install PyWPS and Flask dependency
+
+.. code-block:: bash
+
+   sudo pip install pywps flask
+
+Go to :file:`pywps-flask` directory and start your PyWPS demo server
+
+.. code-block:: bash
+
+   python demo.py
+
+
+Go to http://127.0.0.1:5000 in order to see all available WPS demo
+processes. Let's request process description of selected process,
+eg. *say_hello* process. Try to run the process by ``execute``
+request.
+
+http://localhost:5000/wps?request=Execute&service=WPS&identifier=say_hello&version=1.0.0&datainputs=name=Martin
+
+You should get similar response as below.
+
+.. code-block:: xml
+
+   <wps:LiteralData dataType="urn:ogc:def:dataType:OGC:1.1:string" uom="urn:ogc:def:uom:OGC:1.0:unity">
+   Hello Martin
+   </wps:LiteralData>
+
+Well, we have working demo, so let's continue with creating our first
+WPS process.
+
