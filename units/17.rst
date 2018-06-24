@@ -183,8 +183,4 @@ Time series can be visualized by specialized tool
    
 And finally, a simple animation can be created by
 :grasscmd:`g.gui.animation` (:menuselection:`File --> Animation
-tool`), see :numref:`flooding-animation`.
-
-.. code-block:: bash
-
-   g.gui.animation strds=lakes
+tool`).
