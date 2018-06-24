@@ -18,7 +18,3 @@ There two options how to access GRASS tools from QGIS environment:
 
 Both plugins can be easily activated from :menuselection:`Plugins -->
 Manage and Install Plugins`.
-
-Let's focus on our "favorite" GRASS module - :grasscmd:`i.vi`. At
-first, we load into QGIS input data, study area and Sentinel
-bands (red and near-infrared channels).
