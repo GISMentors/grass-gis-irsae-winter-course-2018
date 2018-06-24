@@ -141,6 +141,9 @@ Units
    units/28
    units/29
    units/30
+   units/31
+   units/32
+   units/33
    
 Lecturers
 =========
