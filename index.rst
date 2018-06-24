@@ -14,7 +14,8 @@ projects and networking with the others.
 Topic of the course will be advanced geospatial analysis with an emphasis on handling 
 of Earth Observation and time series data using Free and Open Source Software.  
 Based on a set of 30 course units (see below), final content for the 2 1/2 days event will be 
-tailored to participants interest and prior knowledge and experience (it would take ~5 days to cover all course units).
+tailored to participants interest and prior knowledge and experience 
+(it would take ~5 days to cover all course units).
 
 The course is kindly supported by IRSAE. Thus IRSAE students and staff will get **priority 
 access until 01.09.2018** as well as a reduced course fee.
@@ -24,7 +25,8 @@ Corse fees that cover full board (food and accomodation at Studenterhytta) are
 * for participants from IRSAE institutions
 * for participants from non-IRSAE institution.
 
-Please registrater here (registration link coming soon).
+
+Please register here (registration link coming soon).
 
 
 Free and Open Source Software (FOSS)
