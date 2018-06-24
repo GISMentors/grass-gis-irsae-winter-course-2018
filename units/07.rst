@@ -1,0 +1,24 @@
+Unit 07 - QGIS loves GRASS
+==========================
+
+Let's step out of the GRASS GIS for a moment. **QGIS** is a very
+popular open source GIS package which made a significant progress in
+the last years. Nowadays it's used in education, academic environment,
+but also in commercial settings. The project started originally more
+or less as a multiplatform browser for geospatial data. This is not
+true any more, QGIS made important steps for being an analytic
+tool. Beside native algoritms QGIS offers also connection to external
+software packages like SAGA, Orfeo or GRASS GIS. In other words, you
+can run GRASS tools from QGIS without starting GRASS explicitly.
+
+There two options how to access GRASS tools from QGIS environment:
+
+* generic **Processing** plugin
+* specialized **GRASS** plugin
+
+Both plugins can be easily activated from :menuselection:`Plugins -->
+Manage and Install Plugins`.
+
+Let's focus on our "favorite" GRASS module - :grasscmd:`i.vi`. At
+first, we load into QGIS input data, study area and Sentinel
+bands (red and near-infrared channels).
