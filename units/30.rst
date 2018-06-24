@@ -28,7 +28,7 @@ Compare with (output return as reference):
 
 http://localhost:5000/wps?request=Execute&service=WPS&identifier=modis-v4&version=1.0.0&datainputs=start=2017-03-01;end=2017-04-01;region=@xlink:href=http://localhost:5000/static/data/study_area.gpkg&responsedocument=zones=@asReference=true
 
-.. figure:: ../images/units/30/qgis-result.png
+#.. figure:: ../images/units/30/qgis-result.png
    :class: large
            
    Example of WPS process consumption in QGIS using WPS client plugin.
