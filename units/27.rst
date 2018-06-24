@@ -1,141 +1,208 @@
-Unit 27 - PyWPS intro
-=====================
+Unit 27 - MODIS
+===============
 
-`PyWPS <http://pywps.org>`__ is a server side implementation of the
-`OGC Web Processing Service
-<http://www.opengeospatial.org/standards/wps>`__ (OGC WPS) standard,
-using the Python programming language.
+There are two satellites, Aqua and Terra which carry the MODIS sensor
+as payload. The **Moderate Resolution Imaging Spectroradiometer**
+(:wikipedia-en:`MODIS`) is a 36-channel from visible to
+thermal-infrared sensor that was launched as part of the Terra
+satellite payload in December 1999 and Aqua satellite (May 2002). The
+Terra satellite passes twice a day (at about 10:30am, and 22:30pm
+local time), also the Aqua satellite passes twice a day (at about
+01:30am, and 13:30pm local time). (source: `GRASS Wiki
+<https://grasswiki.osgeo.org/wiki/MODIS>`__)
 
-**OGC Web Processing Service** standard provides rules for
-standardizing how inputs and outputs (requests and responses) for
-geospatial processing services. The standard also defines how a client
-can request the execution of a process, and how the output from the
-process is handled. It defines an interface that facilitates the
-publishing of geospatial processes and clients discovery of and
-binding to those processes. The data required by the WPS can be
-delivered across a network or they can be available at the
-server. (source: `PyWPS documentation
-<http://pywps.readthedocs.io/en/master/wps.html>`__)
+Our area of interest, Germany, is covered by two tiles (see `MODLAND
+grid <https://modis-land.gsfc.nasa.gov/MODLAND_grid.html>`__):
 
-This unit shows how to write your own WPS processes. The processes
-will be tested in simple environment of `PyWPS demo
-<https://github.com/geopython/pywps-flask>`__. `Download
-<https://github.com/geopython/pywps-flask/archive/master.zip>`__ the
-demo and extract into your working directory.
+* h18v03
+* h18v04
 
-Install PyWPS and Flask dependency
+Download and import
+-------------------
 
-.. code-block:: bash
+Data are provided in 3 projections (Sinusoidal, Lambert Azimuthal
+Equal-Area, and Geographic). For our purpose, data will be reprojected
+to ETRS89 / LAEA Europe :epsg:`3035`.
 
-   sudo pip install pywps flask
+.. _create-location-epsg:
 
-Go to :file:`pywps-flask` directory and start your PyWPS demo server
+At first, a new GRASS location need to be created (see :ref:`Unit 02
+<create-location>`). It can be easily done by using EPSG code (*Select
+EPSG code of spatial reference system*).
 
-.. code-block:: bash
+#.. figure:: ../images/units/24/create-location-epsg-0.svg
 
-   python demo.py
+   Create a new location based on EPSG code.
 
+#.. figure:: ../images/units/24/create-location-epsg-1.png
 
-Go to http://127.0.0.1:5000 in order to see all available WPS demo
-processes. Let's request process description of selected process,
-eg. *say_hello* process. Try to run the process by ``execute``
-request.
+   Enter EPSG code.
 
-http://localhost:5000/wps?request=Execute&service=WPS&identifier=say_hello&version=1.0.0&datainputs=name=Martin
-
-You should get similar response as below.
-
-.. code-block:: xml
-
-   <wps:LiteralData dataType="urn:ogc:def:dataType:OGC:1.1:string" uom="urn:ogc:def:uom:OGC:1.0:unity">
-   Hello Martin
-   </wps:LiteralData>
-
-Well, we have working demo, so let's continue with creating our first
-WPS process.
-
-MODIS process
--------------
-
-Go to :file:`pywps-flask` directory and create your first process in
-:file:`processes` directory (you can use :file:`grassbuffer.py` as a
-template). Example of process below is based on the script created in
-:doc:`26`. Let's focus on important parts.
-
-Process itself is defined as a Python class, :class:`ModisV1` in this
-case (line :lcode:`7`). In class constructor you define input (lines
-:lcode:`9` and :lcode:`11`) and output parameters (line
-:lcode:`14`). Every process has its identifier (line :lcode:`20`),
-title and abstract. The process will operate in GRASS location defined
-on line :lcode:`30`. On line :lcode:`61` is assumed that space time
-LST dataset is located in PERMANENT, see :doc:`25`. For each job
-(executed process by a client) PyWPS creates in this location a
-temporary mapset which is deleted when process is finished. Process
-body is implemented as ``_handler()`` method, see line
-:lcode:`40`. Resultant statistics is stored to response output as a
-simple string on line :lcode:`80`.
-
-.. literalinclude:: ../_static/scripts/modis_v1.py
-   :language: python
-   :linenos:
-   :emphasize-lines: 7, 9, 11, 14, 20, 30, 40, 61, 80
-
-Sample process to download: `modis_v1.py
-<../_static/scripts/modis_v1.py>`__
-
-.. _process-import:
-
-We have to activate the process in :file:`demo.py` (which implements
-PyWPS demo server). Assuming that you named file with process as
-:file:`modis_v1.py`.
-
-.. code-block:: python
-
-   ...
-   from processes.modis_v1 import ModisV1
-   ...
-
-   processes = [
-    ...
-    ModisV1(),
-   ]
-
-Stop running demo PyWPS server by :kbd:`Ctrl+C` and start again.
+Enter a new GRASS session (PERMANENT mapset) and install
+:grasscmdaddons:`i.modis` addons extension (more about installing
+addons in :ref:`Unit 17 <grass-addons>`) for downloading and importing
+MODIS data (note that you have to install also `pyMODIS Python Library
+<http://www.pymodis.org/>`__).
 
 .. code-block:: bash
 
-                
-   python ./demo.py
+   pip install pymodis
+   g.extension extension=i.modis
 
-You should see your ``modis-v1`` process in the list. Click on
-``DescribeProcess`` to check input and outputs parameters description.
+GRASS MODIS addon consists of two modules:
 
-#.. figure:: ../images/units/27/modis-v1.svg
+* :grasscmdaddons:`i.modis.download` and
+* :grasscmdaddons:`i.modis.import`
 
-   Process modis-v1 available on PyWPS demo server.
+Let's download desired tiles (h18v03 and h18v04) for year 2017. We are
+interested about LST products (both Aqua and Terra satellites).
 
-.. important:: In order to use GRASS GIS functionality update PyWPS
-   configuration. Open :file:`pywps.cfg` and set correct GRASS
-   installation directory, eg.
+.. note:: Already downloaded MODIS can be found in sample dataset
+   (`download 7z-archive
+   <http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__)
+   in :file:`modis/h18v03_04` folder. Or alternatively you can use
+   GRASS location with imported data
+   (:file:`grassdata/germany-modis.tar.gz`) and continue with
+   :ref:`LST computation <modis-lst>`.
+  
+.. code-block:: bash
+
+   i.modis.download settings=settings.txt folder=h18v03_04 tiles=h18v03,h18v04 \
+   product=lst_aqua_eight_1000,lst_terra_eight_1000 \
+   startday=2017-01-01 endday=2017-12-31
+
+.. note:: Output folder (:file:`h18v03_04` in this case) must exists,
+   otherwise the module will fail.
+             
+   File :file:`settings.txt` contains two lines: *username* and
+   *password* for accessing MODIS download service.
+
+Then we can import data including reprojection into our location.
+
+.. _modis-import:
+
+.. code-block:: bash
+
+   i.modis.import -mw files=h18v03_04/listfileMOD11A2.006.txt \
+   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=h18v03_04/tlist-mod.txt
+
+   i.modis.import -mw files=h18v03_04/listfileMYD11A2.006.txt \
+   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=h18v03_04/tlist-myd.txt
+
+If ``-m`` flag is given, the import tool creates mosaics from tiles
+automatically, see :numref:`modis-mosaics`.
+
+.. _modis-mosaics:
+
+#.. figure:: ../images/units/24/modis-mosaics.png
+   :class: middle
+        
+   Final mosaics created from h18v03 and h18v04 tiles.
+
+.. _modis-lst:
+   
+LST
+---
+
+In this section we will perform **Land Surface Temperature** (LST)
+analysis in Germany region. At first we will import layer with Germany
+administrative border. This data can be found in sample datasets
+(`download 7z-archive
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__):
+:file:`osm/germany_boundary.gpkg`.
+
+.. note:: Administrative border of Germany has been downloaded from
+   OSM database.
+          
+   .. code-block:: xml
+
+      (
+      relation
+      ["boundary"="administrative"]
+      ["admin_level"="2"]
+      ["name"="Deutschland"]
+      );
+      /*added by auto repair*/
+      (._;>;);
+      /*end of auto repair*/
+      out;
 
    .. code-block:: bash
-                   
-      gisbase=/usr/lib/grass-7.4.0
 
-Now you can finally execute your first WPS process!
+      ogr2ogr -f GPKG germany_boundary.gpkg -a_srs EPSG:4326 -t_srs EPSG:3035 /vsicurl_streaming/"\
+      http://overpass-api.de/api/interpreter?data=%28relation%5B%22boundary%22%3D%22\
+      administrative%22%5D%5B%22admin%5Flevel%22%3D%222%22%5D%5B%22name%22%3D%22Deutschland\
+      %22%5D%3B%29%3B%28%2E%5F%3B%3E%3B%29%3Bout%3B%0A" lines
 
-http://localhost:5000/wps?request=Execute&service=WPS&identifier=modis-v1&version=1.0.0&datainputs=start=2017-03-01;end=2017-04-01
+Let's import the boundary of Germany into our mapset. The input file
+contains national border represented by linestring, see
+:numref:`germany-boundary` left part. It's complication since a mask
+can be set only from areal features (polygons). We need to polygonize
+input data. This will be performed by two GRASS operations:
 
-Example of response:
+* change line border to *boundary* by :grasscmd:`v.type`
+  (in GRASS topological model, an area is composition of boundaries
+  and centroid, see :ref:`Unit 03 <grass-topo>`)
+* add centroid by :grasscmd:`v.centroids`
 
-.. code-block:: python
+.. code-block:: bash
 
-   <wps:LiteralData dataType="urn:ogc:def:dataType:OGC:1.1:string">
-   Min: -5.4;Max: 13.8;Mean: 8.0
-   </wps:LiteralData>
+   v.type input=germany output=germany_b from_type=line to_type=boundary
+   v.centroids input=germany_b output=germany_boundary
 
-.. tip:: When something goes wrong, check :file:`logs/pywps.log` for
-   details.
+.. _germany-boundary:
+   
+#.. figure:: ../images/units/24/germany_line_area.png
+   :class: middle
+        
+   Germany national boundary as linestring on left and as polygon
+   (area) on right part.
 
-Try to improve process in order to return something more
-usable than a string, eg. :wikipedia-en:`JSON`.
+Now we can create a desired mask (:grasscmd:`r.mask`). Don't forget
+that a mask is created in the current computation region. First you
+set computation extent based on Germany vector map and than align
+computation grid to input data by :grasscmd:`g.region`.
+
+.. code-block:: bash
+
+   g.region vector=germany_boundary align=MOD11A2.A2017001_mosaic_LST_Day_1km
+   r.mask vector=germany_boundary
+
+Let's check range values of our LST data (by :grasscmd:`r.info` module
+or from Layer Manager, see :ref:`Unit 03 <raster-metadata>`).
+
+.. code-block:: bash
+
+   r.info -r map=MOD11A2.A2017001_mosaic_LST_Day_1km
+
+::
+
+  min=0
+  max=14411    
+
+.. _modis-dn-c:
+  
+The values do not appear to be temperature. In order to determine LST
+from input data, digital values (DN) must be converted into Celsius or
+Kelvin scale.
+
+.. math::
+
+   C = DN * 0.02 - 273.15
+
+Conversion to Celsium scale can be done by :grasscmd:`r.mapcalc` (see
+:doc:`05` for basic information about map algebra in GRASS). It's also
+suitable to replace zero values with no-data value (NULL values in
+GRASS terminology).
+
+Example (replace :map:`tile` with real map name):
+   
+.. code-block:: bash
+                
+   r.mapcalc expression="tile_c = if(tile != 0, tile * 0.02 - 273.15, null())"
+
+#.. figure:: ../images/units/24/lst-c.png
+   :class: middle
+        
+   LST reconstruction for Germany in Celsius scale (color table
+   ``celsius`` applied).

@@ -1,32 +1,45 @@
-Unit 29 - PyWPS LST region stats
-================================
+Unit 29 - MODIS ST scripting
+============================
 
-The third version of our process will return LST statistics for region
-in Germany defined by input vector data. Input region is imported by
-:grasscmd:`v.import` (line :lcode:`62`), resultant statistics is
-computed by :grasscmd:`t.rast.series` (line :lcode:`68`) and
-:grasscmd:`r.univar` (line :lcode:`78`).
+Let's create a simple Python script for computing LST statistics in
+Germany area for given period. Input parameters:
 
-.. literalinclude:: ../_static/scripts/modis_v3.py
+* :param:`input` - Name of the input space time raster dataset (line :lcode:`6`)
+* :param:`start` - Start date (line :lcode:`9`)
+* :param:`end` - End date (line :lcode:`15`)
+
+The script prints minimum, maximum and mean LST value. The raster map
+for computing statistics is created by :grasscmd:`t.rast.series` (line
+:lcode:`50`), statistics is computed by :grasscmd:`r.univar` (line
+:lcode:`60`). Statistics will be printed in nicely formatted manner,
+see lines :lcode:`66-68`.
+
+In :doc:`25` we processed LST space time dataset only for
+year 2017. We will also check if input dates are valid, see line
+:lcode:`31`.
+
+.. tip::
+
+   You can globally set :param:`quiet` flag by :envvar:`GRASS_VERBOSE`
+   environment variable, see line :lcode:`47`.
+    
+.. literalinclude:: ../_static/scripts/modis-date-stats.py
    :language: python
    :linenos:
-   :emphasize-lines: 10, 62, 68, 78
-                     
-Sample process to download: `modis_v3.py
-<../_static/scripts/modis_v3.py>`__
+   :emphasize-lines: 6, 9, 15, 31, 47, 50, 60, 66-68
 
-Do not forget to import process as done in :ref:`Unit 27
-<process-import>` and restart demo PyWPS server.
+Example of usage:
 
-Copy :file:`study_area.gpkg` to :file:`pywps-flask/static/data` and
-execute the process.
+.. code-block:: bash
+                
+   modis-date-stats.py input=modis_c start=2017-03-01 end=2017-04-01
 
-http://localhost:5000/wps?request=Execute&service=WPS&identifier=modis-v3&version=1.0.0&datainputs=start=2017-03-01;end=2017-04-01;region=@xlink:href=http://localhost:5000/static/data/study_area.gpkg
+::
+   
+   Min: -5.4
+   Max: 13.8
+   Mean: 8.0
 
-Possible response.
-
-.. code-block:: xml
-
-   <wps:ComplexData mimeType="application/json">
-   {"min": "7.70250000000003", "max": "10.6513333333334", "mean": "9.14346666666669", ...}
-   </wps:ComplexData>
+Sample script to download: `modis-date-stats.py
+<../_static/scripts/modis-date-stats.py>`__
+   
