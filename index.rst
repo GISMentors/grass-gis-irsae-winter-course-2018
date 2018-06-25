@@ -4,8 +4,9 @@
 Time, place, fee and registration
 =================================
 
-`IRSAE <http://www.irsae.no>`__ members `NINA <http://www.nina.no>`__ and `FEM <https://www.fmach.it/>`__ 
-offer a **3-days intense GIS workshop from 24.09.2018 to 27.09.2018** at the cosy 
+`IRSAE <http://www.irsae.no>`__ members `NINA <http://www.nina.no>`__ 
+and `FEM <https://www.fmach.it/>`__ offer a **3-days intense workshop on 
+GIS in applied ecology from 24.09.2018 to 27.09.2018** at the cosy 
 `Studenterhytta <http://www.studenterhytta.no>`__ in **Oslo**. 
 With full board provided and no other distraction than beautiful nature around, 
 participants can fully focus on learning new techniques, applying them to their ongoing 
@@ -13,20 +14,23 @@ projects and networking with the others.
 
 Topic of the course will be advanced geospatial analysis with an emphasis on handling 
 of Earth Observation and time series data using Free and Open Source Software.  
-Based on a set of 30 course units (see below), final content for the 2 1/2 days event will be 
-tailored to participants interest and prior knowledge and experience 
-(it would take ~5 days to cover all course units).
+Based on a set of 30 course units (see below), final content for the 3 days event will be 
+tailored according to participants interest as well as prior knowledge and experience 
+(it would take ~5-6 days to cover all course units).
 
-The course is kindly supported by IRSAE. Thus IRSAE students and staff will get **priority 
-access until 01.09.2018** as well as a reduced course fee.
+The course is kindly supported by `IRSAE <http://www.irsae.no>`__. Thus IRSAE 
+students and staff will get a reduced course fee as well as **priority access 
+until 15.08.2018**. 
 
-Corse fees that cover full board (food and accomodation at Studenterhytta) are
+Corse fees that cover full board (3 nights at Studenterhytta with lunch to lunch food) are
 
-* for participants from IRSAE institutions
-* for participants from non-IRSAE institution.
-
+* X NOK (~ X €) for participants from IRSAE institutions
+* X NOK (~ X €) for participants from non-IRSAE institution.
 
 Please register here (registration link coming soon).
+
+For questions regarding registration and organisation please contact:
+`Stefan Blumentrath <https://www.nina.no/Kontakt/Ansatte/Ansattinformasjon.aspx?AnsattID=14230>`__
 
 
 Free and Open Source Software (FOSS)
