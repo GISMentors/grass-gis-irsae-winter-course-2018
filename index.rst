@@ -14,7 +14,7 @@ projects and networking with the others.
 
 Topic of the course will be advanced geospatial analysis with an emphasis on handling 
 of Earth Observation and time series data using Free and Open Source Software.  
-Based on a set of 30 course units (see below), final content for the 3 days event will be 
+Based on a set of 29 course units (see below), final content for the 3 days event will be 
 tailored according to participants interest as well as prior knowledge and experience 
 (it would take ~5-6 days to cover all course units).
 
@@ -24,8 +24,8 @@ until 15.08.2018**.
 
 Corse fees that cover full board (3 nights at Studenterhytta with lunch to lunch food) are
 
-* X NOK (~ X €) for participants from IRSAE institutions
-* X NOK (~ X €) for participants from non-IRSAE institution.
+* 3900 NOK (~ 410 €) for participants from IRSAE institutions
+* 4900 NOK (~ 515 €) for participants from non-IRSAE institution.
 
 Please register here (registration link coming soon).
 
@@ -107,9 +107,6 @@ Software used in this training materials
   utility to search and download Copernicus Sentinel satellite images.
 * `pyModis <http://www.pymodis.org/>`__ Python based library to work
   with MODIS data.
-* `pyWPS <http://pywps.org/>`__ implementation of the Web Processing
-  Service standard from the Open Geospatial Consortium written in
-  Python.
 
 Units
 =====
@@ -146,10 +143,6 @@ Units
    units/27
    units/28
    units/29
-   units/30
-   units/31
-   units/32
-   units/33
    
 Lecturers
 =========
