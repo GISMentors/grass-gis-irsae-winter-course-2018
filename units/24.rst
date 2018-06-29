@@ -1,2 +1,2 @@
-Unit 24 - GRASS and R
-=====================
+Unit 24 - Regression analysis
+=============================

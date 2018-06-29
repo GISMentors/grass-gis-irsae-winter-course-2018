@@ -1,2 +1,2 @@
-Unit 25 - Regression analysis
-=============================
+Unit 25 - Classification
+========================

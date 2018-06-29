@@ -1,208 +1,197 @@
-Unit 27 - MODIS
-===============
+Unit 27 - MODIS time series
+===========================
 
-There are two satellites, Aqua and Terra which carry the MODIS sensor
-as payload. The **Moderate Resolution Imaging Spectroradiometer**
-(:wikipedia-en:`MODIS`) is a 36-channel from visible to
-thermal-infrared sensor that was launched as part of the Terra
-satellite payload in December 1999 and Aqua satellite (May 2002). The
-Terra satellite passes twice a day (at about 10:30am, and 22:30pm
-local time), also the Aqua satellite passes twice a day (at about
-01:30am, and 13:30pm local time). (source: `GRASS Wiki
-<https://grasswiki.osgeo.org/wiki/MODIS>`__)
+In this unit we will perform time-series based LST reconstruction
+based on :ref:`Unit 24 <modis-lst>`. As we already know GRASS enables
+time-series data handling thanks to :grasscmd:`temporal data
+processing framework <temporalintro>`.
 
-Our area of interest, Germany, is covered by two tiles (see `MODLAND
-grid <https://modis-land.gsfc.nasa.gov/MODLAND_grid.html>`__):
+In :doc:`24` we have :ref:`imported <modis-import>` MODIS data into
+GRASS by :grasscmdaddons:`i.modis.import`. The command was called with
+:param:`-w` flag and :param:`outfile` parameter to generate special
+file which can be later used for creating space-time raster dataset
+(strds).
 
-* h18v03
-* h18v04
+Creation of space time dataset including basic operations is explained
+in :doc:`17`. Here we just apply our knowledge on MODIS dataset.
 
-Download and import
--------------------
-
-Data are provided in 3 projections (Sinusoidal, Lambert Azimuthal
-Equal-Area, and Geographic). For our purpose, data will be reprojected
-to ETRS89 / LAEA Europe :epsg:`3035`.
-
-.. _create-location-epsg:
-
-At first, a new GRASS location need to be created (see :ref:`Unit 02
-<create-location>`). It can be easily done by using EPSG code (*Select
-EPSG code of spatial reference system*).
-
-#.. figure:: ../images/units/24/create-location-epsg-0.svg
-
-   Create a new location based on EPSG code.
-
-#.. figure:: ../images/units/24/create-location-epsg-1.png
-
-   Enter EPSG code.
-
-Enter a new GRASS session (PERMANENT mapset) and install
-:grasscmdaddons:`i.modis` addons extension (more about installing
-addons in :ref:`Unit 17 <grass-addons>`) for downloading and importing
-MODIS data (note that you have to install also `pyMODIS Python Library
-<http://www.pymodis.org/>`__).
+At first we will create a new space time raster dataset by
+:grasscmd:`t.create`.
 
 .. code-block:: bash
 
-   pip install pymodis
-   g.extension extension=i.modis
+   t.create output=modis title="MODIS 2017" desc="MODIS data for Germany"
 
-GRASS MODIS addon consists of two modules:
+In the next step will register to the dataset imported MODIS data by
+:grasscmd:`t.register`. We run this command twice, once for Aqua data
+than for Terra data.
 
-* :grasscmdaddons:`i.modis.download` and
-* :grasscmdaddons:`i.modis.import`
-
-Let's download desired tiles (h18v03 and h18v04) for year 2017. We are
-interested about LST products (both Aqua and Terra satellites).
-
-.. note:: Already downloaded MODIS can be found in sample dataset
-   (`download 7z-archive
-   <http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__)
-   in :file:`modis/h18v03_04` folder. Or alternatively you can use
-   GRASS location with imported data
-   (:file:`grassdata/germany-modis.tar.gz`) and continue with
-   :ref:`LST computation <modis-lst>`.
-  
 .. code-block:: bash
+                
+   t.register input=modis file=h18v03_04/tlist-mod.txt
+   t.register input=modis file=h18v03_04/tlist-myd.txt
 
-   i.modis.download settings=settings.txt folder=h18v03_04 tiles=h18v03,h18v04 \
-   product=lst_aqua_eight_1000,lst_terra_eight_1000 \
-   startday=2017-01-01 endday=2017-12-31
-
-.. note:: Output folder (:file:`h18v03_04` in this case) must exists,
-   otherwise the module will fail.
-             
-   File :file:`settings.txt` contains two lines: *username* and
-   *password* for accessing MODIS download service.
-
-Then we can import data including reprojection into our location.
-
-.. _modis-import:
+Let's check basic metedata about created dataset by
+:grasscmd:`t.info`.
 
 .. code-block:: bash
 
-   i.modis.import -mw files=h18v03_04/listfileMOD11A2.006.txt \
-   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=h18v03_04/tlist-mod.txt
-
-   i.modis.import -mw files=h18v03_04/listfileMYD11A2.006.txt \
-   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=h18v03_04/tlist-myd.txt
-
-If ``-m`` flag is given, the import tool creates mosaics from tiles
-automatically, see :numref:`modis-mosaics`.
-
-.. _modis-mosaics:
-
-#.. figure:: ../images/units/24/modis-mosaics.png
-   :class: middle
-        
-   Final mosaics created from h18v03 and h18v04 tiles.
-
-.. _modis-lst:
-   
-LST
----
-
-In this section we will perform **Land Surface Temperature** (LST)
-analysis in Germany region. At first we will import layer with Germany
-administrative border. This data can be found in sample datasets
-(`download 7z-archive
-<http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__):
-:file:`osm/germany_boundary.gpkg`.
-
-.. note:: Administrative border of Germany has been downloaded from
-   OSM database.
-          
-   .. code-block:: xml
-
-      (
-      relation
-      ["boundary"="administrative"]
-      ["admin_level"="2"]
-      ["name"="Deutschland"]
-      );
-      /*added by auto repair*/
-      (._;>;);
-      /*end of auto repair*/
-      out;
-
-   .. code-block:: bash
-
-      ogr2ogr -f GPKG germany_boundary.gpkg -a_srs EPSG:4326 -t_srs EPSG:3035 /vsicurl_streaming/"\
-      http://overpass-api.de/api/interpreter?data=%28relation%5B%22boundary%22%3D%22\
-      administrative%22%5D%5B%22admin%5Flevel%22%3D%222%22%5D%5B%22name%22%3D%22Deutschland\
-      %22%5D%3B%29%3B%28%2E%5F%3B%3E%3B%29%3Bout%3B%0A" lines
-
-Let's import the boundary of Germany into our mapset. The input file
-contains national border represented by linestring, see
-:numref:`germany-boundary` left part. It's complication since a mask
-can be set only from areal features (polygons). We need to polygonize
-input data. This will be performed by two GRASS operations:
-
-* change line border to *boundary* by :grasscmd:`v.type`
-  (in GRASS topological model, an area is composition of boundaries
-  and centroid, see :ref:`Unit 03 <grass-topo>`)
-* add centroid by :grasscmd:`v.centroids`
-
-.. code-block:: bash
-
-   v.type input=germany output=germany_b from_type=line to_type=boundary
-   v.centroids input=germany_b output=germany_boundary
-
-.. _germany-boundary:
-   
-#.. figure:: ../images/units/24/germany_line_area.png
-   :class: middle
-        
-   Germany national boundary as linestring on left and as polygon
-   (area) on right part.
-
-Now we can create a desired mask (:grasscmd:`r.mask`). Don't forget
-that a mask is created in the current computation region. First you
-set computation extent based on Germany vector map and than align
-computation grid to input data by :grasscmd:`g.region`.
-
-.. code-block:: bash
-
-   g.region vector=germany_boundary align=MOD11A2.A2017001_mosaic_LST_Day_1km
-   r.mask vector=germany_boundary
-
-Let's check range values of our LST data (by :grasscmd:`r.info` module
-or from Layer Manager, see :ref:`Unit 03 <raster-metadata>`).
-
-.. code-block:: bash
-
-   r.info -r map=MOD11A2.A2017001_mosaic_LST_Day_1km
+   t.info input=modis
 
 ::
 
-  min=0
-  max=14411    
+   ...
+   | Start time:................. 2017-01-01 00:00:00
+   | End time:................... 2018-01-04 00:00:00
+   ...
+   | Number of registered maps:.. 184
 
-.. _modis-dn-c:
-  
-The values do not appear to be temperature. In order to determine LST
-from input data, digital values (DN) must be converted into Celsius or
-Kelvin scale.
-
-.. math::
-
-   C = DN * 0.02 - 273.15
-
-Conversion to Celsium scale can be done by :grasscmd:`r.mapcalc` (see
-:doc:`05` for basic information about map algebra in GRASS). It's also
-suitable to replace zero values with no-data value (NULL values in
-GRASS terminology).
-
-Example (replace :map:`tile` with real map name):
+.. _t-register-file:
    
+.. note:: We are using composed product from the daily 1-kilometer LST
+   product (MOD11A1/MYD11A1) stored on a 1-km Sinusoidal grid as the
+   average values of clear-sky LSTs during an 8-day period.
+
+   ::
+      
+      MOD11A2.A2017297_mosaic_LST_Day_1km|2017-10-24|2017-11-01
+
+Data querying
+-------------
+
+For querying space time raster dataset is designed
+:grasscmd:`t.rast.list`. Let's print raster data covering March 2017.
+
 .. code-block:: bash
                 
-   r.mapcalc expression="tile_c = if(tile != 0, tile * 0.02 - 273.15, null())"
+   t.rast.list input=modis order=start_time \
+   where="start_time > '2017-03-01' and start_time < '2017-04-01'"
 
-#.. figure:: ../images/units/24/lst-c.png
-   :class: middle
-        
-   LST reconstruction for Germany in Celsius scale (color table
-   ``celsius`` applied).
+Univariate statistics can be computed by :grasscmd:`t.rast.univar`
+(note that the command is running in the current computation region
+similarly as :grasscmd:`r.univar` does).
+
+.. code-block:: bash
+                
+   t.rast.univar input=modis where="start_time > '2017-03-01' and start_time < '2017-04-01'"
+
+::
+   
+   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
+   ...|2017-03-06 00:00:00|2017-03-14 00:00:00|11127.9119722696|0|14548|11127.9119722696|...
+
+As we can see we have to convert DN into Celsius scale as we done for
+selected data in :ref:`Unit 24 <modis-dn-c>`. Instead of running
+:grasscmd:`r.mapcalc` we can use temporal command
+:grasscmd:`t.rast.mapcalc` which applies map algebra to all the maps
+registered in input space time dataset.
+
+.. tip:: Many of temporal data processing modules (``t.*``) support
+   parallelization (see ``nproc`` option).
+
+.. code-block:: bash
+      
+   t.rast.mapcalc input=modis output=modis_c nproc=3 basename=c \
+   expression="if(modis != 0, modis * 0.02 - 273.15, null())"
+                
+The command will create a new space time raster dataset with raster
+maps in Celsius scale. Since new raster map will be created, the
+command requires to define :param:`basename` for them. Note that new
+raster maps will be produced in current computation region with mask
+respected.
+
+.. code-block:: bash
+
+   t.rast.univar input=modis_c where="start_time > '2017-03-01' and start_time < '2017-04-01'"
+
+Looks better.
+
+::
+   
+   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
+   c_033@PERMANENT|2017-03-06 00:00:00|2017-03-14 00:00:00|8.38271624724276|-20.35|17.81|...
+
+.. tip:: Color table can be easily set by :grasscmd:`t.rast.colors`
+         similarly as :grasscmd:`r.colors` does for single raster
+         map.
+            
+Data aggregation
+----------------
+
+We can aggregate data monthly by using :grasscmd:`t.rast.aggregate`.
+
+.. code-block:: bash
+                          
+   t.rast.aggregate input=modis_c output=modis_cm basename=cm granularity="1 months" nproc=3
+
+Statistics can be computed by :grasscmd:`t.rast.univar`.
+
+.. code-block:: bash
+                
+   t.rast.univar modis_cm
+
+Example for July and August only.
+
+.. code-block:: bash
+
+   t.rast.univar modis_cm where="start_time > '2017-07-01' and start_time < '2017-09-01'"
+
+Data extraction
+---------------
+
+A new space time dataset only with subset of data can be created by
+:grasscmd:`t.rast.extract`. Example for the four seasons below.
+
+.. code-block:: bash
+                          
+   t.rast.extract input=modis_c where="start_time > '2017-03-01' and start_time < '2017-06-01'" \
+   output=modis_spring
+
+   t.rast.extract input=modis_c where="start_time > '2017-06-01' and start_time < '2017-09-01'" \
+   output=modis_summer
+                
+   t.rast.extract input=modis_c where="start_time > '2017-09-01' and start_time < '2017-12-01'" \
+   output=modis_autumn
+                
+   t.rast.extract input=modis_c where="start_time > '2017-12-01' or start_time < '2017-03-01'" \
+   output=modis_winter
+
+
+By the next command :grasscmd:`t.rast.series`, we will compute average
+temperature for each seasons.
+
+.. code-block:: bash
+                
+   t.rast.series input=modis_spring output=modis_spring_avg method=average
+   t.rast.series input=modis_summer output=modis_summer_avg method=average
+   t.rast.series input=modis_autumn output=modis_autumn_avg method=average
+   t.rast.series input=modis_winter output=modis_winter_avg method=average
+
+Four new raster maps are created, let's print univariate statistics
+for spring by using :grasscmd:`r.univar`.
+   
+.. code-block:: bash
+
+   r.univar modis_spring_avg
+
+::
+
+   minimum: -3.51545
+   maximum: 17.6643
+   range: 21.1797
+   mean: 10.7001
+
+#.. figure:: ../images/units/25/spring_avg.png
+
+   Average temperature for spring 2017.
+
+Data visualization
+------------------
+
+In :ref:`Unit 17 <st-animation>` have been presented basic GRASS tools
+for temporal data visualization: :grasscmd:`g.gui.timeline` and
+:grasscmd:`g.gui.animation`. See animation example below.
+
+#.. figure:: ../images/units/25/modis-animation.gif
+
+   Monthly aggregated dataset animation.

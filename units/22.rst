@@ -1,79 +1,25 @@
-Unit 22 - ST scripting
-======================
+Unit 22 - time series script tuning
+===================================
 
-There is another GRASS Python library to be introduced -
-:grasscmd2:`GRASS GIS Temporal Framework
-<libpython/temporal_framework.html>`.
+Let's improve script created in :doc:`22` by processing Sentinel
+scenes in parallel. The paralelization is done by
+:pygrass-modules:`ParallelModuleQueue`, see line :lcode:`237`
+similarly to :doc:`19`.
 
-In script below we will do similar computation like in :doc:`12`. But
-with a small difference. We will not process only one Sentinel scene,
-but spatio-temporal dataset of multiple Sentinel scenes.
+New feature of PyGRASS library is introduced on line :lcode:`166`. By
+:pygrass-modules:`MultiModule` you can define list of modules which
+will work as separated units not influenced by other processes running
+parallel. By ``set_temp_region`` we ensure that computation region
+settings will not influenced by other processes running in parallel.
 
-Let's define input and output parameters:
+New script option :param:`ncproc` on line :lcode:`48` enables
+controlling number of processes running in parallel.
 
-* :param:`region` - Name of input vector region map (line :lcode:`19`)
-* :param:`b4` - Name of input 4th band space time raster dataset (line
-  :lcode:`24`)
-* :param:`b8` - Name of input 8th band space time raster dataset (line
-  :lcode:`29`)
-* :param:`clouds` - Name of the input clouds space time raster dataset
-  (line :lcode:`32`)
-* :param:`basename` - Basename for output raster maps (line
-  :lcode:`38`)
-* :param:`threshold` - Threshold for removing small areas (line
-  :lcode:`43`)
-
-Let's focus on functions used from :grasscmd2:`GRASS GIS Temporal
-Framework <libpython/temporal_framework.html>`:
-
-* initialization must be done by :grasscmd2:`init
-  <libpython/temporal.html#temporal.core.init>`, see line :lcode:`155`
-* space time datasets are open on lines :lcode:`157-159` by
-  :grasscmd2:`open_old_stds
-  <libpython/temporal.html#temporal.open_stds.open_old_stds>`
-* raster maps registered in reference dataset (b4) are listed on line
-  :lcode:`163` by :grasscmd2:`get_registered_maps
-  <libpython/temporal.html#temporal.abstract_space_time_dataset.AbstractSpaceTimeDataset.get_registered_maps>`
-* related raster maps in two other datasets (b8, cl) are searched on
-  lines :lcode:`166-169` by :grasscmd2:`get_registered_maps
-  <libpython/temporal.html#temporal.abstract_space_time_dataset.AbstractSpaceTimeDataset.get_registered_maps>`
-  with ``where`` parameter
-
-.. literalinclude:: ../_static/scripts/ndvi-tgrass-v1.py
+.. literalinclude:: ../_static/scripts/ndvi-tgrass-v2.py
    :language: python
    :linenos:
-   :emphasize-lines: 19, 24, 28, 32, 35, 38, 43, 155, 157-159, 163, 166-169
+   :emphasize-lines: 48, 166, 237
+
+Sample script to download: `ndvi-tgrass-v2.py
+<../_static/scripts/ndvi-tgrass-v2.py>`__
                      
-Example of usage:
-
-.. code-block:: bash
-
-   ndvi-tgrass.py b4=b4 b8=b8 clouds=clouds basename=ndvi out=stats.txt
-
-Possible output:
-
-::
-
-   --------------------------------------------------------------------------------
-   NDVI class statistics (ndvi_1: 2017-05-17 10:20:31)
-   --------------------------------------------------------------------------------
-   NDVI class 1: 227.6 ha
-   NDVI class 2: 1565.3 ha
-   NDVI class 3: 9643.5 ha
-   NDVI class 1: -0.5690 (min) 0.7275 (max) 0.0496 (mean)
-   NDVI class 2: -0.4697 (min) 0.9789 (max) 0.3135 (mean)
-   NDVI class 3: -0.2160 (min) 0.9993 (max) 0.7998 (mean)
-   ...
-   --------------------------------------------------------------------------------
-   NDVI class statistics (ndvi_7: 2017-11-03 10:22:01)
-   --------------------------------------------------------------------------------
-   NDVI class 1: 156.2 ha
-   NDVI class 2: 2549.5 ha
-   NDVI class 3: 8730.5 ha
-   NDVI class 1: -0.6170 (min) 0.6725 (max) 0.0495 (mean)
-   NDVI class 2: -0.9977 (min) 0.9989 (max) 0.3215 (mean)
-   NDVI class 3: -0.1564 (min) 0.9994 (max) 0.6794 (mean)
-
-Sample script to download: `ndvi-tgrass-v1.py
-<../_static/scripts/ndvi-tgrass-v1.py>`__
-   
