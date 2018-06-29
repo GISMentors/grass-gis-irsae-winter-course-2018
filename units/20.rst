@@ -1,5 +1,5 @@
-Unit 20 - Sentinel time series
-==============================
+Unit 20 - Sentinel Spatio-temporal
+==================================
 
 This unit is dedicated to downloading and processing time-series
 Sentinel products.

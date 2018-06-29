@@ -1,5 +1,5 @@
-Unit 27 - MODIS time series
-===========================
+Unit 27 - MODIS Spatio-temporal
+===============================
 
 In this unit we will perform time-series based LST reconstruction
 based on :ref:`Unit 24 <modis-lst>`. As we already know GRASS enables

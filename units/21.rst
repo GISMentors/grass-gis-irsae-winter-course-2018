@@ -1,5 +1,5 @@
-Unit 21 - time series scripting
-===============================
+Unit 21 - Spatio-temporal scripting
+===================================
 
 There is another GRASS Python library to be introduced -
 :grasscmd2:`GRASS GIS Temporal Framework

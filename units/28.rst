@@ -1,5 +1,5 @@
-Unit 28 - MODIS time series scripting
-=====================================
+Unit 28 - MODIS Spatio-temporal scripting
+=========================================
 
 Let's create a simple Python script for computing LST statistics in
 Germany area for given period. Input parameters:

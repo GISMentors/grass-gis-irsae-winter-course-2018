@@ -1,5 +1,5 @@
-Unit 22 - time series script tuning
-===================================
+Unit 22 - Spatio-temporal script tuning
+=======================================
 
 Let's improve script created in :doc:`22` by processing Sentinel
 scenes in parallel. The paralelization is done by
