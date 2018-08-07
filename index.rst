@@ -22,12 +22,15 @@ The course is kindly supported by `IRSAE <http://www.irsae.no>`__. Thus IRSAE
 students and staff will get a reduced course fee as well as **priority access 
 until 31.08.2018**. 
 
+
 Corse fees - that cover full board (3 nights at Studenterhytta with lunch to lunch food) - are
 
 * 3900 NOK (~ 410 €) for participants from IRSAE institutions
 * 4900 NOK (~ 515 €) for participants from non-IRSAE institution.
 
+
 Please register `here <https://goo.gl/forms/yUyIEbUUoab4B04l1>`__.
+
 
 Participants are exected to bring their own device / laptop, so the course can have as 
 much as possible take home effect. An OSGeo-Live USB medium will be handed out with all 
