@@ -1,2 +1,12 @@
 Unit 24 - Regression analysis
 =============================
+
+Geographically Weighted Regression
+
+Gradient Boosted Regression Trees
+
+.. code-block:: bash
+                
+   r.gwr
+   r.ml.learn
+
