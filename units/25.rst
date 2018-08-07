@@ -1,2 +1,9 @@
 Unit 25 - Classification
 ========================
+
+Supervised and unsupervised classification
+
+i.maxlik
+r.ml.learn
+
+Object based?
