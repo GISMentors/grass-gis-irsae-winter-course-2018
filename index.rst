@@ -14,21 +14,25 @@ projects and networking with the others.
 
 Topic of the course will be advanced geospatial analysis with an emphasis on handling 
 of Earth Observation and time series data using Free and Open Source Software.  
-Based on a set of 29 course units (see below), final content for the 3 days event will be 
+Based on a set of 28 course units (see below), final content for the 3 days event will be 
 tailored according to participants interest as well as prior knowledge and experience 
-(it would take ~5-6 days to cover all course units).
+(it would take ~5 days to cover all course units).
 
 The course is kindly supported by `IRSAE <http://www.irsae.no>`__. Thus IRSAE 
 students and staff will get a reduced course fee as well as **priority access 
-until 15.08.2018**. 
+until 31.08.2018**. 
 
-Corse fees that cover full board (3 nights at Studenterhytta with lunch to lunch food) are
+Corse fees - that cover full board (3 nights at Studenterhytta with lunch to lunch food) - are
 
 * 3900 NOK (~ 410 €) for participants from IRSAE institutions
 * 4900 NOK (~ 515 €) for participants from non-IRSAE institution.
 
-Please register here (registration link coming soon).
+Please register `here <https://goo.gl/forms/yUyIEbUUoab4B04l1>`__.
 
+Participants are exected to bring their own device / laptop, so the course can have as 
+much as possible take home effect. An OSGeo-Live USB medium will be handed out with all 
+relevant software and sample data installed.
+ 
 For questions regarding registration and organisation please contact:
 `Stefan Blumentrath <https://www.nina.no/Kontakt/Ansatte/Ansattinformasjon.aspx?AnsattID=14230>`__
 
