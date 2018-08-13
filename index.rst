@@ -1,7 +1,8 @@
 
 .. |nina_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
+   :width: 25%
 .. |fem_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
-
+   :width: 25%
 
 |nina_logo| |fem_logo|   
 
