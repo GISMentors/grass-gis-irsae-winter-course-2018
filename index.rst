@@ -1,10 +1,15 @@
 
 .. |nina_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
-   :width: 25%
+   :height: 92px
+   :width: 148px
 .. |fem_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
-   :width: 25%
+   :height: 92px
+   :width: 259px
+.. |irsae_logo| image:: ./images/IRSAE.jpg
+   :height: 92px
+   :width: 546px
 
-|nina_logo| |fem_logo|   
+|nina_logo| |irsae_logo|   
 
 
 Time, place, fee and registration
