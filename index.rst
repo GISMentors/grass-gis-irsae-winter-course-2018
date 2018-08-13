@@ -1,11 +1,9 @@
 
 .. |nina_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
-    :height: 128px
+.. |fem_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
 
-=========== ====
-|nina_logo|     
-=========== ====
-=========== ====
+
+|nina_logo| |fem_logo|   
 
 
 Time, place, fee and registration
