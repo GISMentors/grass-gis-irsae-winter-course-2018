@@ -1,6 +1,9 @@
 Unit 13 - PyGRASS intro
 =======================
 
+.. warning:: Materials under construction!
+
+
 :grasscmd2:`PyGRASS <libpython/pygrass_index.html>` has been design as
 an **object-oriented** Python API to GRASS. This is a major difference
 to :grasscmd2:`GRASS Scripting Library <libpython/script_intro.html>`

@@ -1,6 +1,9 @@
 Unit 01 - About GRASS GIS
 =========================
 
+.. warning:: Materials under construction!
+
+
 **GRASS GIS**, commonly referred as GRASS (Geographic Resources
 Analysis Support System), is a free and open source Geographic
 Information System (GIS) software suite used for geospatial data

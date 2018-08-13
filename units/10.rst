@@ -1,6 +1,9 @@
 Unit 10 - Python intro
 ======================
 
+.. warning:: Materials under construction!
+
+
 :wikipedia-en:`Python` programming/scripting language is very popular
 in the field of GIS and a science in general. Python is also the main
 scripting platform for Esri product (see `arcpy

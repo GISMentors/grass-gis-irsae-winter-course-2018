@@ -1,6 +1,9 @@
 Unit 17 - Lidar
 ===============
 
+.. warning:: Materials under construction!
+
+
 There is open Lidar data for Norway available at
 `hoydedata.no <http://www.hoydedata.no/>`__. Go to `Download 
 <http://www.hoydedata.no/>`__, choose region in map viewer and request data for download.

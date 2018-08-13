@@ -1,6 +1,9 @@
 Unit 18 - Lidar scripting
 =========================
 
+.. warning:: Materials under construction!
+
+
 In this unit we will recover our knowledge of PyGRASS scripting (see
 :doc:`14`). Let's create a fancy script to produce seamless DEM
 (Digital Elevation Model) from bunch of LAS/LAZ files. Why so fancy?

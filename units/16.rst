@@ -1,6 +1,9 @@
 Unit 16 - Spatio-temporal intro
 ===============================
 
+.. warning:: Materials under construction!
+
+
 GRASS comes in version 7 with high quality tools for spatio-temporal
 data processing, see :grasscmd:`GRASS documentation <temporalintro>`
 for details.

@@ -1,6 +1,9 @@
 Unit 09 - Model tuning
 ======================
 
+.. warning:: Materials under construction!
+
+
 Let's improve our NDVI model created in :doc:`08`. The model operates
 in a current computation region, it would be better to define region
 based on user input, eg. by city area. Then NDVI would be computed

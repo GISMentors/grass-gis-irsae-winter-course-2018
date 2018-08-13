@@ -1,6 +1,9 @@
 Unit 07 - QGIS loves GRASS
 ==========================
 
+.. warning:: Materials under construction!
+
+
 Let's step out of the GRASS GIS for a moment. **QGIS** is a very
 popular open source GIS package which made a significant progress in
 the last years. Nowadays it's used in education, academic environment,

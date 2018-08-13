@@ -1,6 +1,9 @@
 Unit 27 - MODIS Spatio-temporal
 ===============================
 
+.. warning:: Materials under construction!
+
+
 In this unit we will perform time-series based LST reconstruction
 based on :ref:`Unit 24 <modis-lst>`. As we already know GRASS enables
 time-series data handling thanks to :grasscmd:`temporal data
