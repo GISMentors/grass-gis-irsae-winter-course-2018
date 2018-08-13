@@ -3,7 +3,7 @@
 
 .. figure:: ./images/NINA_logo_sort_txt_engelsk_under.png
    :height: 25px
-
+   :width: 15 px
 
 Time, place, fee and registration
 =================================
