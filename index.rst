@@ -1,8 +1,9 @@
 
+.. |nina_logo| image:: ./images/NINA_logo_sort_txt_engelsk_under.png
 
-+--------------------------------------------------------+------------+
-|.. image:: ./images/NINA_logo_sort_txt_engelsk_under.png|            |
-+========================================================+============+
++-------------+--+
+| |nina_logo| |  |
++=============+==+
 
 
 Time, place, fee and registration
