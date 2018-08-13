@@ -1,6 +1,10 @@
 
 .. warning:: Materials under construction!
 
+.. figure:: ./images/NINA_logo_sort_txt_engelsk_under.png
+   :class: small
+
+
 Time, place, fee and registration
 =================================
 
