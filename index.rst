@@ -40,7 +40,7 @@ Corse fees - that cover full board (3 nights at Studenterhytta with lunch to lun
 * 4900 NOK (~ 515 €) for participants from non-IRSAE institution.
 
 
-Please register `here <https://goo.gl/forms/yUyIEbUUoab4B04l1>`__.
+**Please register `here <https://goo.gl/forms/yUyIEbUUoab4B04l1>`__.**
 
 
 Participants are exected to bring their own device / laptop, so the course can have as 
