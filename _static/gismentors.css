@@ -11,3 +11,8 @@
 a {
   color: #E57200;
 }
+
+h1 {
+    background: url(images/NINA_logo_sort_txt_engelsk_under.png) no-repeat top left;
+    padding-left: 15px;
+}
