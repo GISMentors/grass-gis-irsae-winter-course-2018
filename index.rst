@@ -1,9 +1,6 @@
-
-.. warning:: Materials under construction!
-
-.. image:: ./images/NINA_logo_sort_txt_engelsk_under.png
-   :height: 25px
-   :width: 15 px
++--------------------------------------------------------+------------+
+|.. image:: ./images/NINA_logo_sort_txt_engelsk_under.png|            |
++========================================================+============+
 
 Time, place, fee and registration
 =================================
