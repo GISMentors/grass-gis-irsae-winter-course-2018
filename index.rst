@@ -9,7 +9,7 @@
    :height: 92px
    :width: 546px
 
-|nina_logo| |irsae_logo|   
+|irsae_logo| |nina_logo|
 
 
 Time, place, fee and registration
