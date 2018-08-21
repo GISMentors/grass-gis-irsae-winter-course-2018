@@ -34,7 +34,7 @@ students and staff will get a reduced course fee as well as **priority access
 until 31.08.2018**. 
 
 
-Corse fees - that cover full board (3 nights at Studenterhytta with lunch to lunch food) - are
+Course fees - that cover full board (3 nights at Studenterhytta with lunch to lunch food) - are
 
 * 3900 NOK (~ 410 €) for participants from IRSAE institutions
 * 4900 NOK (~ 515 €) for participants from non-IRSAE institution.
