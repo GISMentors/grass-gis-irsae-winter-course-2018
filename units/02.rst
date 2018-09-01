@@ -8,30 +8,45 @@ Startup
 -------
 
 Starting a GRASS session requires basic knowledge about software
-itself, the users usually do not like it ;-) In other words GRASS
-forces organizing your data from early beginning.
+itself. It is an obstacle especially for newcomers. In other words
+GRASS forces organizing your data from early beginning.
 
 Before entering GRASS a startup screen appears, the user must define
 working project in which GRASS session will operate. Without this step
-you cannot enter GRASS. This approach is not so common. Applications
+you cannot enter GRASS. Such approach is not so common. Applications
 like Esri ArcGIS or QGIS just starts. The user loads different data
 from various data sources in different projections, and starts working
 on his/her project. GRASS is different, which makes this software
-harder to enter for newcomers. *But don't worry, we will enter GRASS
-in few steps.*
+harder to enter for newcomers. *But don't worry, we will enter our
+first GRASS sessions in few steps.*
 
 The GRASS GIS startup screen requires to set up three items:
 
 #. **Database directory.** A directory on local or network disc which
    contains all data accessed by GRASS. It's usually directory called
-   :file:`grassdata` located in user's home directory. *This item is
+   :file:`grassdata` located in a user's home directory. *This item is
    set up on Windows automatically, so usually you don't need to
-   care.*
+   care about it.*
 
 #. **Location**. Plays a role of "a project". All geodata stored
    within one location must have the same spatial coordinate system
-   (GRASS doesn't support on-the-fly projection).
+   (GRASS doesn't support on-the-fly projection from several reasons).
 
 #. **Mapset** Contains task-related data within one project. Helps
    organizing data into logical groups or to separate parallel work of
    more users on the same project.
+
+.. _startup0:
+   
+.. figure:: ../images/units/02/startup-0.svg
+
+   GRASS GIS startup screen.
+
+At first define database directory (:fignote:`1.`) if not already set
+up. Then a new location ("a project") can be created (:fignote:`2a.`)
+or official GRASS sample location(s) downloaded (:fignote:`2b.`). We
+will create our own location, a project related to *Oslo region*.
+
+A new location
+--------------
+

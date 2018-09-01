@@ -60,7 +60,7 @@ Free and Open Source Software (FOSS)
    FOSS software overview (`source
    <https://www.linkedin.com/pulse/open-source-software-development-neha-sharma>`__).
 
-Free and open-source software (FOSS) is computer software that can be
+Free and open-source software (FOSS) is a computer software that can be
 classified as both **free software** and **open-source
 software**. That is, anyone is freely licensed to
 
