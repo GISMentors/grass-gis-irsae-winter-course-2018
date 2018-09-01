@@ -105,8 +105,8 @@ This principles ensure that `OSGeo projects
 <https://www.osgeo.org/projects/>`__ are well established, stable,
 mature and sustainable.
 
-Software used in this training materials
-========================================
+Software
+========
 
 .. figure:: ./images/grass-gis-logo.png
    :class: small
@@ -125,6 +125,17 @@ Software used in this training materials
   utility to search and download Copernicus Sentinel satellite images.
 * `pyModis <http://www.pymodis.org/>`__ Python based library to work
   with MODIS data.
+
+Dataset
+=======
+
+For purpose of this training materials a sample dataset has been
+created based on Open Data covering `Studenterhytta venue region
+<https://www.openstreetmap.org/node/879127732>`__. All data layers are
+projected in ETRS89 / UTM zone 33N (:epsg:`25833`). See detailed
+description below.
+
+* administrative borders (:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml`, source: `GeoNorge <https://kartkatalog.geonorge.no/metadata/kartverket/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671>`__)
 
 Units
 =====
