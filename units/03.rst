@@ -4,3 +4,61 @@ Unit 03 - Data Management
 .. warning:: Materials under construction!
 
 
+Data can be imported simply from toolbar by tools dedicated for
+:wikipedia:`raster <GIS_file_formats#Raster>` or :wikipedia:`vector
+<GIS_file_formats#Vector>` data formats |grass-layer-import|. Basic
+knowledge of commonly used GIS formats is required.
+
+Vector data
+-----------
+
+Let's start with data file used for creating our project location in
+:doc:`02`. :file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` is a
+:wikipedia:`GML` file, which is a commonly used GIS *vector* format.
+
+Import vector data
+^^^^^^^^^^^^^^^^^^
+
+.. figure:: ../images/units/03/import-vector-toolbar.png
+
+   Import vector data from the main toolbar.
+
+.. note:: Dialog for importing vector data is also accessible from
+   menu :menuselection:`File --> Import vector data --> Simplified
+   vector import with reprojection` or from command line by
+   :grasscmd:`v.import` module.
+
+Import dialog allows importing single vector file (:item:`File`) or
+multiple files from directory (:item:`Directory`). In our case single
+file is planned to be imported, we keep default data source
+(:item:`File`).
+
+.. important:: If a spatial reference system (SRS) of vector file differs
+   from GRASS location (:item:`Project match`) input vector data are
+   automatically reprojected (*please forget about on-the-fly
+   reprojection*, GRASS simply does not support such dangerous
+   feature) into location projection.
+
+.. figure:: ../images/units/03/import-vector-dialog.png
+
+   Dialog for importing vector file(s). Input file
+   :file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` contains several
+   layers, we choose "Filke" (administrative regions) to import.
+
+.. note:: In some cases SRS of imported file can be missing or
+          invalid. GRASS reports this issue as *In case of no
+          significant differences in the projection definitions, use
+          the -o flag to ignore them and use current location
+          definition.  Consider generating a new location from the
+          input dataset using the 'location' parameter.*
+
+          GRASS allows importing such file by overriding project check
+          (if you are really sure that SRS of input file is the same
+          as GRASS location).
+
+          .. figure:: ../images/units/03/override-projection-check.svg
+
+             Override projection check to force import.
+   
+Display vector data
+^^^^^^^^^^^^^^^^^^^
