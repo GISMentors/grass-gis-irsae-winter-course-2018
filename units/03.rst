@@ -6,9 +6,17 @@ Unit 03 - Data Management
 
 Data can be imported simply from toolbar by tools dedicated for
 :wikipedia:`raster <GIS_file_formats#Raster>` or :wikipedia:`vector
-<GIS_file_formats#Vector>` data formats |grass-layer-import|. Basic
+<GIS_file_formats#Vector>` GIS data formats |grass-layer-import|. Basic
 knowledge of commonly used :wikipedia:`GIS file formats` is required.
 
+.. note:: GRASS terminology differs from commonly used GIS
+          packages. To avoid confusion let's focus on the most
+          important terms. Commonly used term "a layer" is called in
+          GRASS "a map". GRASS layer is subset of features with one
+          "map". So "GRASS raster map" can be treated as "a raster
+          layer" in other GIS packages.
+          
+          
 Import GIS data
 ---------------
 
@@ -67,3 +75,60 @@ displayed in map window.
    :class: large
            
    Imported Norway administrative regions.
+
+Querying data
+-------------
+
+Imported raster or vector data layers can be iteractively queried by
+|grass-info| from Map Window toolbar.
+
+.. figure:: ../images/units/03/query-map-window.png
+           
+   Query interactively Norway administrative regions.
+
+Vector data layers (GRASS vector maps) can be queried also by
+attribute filters using Attribute Table Manager |grass-table|.
+
+.. figure:: ../images/units/03/show-attrb-data-menu.png
+           
+   Open Attribute Table Manager from layer menu.
+
+Vector features can be queried by simple SQL queries by WHERE
+statement.
+
+.. figure:: ../images/units/03/simple-query.png
+           
+   Simple attribute querying.
+
+.. tip:: GRASS offers also interactive tool for attribute querying
+         similarly to other GIS packages. The tool accessible from
+         :item:`Builder` tab as :item:`SQL Builder`.
+
+         .. figure:: ../images/units/03/advanced-query.svg
+           
+            Open SQL Builder.
+
+         .. figure:: ../images/units/03/sql-builder.png
+            :class: small
+            
+            SQL Builder in action.
+            
+Selected vector objects (commonly refered as "features" in GIS
+terminology) can be saved into new layer (GRASS vector map) from menu
+by :menuselection:`Extract selected features`.
+
+.. figure:: ../images/units/03/extract-menu.png
+   :class: large
+   
+   Extract selected features into a new vector map.
+
+Created vector map is automatically added into Layer Tree. Switch
+visibility of map layers by checkboxes and zoom to currently selected
+map by |grass-zoom-extent| as shown on :numref:`oslo-region`.
+
+.. _oslo-region:
+
+.. figure:: ../images/units/03/oslo-region.svg
+   :class: large
+   
+   Extract Oslo region displayed in Map Window.
