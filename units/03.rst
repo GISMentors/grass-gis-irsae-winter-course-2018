@@ -7,17 +7,17 @@ Unit 03 - Data Management
 Data can be imported simply from toolbar by tools dedicated for
 :wikipedia:`raster <GIS_file_formats#Raster>` or :wikipedia:`vector
 <GIS_file_formats#Vector>` data formats |grass-layer-import|. Basic
-knowledge of commonly used GIS formats is required.
+knowledge of commonly used :wikipedia:`GIS file formats` is required.
 
-Vector data
------------
+Import GIS data
+---------------
 
 Let's start with data file used for creating our project location in
 :doc:`02`. :file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` is a
 :wikipedia:`GML` file, which is a commonly used GIS *vector* format.
 
-Import vector data
-^^^^^^^^^^^^^^^^^^
+Vector data
+^^^^^^^^^^^
 
 .. figure:: ../images/units/03/import-vector-toolbar.png
 
@@ -59,6 +59,11 @@ file is planned to be imported, we keep default data source
           .. figure:: ../images/units/03/override-projection-check.svg
 
              Override projection check to force import.
-   
-Display vector data
-^^^^^^^^^^^^^^^^^^^
+
+After successful operation imported data layer should be automatically
+displayed in map window.
+
+.. figure:: ../images/units/03/fylke.png
+   :class: large
+           
+   Imported Norway administrative regions.
