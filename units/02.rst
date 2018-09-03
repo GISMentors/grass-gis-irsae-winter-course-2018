@@ -67,10 +67,10 @@ also short description can be added.
 Then a method for creating new location is chosen. Usually a location
 is created using given EPSG code (*Select EPSG code of spatial
 reference system*) or from existing data (*Read projection and datum
-terms from a georeferenced data file*). In our case we will create a
-new location based on Norway administrative borders
-:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` data file from
-sample dataset.
+terms from a georeferenced data file*). In our case a new location
+will be created based on sample Sentinel data (eg.
+:file:`L2A_T32VNM_20180202T104239_B04_10m.jp2` file located in
+:file:`sentinel/sample` directory of sample dataset).
 
 .. figure:: ../images/units/02/create-location-1.png
 
@@ -83,24 +83,21 @@ In the next page define an input file.
    Define an input file.
 
 Spatial reference system of created location is chosen based on input
-file (here UTM zone 33N :epsg:`25833`).
+file (here WGS84 / UTM zone 32N :epsg:`32632`).
 
 .. figure:: ../images/units/02/create-location-3.png
 
    Check the summary.
 
 After creating a new location (:item:`Finish` button) the user can
-optionally import input data.
-
-.. note:: Unfortunately Location Wizard has problem with importing
-          vector data with more layers (which is our case). We will
-          skip this operation since we are going to import input data
-          later by more advanced GRASS importer.
+optionally import input data. We will skip this operation at this
+moment since we are going to import input data later by more advanced
+GRASS importer.
           
-          .. figure:: ../images/units/02/create-location-4.svg
-             :class: small
-
-             Skip importing input data.
+.. figure:: ../images/units/02/create-location-4.svg
+   :class: small
+                     
+   Skip importing input data.
    
 Now we can *finally* start a GRASS session by entering our first GRASS
 location.

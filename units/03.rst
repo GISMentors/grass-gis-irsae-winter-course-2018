@@ -21,11 +21,21 @@ Import GIS data
 ---------------
 
 Let's start with data file used for creating our project location in
-:doc:`02`. :file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` is a
-:wikipedia:`GML` file, which is a commonly used GIS *vector* format.
+:doc:`02`. :file:`L2A_T32VNM_20180202T104239_B04_10m.jp2` is a
+:wikipedia:`JPEG2000` file, which is nowadays commonly used GIS
+*raster* format for imagery data.
 
+Raster data
+^^^^^^^^^^^
+
+.. todo:: TBD
+   
 Vector data
 ^^^^^^^^^^^
+
+Norway administrative regions are stored in
+:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` :wikipedia:`GML`
+file, which is a commonly used GIS exchange *vector* format.
 
 .. figure:: ../images/units/03/import-vector-toolbar.png
 
