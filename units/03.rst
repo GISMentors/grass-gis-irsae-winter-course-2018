@@ -20,16 +20,61 @@ knowledge of commonly used :wikipedia:`GIS file formats` is required.
 Import GIS data
 ---------------
 
+Raster data
+^^^^^^^^^^^
+
 Let's start with data file used for creating our project location in
 :doc:`02`. :file:`L2A_T32VNM_20180202T104239_B04_10m.jp2` is a
 :wikipedia:`JPEG2000` file, which is nowadays commonly used GIS
 *raster* format for imagery data.
 
-Raster data
-^^^^^^^^^^^
+.. figure:: ../images/units/03/import-raster-toolbar.png
 
-.. todo:: TBD
-   
+   Import raster data from the main toolbar.
+
+.. note:: Dialog for importing raster data is also accessible from
+   menu :menuselection:`File --> Import raster data --> Simplified
+   raster import with reprojection` or from command line by
+   :grasscmd:`r.import` module.
+
+Import dialog allows importing single vector file (:item:`File`) or
+multiple files from directory (:item:`Directory`). In our case single
+file is planned to be imported, we keep default data source
+(:item:`File`).
+
+.. figure:: ../images/units/03/import-raster-dialog.svg
+
+   Dialog for importing raster file(s).
+
+.. important:: If a spatial reference system (SRS) of raster file
+   differs from GRASS location (:item:`Project match`) input raster
+   data are automatically reprojected into SRS of current GRASS
+   location. Note that GRASS simply does not support on the fly
+   transformation from several reasons.
+
+.. note:: In some cases SRS of imported file can be missing or
+          invalid. GRASS reports this issue as *In case of no
+          significant differences in the projection definitions, use
+          the -o flag to ignore them and use current location
+          definition.  Consider generating a new location from the
+          input dataset using the 'location' parameter.*
+
+          GRASS allows importing such file by overriding project check
+          (if you are really sure that SRS of input file is the same
+          as GRASS location).
+
+          .. figure:: ../images/units/03/override-projection-check.svg
+
+             Override projection check to force import.
+
+After successful operation imported data layer should be automatically
+displayed in Map Window.
+
+.. figure:: ../images/units/03/sentinel.png
+   :class: large
+           
+   Imported Sentinel band displayed in Map Window.
+
 Vector data
 ^^^^^^^^^^^
 
@@ -46,37 +91,24 @@ file, which is a commonly used GIS exchange *vector* format.
    vector import with reprojection` or from command line by
    :grasscmd:`v.import` module.
 
-Import dialog allows importing single vector file (:item:`File`) or
-multiple files from directory (:item:`Directory`). In our case single
-file is planned to be imported, we keep default data source
-(:item:`File`).
+.. _import-vector:
 
-.. important:: If a spatial reference system (SRS) of vector file differs
-   from GRASS location (:item:`Project match`) input vector data are
-   automatically reprojected (*please forget about on-the-fly
-   reprojection*, GRASS simply does not support such dangerous
-   feature) into location projection.
-
-.. figure:: ../images/units/03/import-vector-dialog.png
+.. figure:: ../images/units/03/import-vector-dialog.svg
 
    Dialog for importing vector file(s). Input file
    :file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` contains several
    layers, we choose "Filke" (administrative regions) to import.
 
-.. note:: In some cases SRS of imported file can be missing or
-          invalid. GRASS reports this issue as *In case of no
-          significant differences in the projection definitions, use
-          the -o flag to ignore them and use current location
-          definition.  Consider generating a new location from the
-          input dataset using the 'location' parameter.*
+In this case appearently SRS of input data layer and current GRASS
+location differs (see :item:`Project match: No` on
+:numref:`import-vector`), reprojection of input data will be
+requested.
 
-          GRASS allows importing such file by overriding project check
-          (if you are really sure that SRS of input file is the same
-          as GRASS location).
-
-          .. figure:: ../images/units/03/override-projection-check.svg
-
-             Override projection check to force import.
+.. figure:: ../images/units/03/import-vector-reproject.png
+   :class: small
+   
+   Reprojection needs to be confirmed by a user by :item:`Import &
+   reproject`.
 
 After successful operation imported data layer should be automatically
 displayed in map window.
@@ -134,11 +166,30 @@ by :menuselection:`Extract selected features`.
 
 Created vector map is automatically added into Layer Tree. Switch
 visibility of map layers by checkboxes and zoom to currently selected
-map by |grass-zoom-extent| as shown on :numref:`oslo-region`.
+map (:map:`oslo`) by |grass-zoom-extent| as shown on :numref:`oslo-region`.
 
 .. _oslo-region:
 
 .. figure:: ../images/units/03/oslo-region.svg
    :class: large
    
-   Extract Oslo region displayed in Map Window.
+   Oslo region and Sentinel band displayed in Map Window.
+
+Let's change symbology of Oslo polygon vector map.
+
+.. figure:: ../images/units/03/layer-props.png
+
+   Open map layer properties from menu. Properties dialog can be open
+   also simply by double-clicking on map layer item.
+
+Feature outline and fill color can be changed in :item:`Colors` tab.
+
+.. figure:: ../images/units/03/d-vect.png
+
+   Change polygon outline color. Fill color set to transparent. Line
+   width can be changed in :item:`Lines` tab.
+
+.. figure:: ../images/units/03/oslo-sentinel.png
+   :class: large
+           
+   Example of vizualization of map layers composition.
