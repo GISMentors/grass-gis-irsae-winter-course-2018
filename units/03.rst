@@ -24,7 +24,7 @@ Raster data
 ^^^^^^^^^^^
 
 Let's start with data file used for creating our project location in
-:doc:`02`. :file:`L2A_T32VNM_20180202T104239_B04_10m.jp2` is a
+:doc:`02`. :file:`L2A_T32VNM_20180222T104029_B04_10m.jp2` is a
 :wikipedia:`JPEG2000` file, which is nowadays commonly used GIS
 *raster* format for imagery data.
 
@@ -52,6 +52,8 @@ file is planned to be imported, we keep default data source
    location. Note that GRASS simply does not support on the fly
    transformation from several reasons.
 
+.. _import-no-srs:
+
 .. note:: In some cases SRS of imported file can be missing or
           invalid. GRASS reports this issue as *In case of no
           significant differences in the projection definitions, use
@@ -74,6 +76,8 @@ displayed in Map Window.
    :class: large
            
    Imported Sentinel band displayed in Map Window.
+
+.. _import-vector-section:
 
 Vector data
 ^^^^^^^^^^^
