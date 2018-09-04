@@ -140,7 +140,44 @@ description below.
 Units
 =====
 
+.. important:: Teaser. Check out first few units online. Rest of units will be
+   published online later.
+   
 .. toctree::
+   :maxdepth: 2
+
+   units/01
+   units/02
+   units/03
+   units/04
+
+* Unit 05 - Perform computation
+* Unit 06 - Data export
+* Unit 07 - QGIS loves GRASS
+* Unit 08 - Modeler
+* Unit 09 - Model tuning
+* Unit 10 - Python intro
+* Unit 11 - Scripting
+* Unit 12 - Script tuning
+* Unit 13 - PyGRASS intro
+* Unit 14 - PyGRASS scripting
+* Unit 15 - Reprojection
+* Unit 16 - Spatio-temporal intro
+* Unit 17 - Lidar
+* Unit 18 - Lidar scripting
+* Unit 19 - Sentinel downloader
+* Unit 20 - Sentinel Spatio-temporal
+* Unit 21 - Spatio-temporal scripting
+* Unit 22 - Spatio-temporal script tuning
+* Unit 23 - GRASS and R
+* Unit 24 - Regression analysis
+* Unit 25 - Classification
+* Unit 26 - MODIS
+* Unit 27 - MODIS Spatio-temporal
+* Unit 28 - MODIS Spatio-temporal scripting
+
+..
+   .. toctree::
    :maxdepth: 2
 
    units/01

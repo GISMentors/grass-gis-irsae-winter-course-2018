@@ -1,9 +1,6 @@
 Unit 02 - First steps
 =====================
 
-.. warning:: Materials under construction!
-
-
 Startup
 -------
 

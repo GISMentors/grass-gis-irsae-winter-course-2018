@@ -1,9 +1,6 @@
 Unit 03 - Data Management
 =========================
 
-.. warning:: Materials under construction!
-
-
 Data can be imported simply from toolbar by tools dedicated for
 :wikipedia:`raster <GIS_file_formats#Raster>` or :wikipedia:`vector
 <GIS_file_formats#Vector>` GIS data formats |grass-layer-import|. Basic
