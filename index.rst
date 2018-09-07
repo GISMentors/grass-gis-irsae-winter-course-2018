@@ -151,8 +151,8 @@ Units
    units/03
    units/04
    units/05
+   units/06
    
-* Unit 06 - Data export
 * Unit 07 - QGIS loves GRASS
 * Unit 08 - Modeler
 * Unit 09 - Model tuning
