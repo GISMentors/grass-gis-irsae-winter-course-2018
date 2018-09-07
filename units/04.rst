@@ -140,6 +140,8 @@ region --> Set region`). Example below:
 
    g.region vector=oslo align=L2A_T32VNM_20180222T104029_B04_10m
 
+.. _color-table:
+
 Color table
 -----------
 

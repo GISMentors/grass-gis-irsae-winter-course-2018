@@ -150,8 +150,8 @@ Units
    units/02
    units/03
    units/04
-
-* Unit 05 - Perform computation
+   units/05
+   
 * Unit 06 - Data export
 * Unit 07 - QGIS loves GRASS
 * Unit 08 - Modeler

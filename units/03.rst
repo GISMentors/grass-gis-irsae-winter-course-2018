@@ -17,6 +17,8 @@ knowledge of commonly used :wikipedia:`GIS file formats` is required.
 Import GIS data
 ---------------
 
+.. _import-raster-section:
+
 Raster data
 ^^^^^^^^^^^
 
