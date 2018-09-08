@@ -21,3 +21,53 @@ There two options how to access GRASS tools from QGIS environment:
 
 Both plugins can be easily activated from :menuselection:`Plugins -->
 Manage and Install Plugins`.
+
+Let's focus on our "favorite" GRASS module - :grasscmd:`i.vi`. At
+first, we load into QGIS input data, Jena city region and Sentinel
+bands (red and near-infrared channels).
+
+.. figure:: ../images/units/07/qgis-input-data.png
+   :class: large
+           
+   Input data loaded in QGIS.
+
+Processing plugin
+-----------------
+
+Processing plugin is a generic toolbox which allows to run processing
+tools provided by various software packages. Let's open
+:menuselection:`Processing --> Toolbox` and search for
+:grasscmd:`i.vi` GRASS module.
+
+.. figure:: ../images/units/07/processing-i-vi.png
+   :class: small
+           
+   Search for :grasscmd:`i.vi` GRASS module in Processing toolbox.
+   
+.. figure:: ../images/units/07/processing-i-vi-params.svg
+   :class: middle
+                    
+   Set input parameters, don't forget about computation region.
+
+:numref:`processing-result` nicely shows how Processing plugin
+works. First of all a temporal GRASS location is created by
+:grasscmd:`g.proj`, input data are linking into this location by
+:grasscmd:`r.external`. Then computation can finally starts by running
+:grasscmd:`i.vi` module. In the last step output data are exported out
+of GRASS using :grasscmd:`r.out.gdal`. The resultant GTIFF file is
+displayed in QGIS map window.
+
+.. _processing-i-vi-running:
+
+.. figure:: ../images/units/07/processing-i-vi-running.png
+           
+   Running tool, most of time takes exporting data from GRASS temporal
+   session.
+   
+.. _processing-result:
+
+.. figure:: ../images/units/07/processing-result.png
+   :class: large
+           
+   Resultant NDVI raster displayed in QGIS map window (with better
+   color interpretation than grayscale). No clouds mask involved.

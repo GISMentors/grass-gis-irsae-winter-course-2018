@@ -152,8 +152,8 @@ Units
    units/04
    units/05
    units/06
-   
-* Unit 07 - QGIS loves GRASS
+   units/07
+
 * Unit 08 - Modeler
 * Unit 09 - Model tuning
 * Unit 10 - Python intro
