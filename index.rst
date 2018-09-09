@@ -136,7 +136,8 @@ projected in ETRS89 / UTM zone 33N (:epsg:`25833`). See detailed
 description below.
 
 * administrative borders (:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml`, source: `GeoNorge <https://kartkatalog.geonorge.no/metadata/kartverket/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671>`__)
-
+* Sentinel-2 sample bands (:file:`sentinel/sample`, source: Copernicus Open Access Hub)
+  
 Units
 =====
 
