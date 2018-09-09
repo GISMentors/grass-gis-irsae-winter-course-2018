@@ -1,47 +1,18 @@
 #!/bin/bash
 
-sudo apt install subversion \
-     autoconf2.13 \
-     autotools-dev \
-     bison \
-     flex \
-     graphviz \
-     libblas-dev \
-     libbz2-dev \
-     libcairo2-dev \
-     libfftw3-dev \
-     libfreetype6-dev \
-     libgdal-dev \
-     libgeos-dev \
-     libglu1-mesa-dev \
-     libjpeg-dev \
-     liblapack-dev \
-     libmotif-dev \
-     libmysqlclient-dev \
-     libncurses5-dev \
-     libnetcdf-dev \
-     libpng-dev \
-     libpq-dev \
-     libproj-dev \
-     libreadline-dev \
-     libsqlite3-dev \
-     libtiff-dev \
-     libwxgtk3.0-dev \
-     libxmu-dev \
-     netcdf-bin \
-     proj-bin \
+sudo apt install proj-bin \
      python \
-     python-dev \
      python-numpy \
      python-pil \
      python-ply \
-     python-wxgtk3.0 \
-     unixodbc-dev \
-     zlib1g-dev \
-     python-ply \
-    python-flask
+     geany
 
-sudo pip install pymodis sentinelsat pandas pywps
+sudo pip install pymodis sentinelsat pandas
+
+# GRASS 7.4.1
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get update
+sudo apt-get install grass qgis
 
 # liblas
 wget https://github.com/LASzip/LASzip/releases/download/v2.2.0/laszip-src-2.2.0.tar.gz
@@ -59,7 +30,4 @@ cmake -G "Unix Makefiles" ../ -DWITH_LASZIP=YES
 make
 sudo make install
 
-cd /home/user
-git clone https://github.com/geopython/pywps-flask.git
-chown user:user pywps-flask -R
 exit 0
