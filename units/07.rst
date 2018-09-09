@@ -71,3 +71,26 @@ displayed in QGIS map window.
            
    Resultant NDVI raster displayed in QGIS map window (with better
    color interpretation than grayscale). No clouds mask involved.
+
+GRASS plugin
+------------
+
+GRASS plugin has been designed to support GRASS as *native* processing
+toolbox.  This also includes ability to display data stored in GRASS
+native format, raster and vector maps located in GRASS locations. And,
+of course, ability to run any GRASS command with full flexibility of
+GRASS environment. On the other hand, in contrast to **Processing**
+plugin, the GRASS plugin requires at least basic knowledge of GRASS
+GIS. User have to understand concept of locations and mapset, and
+control computational region. Data created by GRASS plugin are
+persistent and accessible also by GRASS itself.
+
+GRASS plugin behaves similarly to GRASS itself. In order to use GRASS
+tools, there must be a location and a mapset available to be
+entered. New location/mapset can be created by :menuselection:`Plugins
+--> GRASS --> New Mapset`. Creating new mapsets in GRASS plugin is a
+very similar procedure to creating location/mapset in native GRASS
+environment, see :ref:`Creating new location <create-location>` (Unit
+02). Since we already have GRASS location and mapset prepared from
+:doc:`02`, we can easily open it by :menuselection:`Plugins --> GRASS
+--> Open Mapset`.

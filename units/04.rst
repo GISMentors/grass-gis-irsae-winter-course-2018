@@ -52,7 +52,7 @@ The corresponding command for console would be:
 
 .. code-block:: bash
 
-   v.clip ainput=MaskFeature binput=oslo output=oslo_clouds
+   v.clip input=MaskFeature clip=oslo output=oslo_clouds
 
 .. figure:: ../images/units/04/oslo-clouds.png
 

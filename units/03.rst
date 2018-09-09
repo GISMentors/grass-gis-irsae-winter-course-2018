@@ -23,7 +23,7 @@ Raster data
 ^^^^^^^^^^^
 
 Let's start with data file used for creating our project location in
-:doc:`02`. :file:`L2A_T32VNM_20180222T104029_B04_10m.jp2` is a
+:doc:`02`. :file:`L2A_T32VNM_20170705T105031_B04_10m.jp2` is a
 :wikipedia:`JPEG2000` file, which is nowadays commonly used GIS
 *raster* format for imagery data.
 

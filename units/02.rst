@@ -47,6 +47,8 @@ our own location, a project related to *Oslo region*.
 .. note:: Download sample location functionality is available only in
    GRASS 7.4+.
 
+.. _create-location:
+
 Create a new location
 ---------------------
 
@@ -66,7 +68,7 @@ is created using given EPSG code (*Select EPSG code of spatial
 reference system*) or from existing data (*Read projection and datum
 terms from a georeferenced data file*). In our case a new location
 will be created based on sample Sentinel data (eg.
-:file:`L2A_T32VNM_20180222T104029_B04_10m.jp2` file located in
+:file:`L2A_T32VNM_20170705T105031_B04_10m.jp2` file located in
 :file:`sentinel/sample` directory of sample dataset).
 
 .. figure:: ../images/units/02/create-location-1.png
