@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE gxm SYSTEM "grass-gxm.dtd">
 <gxm>
-    <window pos="623,226" size="985,767" />
+    <window pos="26,23" size="1037,856" />
     <properties>
-        <name>ndvi-v3</name>
-        <description>NDVI model version 3</description>
+        <name>ndvi-v2</name>
+        <description>NDVI model version 2</description>
         <author>martin</author>
         <flag name="overwrite" />
     </properties>
@@ -12,7 +12,7 @@
         <task name="v.overlay">
             <parameter name="ainput">
                 <parameterized />
-                <value>jena_boundary_5km@PERMANENT</value>
+                <value>oslo@PERMANENT</value>
             </parameter>
             <parameter name="alayer">
                 <value>1</value>
@@ -50,7 +50,7 @@
                 <value>region_mask</value>
             </parameter>
             <parameter name="align">
-                <value>L2A_T32UPB_20170706T102021_B04_10m@PERMANENT</value>
+                <value>L2A_T32VNM_20170705T105031_B04_10m@PERMANENT</value>
             </parameter>
             <flag name="overwrite" />
         </task>
@@ -72,7 +72,7 @@
     <action id="4" name="i.vi" pos="375,185" size="125,50">
         <task name="i.vi">
             <parameter name="red">
-                <value>L2A_T32UPB_20170706T102021_B04_10m@PERMANENT</value>
+                <value>L2A_T32VNM_20170705T105031_B04_10m@PERMANENT</value>
             </parameter>
             <parameter name="output">
                 <value>ndvi</value>
@@ -81,7 +81,7 @@
                 <value>ndvi</value>
             </parameter>
             <parameter name="nir">
-                <value>L2A_T32UPB_20170706T102021_B08_10m@PERMANENT</value>
+                <value>L2A_T32VNM_20170705T105031_B08_10m@PERMANENT</value>
             </parameter>
             <parameter name="storage_bit">
                 <value>8</value>
@@ -98,7 +98,7 @@
                 <value>ndvi_class</value>
             </parameter>
             <parameter name="rules">
-                <value>/home/martin/geodata/jena/models/reclass.txt</value>
+                <value>/home/martin/git/gismentors/grass-gis-irsae-winter-course-2018/_static/models/reclass.txt</value>
             </parameter>
             <flag name="overwrite" />
         </task>
@@ -109,7 +109,7 @@
                 <value>ndvi_class</value>
             </parameter>
             <parameter name="rules">
-                <value>/home/martin/geodata/jena/models/colors.txt</value>
+                <value>/home/martin/git/gismentors/grass-gis-irsae-winter-course-2018/_static/models/colors.txt</value>
             </parameter>
         </task>
     </action>
@@ -151,14 +151,14 @@
             </parameter>
             <parameter name="threshold">
                 <parameterized />
-                <value>1600</value>
+                <value>2000</value>
             </parameter>
             <flag name="overwrite" />
         </task>
     </action>
     <data pos="135,35" size="175,50">
         <data-parameter prompt="vector">
-            <value>jena_boundary@PERMANENT</value>
+            <value>oslo@PERMANENT</value>
         </data-parameter>
         <relation dir="from" id="1" name="ainput">
         </relation>
@@ -183,7 +183,7 @@
     </data>
     <data pos="600,185" size="175,50">
         <data-parameter prompt="raster">
-            <value>L2A_T32UPB_20170706T102021_B04_10m@PERMANENT</value>
+            <value>L2A_T32VNM_20170705T105031_B04_10m@PERMANENT</value>
         </data-parameter>
         <relation dir="from" id="4" name="red">
         </relation>
@@ -201,7 +201,7 @@
     </data>
     <data pos="145,185" size="175,50">
         <data-parameter prompt="raster">
-            <value>L2A_T32UPB_20170706T102021_B08_10m@PERMANENT</value>
+            <value>L2A_T32VNM_20170705T105031_B08_10m@PERMANENT</value>
         </data-parameter>
         <relation dir="from" id="4" name="nir">
         </relation>
@@ -210,6 +210,7 @@
         <data-parameter prompt="raster">
             <value>ndvi_class</value>
         </data-parameter>
+        <display />
         <relation dir="from" id="7" name="input">
         </relation>
         <relation dir="from" id="6" name="map">
@@ -221,6 +222,7 @@
         <data-parameter prompt="vector">
             <value>ndvi_class</value>
         </data-parameter>
+        <display />
         <relation dir="from" id="8" name="input">
         </relation>
         <relation dir="to" id="7" name="output">
@@ -230,6 +232,7 @@
         <data-parameter prompt="vector">
             <value>ndvi_vector</value>
         </data-parameter>
+        <display />
         <relation dir="to" id="8" name="output">
         </relation>
     </data>

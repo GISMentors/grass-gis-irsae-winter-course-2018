@@ -155,8 +155,8 @@ Units
    units/06
    units/07
    units/08
-
-* Unit 09 - Model tuning
+   units/09
+   
 * Unit 10 - Python intro
 * Unit 11 - Scripting
 * Unit 12 - Script tuning
