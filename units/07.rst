@@ -94,3 +94,71 @@ environment, see :ref:`Creating new location <create-location>` (Unit
 02). Since we already have GRASS location and mapset prepared from
 :doc:`02`, we can easily open it by :menuselection:`Plugins --> GRASS
 --> Open Mapset`.
+
+.. figure:: ../images/units/07/grass-open-mapset.png
+   :class: small
+           
+   Open existing location and mapset by GRASS plugin.
+
+After opening existing mapset, the GRASS tools are activated 
+accessible from menu :menuselection:`Plugins --> GRASS --> Open GRASS
+Tools`.
+
+As advanced GRASS users, we know that before any computation desired
+computational region must be defined. For this task, GRASS plugin
+offers GUI tool in :item:`Region` tab. In any case, for more advanced
+operations can be used :grasscmd:`g.region` GRASS module.
+
+.. figure:: ../images/units/07/grass-region.svg
+
+   Set computation region from map display. Don't forget to set
+   correct spatial resolution (for real work it's better to use
+   :grasscmd:`g.region` with `align` option).
+   
+Unfortunately :grasscmd:`i.vi` GRASS module is not available in GRASS
+plugin. We can try to compute NDVI index using :grasscmd:`r.mapcalc`,
+and well-known map algebra technique.
+
+.. figure:: ../images/units/07/grass-r-mapcalc.png
+   
+   Search :grasscmd:`r.mapcalc` module in GRASS plugin.
+
+GRASS plugin offers native graphical front-end for map algebra.
+
+.. figure:: ../images/units/07/grass-map-calc.png
+
+   Graphical Map Calculator in GRASS plugin.
+
+For those who don't like this tool there is another possibility. To
+launch :grasscmd:`i.vi` from **GRASS Shell**.
+
+.. figure:: ../images/units/07/grass-shell.png
+   :class: small
+        
+   GRASS Shell.
+
+.. tip:: If you add special flag :param:`--ui` at the end of command,
+   a native GRASS GUI dialog appears. In this way you can start other
+   GRASS tools like :grasscmd:`g.gui.gmodeler` (see :doc:`08`) or
+   whole GRASS GUI by :grasscmd:`g.gui`. But it seems schizophrenic a
+   bit to start GRASS GUI from GRASS plugin in QGIS
+   environment. Someone could ask, why don't you use GRASS directly
+   ;-)
+
+   .. figure:: ../images/units/07/grass-i-vi-shell.svg
+      :class: large
+           
+      Launch native GUI dialog for :grasscmd:`i.vi` GRASS module.
+
+As you already know, output data produced by GRASS are stored in the
+current mapset. Native GRASS data can be directly accessed by QGIS
+*Browse Panel* in normal way as other data sources, see
+:numref:`qgis-grass-browse`.
+
+.. _qgis-grass-browse:
+
+.. figure:: ../images/units/07/grass-data-browse.png
+   :class: large
+        
+   Browse GRASS data similarly as other data sources.
+
