@@ -156,8 +156,8 @@ Units
    units/07
    units/08
    units/09
-   
-* Unit 10 - Python intro
+   units/10
+
 * Unit 11 - Scripting
 * Unit 12 - Script tuning
 * Unit 13 - PyGRASS intro
