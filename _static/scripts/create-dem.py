@@ -49,7 +49,8 @@ def import_files(directory):
         fullname = os.path.join(directory, f)
         basename = os.path.basename(f)
         # '-' is not valid for vector map names
-        mapname = os.path.splitext(basename)[0].replace('-', '_')
+        # vector map names cannot start with number
+        mapname = "las_{}".format(os.path.splitext(basename)[0].replace('-', '_'))
         
         maps.append(mapname)
         gs.message("Importing <{}>...".format(fullname))

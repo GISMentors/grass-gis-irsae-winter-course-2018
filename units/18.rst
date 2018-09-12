@@ -1,9 +1,6 @@
 Unit 18 - Lidar scripting
 =========================
 
-.. warning:: Materials under construction!
-
-
 In this unit we will recover our knowledge of PyGRASS scripting (see
 :doc:`14`). Let's create a fancy script to produce seamless DEM
 (Digital Elevation Model) from bunch of LAS/LAZ files. Why so fancy?
@@ -38,8 +35,34 @@ overlap in order to create seamless mosaics, see
 :grasscmd:`r.series`, see :lcode:`88`. In overlaps cell values will be
 computed as average, it is a main reason why we do not use
 :grasscmd:`r.patch`.
-  
+
 .. literalinclude:: ../_static/scripts/create-dem.py
    :language: python
    :linenos:
    :emphasize-lines: 6, 9, 13, 18, 33, 37, 42, 56, 57, 59, 66, 72-75, 81, 88
+
+Compare with existing raster
+----------------------------
+
+First we need to import all the DTM downloaded from
+`hoydedata.no <http://www.hoydedata.no/>`__. You can import all TIF file
+using :menuselection:`File --> Import raster data --> Simplified raster
+import with reprojection` checking :item:`Directory` as :item:`Source type`
+and selecting :file:`/home/geodata/lidar/dtm/`
+
+.. figure:: ../images/units/18/import_dtm.png
+   :class: middle
+
+Once the DTM are imported you can patch them using :grasscmd:`r.series`
+and set the color to `elevation`
+
+.. code-block:: bash
+
+   r.series input=`g.list type=raster pattern=DTM_* sep=','` output=DTM_patch
+   r.colors map=DTM_patch@lidar color=elevation
+
+.. figure:: ../images/units/18/dtm_patched.png
+   :class: middle
+
+The last step is to calculate the difference beetween the imported DTM and
+the created DSM with the previous Python script.
