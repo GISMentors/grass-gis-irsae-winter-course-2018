@@ -26,63 +26,63 @@ def cleanup():
 
 def main():
     Module("v.overlay",
-                overwrite = True,
-                ainput = "oslo@PERMANENT",
-                alayer = "1",
-                atype = "auto",
-                binput = "MaskFeature@PERMANENT",
-                blayer = "1",
-                btype = "area",
-                operator = "not",
-                output = "region_mask",
-                olayer = "1,0,0",
-                snap = 1e-8)
+           overwrite = True,
+           ainput = "oslo@PERMANENT",
+           alayer = "1",
+           atype = "auto",
+           binput = "MaskFeature@PERMANENT",
+           blayer = "1",
+           btype = "area",
+           operator = "not",
+           output = "region_mask",
+           olayer = "1,0,0",
+           snap = 1e-8)
 
     Module("g.region",
-                overwrite = True,
-                vector = "region_mask",
-                align = "L2A_T32VNM_20170705T105031_B04_10m@PERMANENT")
+           overwrite = True,
+           vector = "region_mask",
+           align = "L2A_T32VNM_20170705T105031_B04_10m@PERMANENT")
 
     Module("r.mask",
-                overwrite = True,
-                maskcats = "*",
-                vector = "region_mask",
-                layer = "1")
+           overwrite = True,
+           maskcats = "*",
+           vector = "region_mask",
+           layer = "1")
 
     Module("i.vi",
-                overwrite = True,
-                red = "L2A_T32VNM_20170705T105031_B04_10m@PERMANENT",
-                output = "ndvi",
-                viname = "ndvi",
-                nir = "L2A_T32VNM_20170705T105031_B08_10m@PERMANENT",
-                storage_bit = 8)
+           overwrite = True,
+           red = "L2A_T32VNM_20170705T105031_B04_10m@PERMANENT",
+           output = "ndvi",
+           viname = "ndvi",
+           nir = "L2A_T32VNM_20170705T105031_B08_10m@PERMANENT",
+           storage_bit = 8)
 
     Module("r.recode",
-                overwrite = True,
-                input = "ndvi",
-                output = "ndvi_class",
-                rules = "/home/martin/git/gismentors/grass-gis-irsae-winter-course-2018/_static/models/reclass.txt")
+           overwrite = True,
+           input = "ndvi",
+           output = "ndvi_class",
+           rules = "/home/martin/git/gismentors/grass-gis-irsae-winter-course-2018/_static/models/reclass.txt")
 
     Module("r.colors",
-                map = "ndvi_class",
-                rules = "/home/martin/git/gismentors/grass-gis-irsae-winter-course-2018/_static/models/colors.txt")
+           map = "ndvi_class",
+           rules = "/home/martin/git/gismentors/grass-gis-irsae-winter-course-2018/_static/models/colors.txt")
 
     Module("r.to.vect",
-                flags = 'sv',
-                overwrite = True,
-                input = "ndvi_class",
-                output = "ndvi_class",
-                type = "area",
-                column = "value")
+           flags = 'sv',
+           overwrite = True,
+           input = "ndvi_class",
+           output = "ndvi_class",
+           type = "area",
+           column = "value")
 
     Module("v.clean",
-                overwrite = True,
-                input = "ndvi_class",
-                layer = "-1",
-                type = ["point","line","boundary","centroid","area","face","kernel"],
-                output = "ndvi_vector",
-                tool = "rmarea",
-                threshold = 1600)
+           overwrite = True,
+           input = "ndvi_class",
+           layer = "-1",
+           type = ["point","line","boundary","centroid","area","face","kernel"],
+           output = "ndvi_vector",
+           tool = "rmarea",
+           threshold = 1600)
 
     ret = Module('r.univar', flags='g', map='ndvi', stdout_=PIPE)
     stats = parse_key_val(ret.outputs.stdout)

@@ -170,9 +170,8 @@ Units
    units/09
    units/10
    units/11
-
-* Unit 11 - Scripting
-* Unit 12 - Script tuning
+   units/12
+   
 * Unit 13 - PyGRASS intro
 * Unit 14 - PyGRASS scripting
 * Unit 15 - Reprojection

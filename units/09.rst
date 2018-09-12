@@ -94,6 +94,8 @@ Sample model to download: `ndvi-v2.gxm <../_static/models/ndvi-v2.gxm>`__
 (note: don't forget to fix path to reclass and colors file for
 :grasscmd:`r.recode` and :grasscmd:`r.colors` modules)
 
+.. _model-parameterization:
+
 Parameterization
 ----------------
 
