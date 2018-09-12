@@ -76,6 +76,11 @@ displayed in Map Window.
            
    Imported Sentinel band displayed in Map Window.
 
+.. note:: GRASS imports/links RGB image as separate bands. Color
+   composition can be displayed using :grasscmd:`d.rgb`. By
+   :grasscmd:`r.composite` it is possible to create color composite as
+   a new raster map.
+
 .. _import-vector-section:
 
 Vector data
