@@ -48,7 +48,7 @@ much as possible take home effect. An OSGeo-Live USB medium will be handed out w
 relevant software and sample data installed.
 
 IRSAE cannot give **ECTS** directly. Following earlier praxis in IRSAE courses, participants will be 
-provided with a certificate upon completition of the course, stating that the course is worth 1 ECTS 
+provided with a certificate upon completion of the course, stating that the course is worth 1 ECTS 
 credit (as 1 ECTS should roughly correspond to 20 to 25 hours of student's time). It is then up to the 
 University where the students are affiliated to validate the credits (or not).
 
