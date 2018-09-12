@@ -136,8 +136,7 @@ Dataset
 
 For purpose of this training materials a sample dataset has been
 created based on Open Data covering `Studenterhytta venue region
-<https://www.openstreetmap.org/node/879127732>`__. All data layers are
-projected in ETRS89 / UTM zone 33N (:epsg:`25833`). See detailed
+<https://www.openstreetmap.org/node/879127732>`__. See detailed
 description below.
 
 * administrative borders (:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml`, source: `GeoNorge <https://kartkatalog.geonorge.no/metadata/kartverket/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671>`__)
