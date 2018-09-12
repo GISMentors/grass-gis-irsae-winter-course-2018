@@ -105,7 +105,7 @@ file, which is a commonly used GIS exchange *vector* format.
 
    Dialog for importing vector file(s). Input file
    :file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` contains several
-   layers, we choose "Filke" (administrative regions) to import.
+   layers, we choose "Fylke" (administrative regions) to import.
 
 In this case appearently SRS of input data layer and current GRASS
 location differs (see :item:`Project match: No` on
