@@ -46,7 +46,12 @@ Course fees - that cover full board (3 nights at Studenterhytta with lunch to lu
 Participants are exected to bring their own device / laptop, so the course can have as 
 much as possible take home effect. An OSGeo-Live USB medium will be handed out with all 
 relevant software and sample data installed.
- 
+
+IRSAE cannot give **ECTS** directly. Following earlier praxis in IRSAE courses, participants will be 
+provided with a certificate upon completition of the course, stating that the course is worth 1 ECTS 
+credit (as 1 ECTS should roughly correspond to 20 to 25 hours of student's time). It is then up to the 
+University where the students are affiliated to validate the credits (or not).
+
 For questions regarding registration and organisation please contact:
 `Stefan Blumentrath <https://www.nina.no/Kontakt/Ansatte/Ansattinformasjon.aspx?AnsattID=14230>`__
 
