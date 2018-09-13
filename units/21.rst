@@ -91,7 +91,13 @@ Time topology information can be obtained by :grasscmd:`t.topology`.
    | Number of gaps: ............ 0
    | Granularity: ............... 8 days
    ...
-   
+
+It is possible to see our spatial-temporal dataset also graphically using
+:grasscmd:`g.gui.timeline`
+
+.. figure:: ../images/units/21/timeline.png
+   :class: large
+
 Space-time Data Querying
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
