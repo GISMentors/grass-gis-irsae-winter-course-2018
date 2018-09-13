@@ -180,10 +180,10 @@ Units
 * Unit 19 - Sentinel preprocessing
 * Unit 20 - MODIS
 * Unit 21 - Spatio-temporal intro
-* Unit 22 - Sentinel Spatio-temporal
-* Unit 23 - Spatio-temporal scripting
-* Unit 24 - Spatio-temporal script tuning
-* Unit 25 - MODIS Spatio-temporal
+* Unit 22 - Spatio-temporal basic analysis
+* Unit 23 - Sentinel Spatio-temporal
+* Unit 24 - Spatio-temporal scripting
+* Unit 25 - Spatio-temporal script tuning
 * Unit 26 - MODIS Spatio-temporal scripting
 * Unit 27 - Regression analysis
 * Unit 28 - Classification
