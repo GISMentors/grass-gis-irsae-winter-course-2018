@@ -34,5 +34,7 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
 sudo apt-get install grass qgis
 
+# clean up
+sudo apt autoremove
 
 exit 0
