@@ -174,19 +174,20 @@ Units
            
 * Unit 14 - PyGRASS scripting
 * Unit 15 - Reprojection
-* Unit 16 - Spatio-temporal intro
-* Unit 17 - Lidar
-* Unit 18 - Lidar scripting
-* Unit 19 - Sentinel downloader
-* Unit 20 - Sentinel Spatio-temporal
-* Unit 21 - Spatio-temporal scripting
-* Unit 22 - Spatio-temporal script tuning
-* Unit 23 - GRASS and R
-* Unit 24 - Regression analysis
-* Unit 25 - Classification
-* Unit 26 - MODIS
-* Unit 27 - MODIS Spatio-temporal
-* Unit 28 - MODIS Spatio-temporal scripting
+* Unit 16 - Lidar
+* Unit 17 - Lidar scripting
+* Unit 18 - Sentinel downloader
+* Unit 19 - Sentinel preprocessing
+* Unit 20 - MODIS
+* Unit 21 - Spatio-temporal intro
+* Unit 22 - Spatio-temporal basic analysis
+* Unit 23 - Sentinel Spatio-temporal
+* Unit 24 - Spatio-temporal scripting
+* Unit 25 - Spatio-temporal script tuning
+* Unit 26 - MODIS Spatio-temporal scripting
+* Unit 27 - Regression analysis
+* Unit 28 - Classification
+* Unit 29 - GRASS and R
 
 ..
    .. toctree::
@@ -220,6 +221,7 @@ Units
    units/26
    units/27
    units/28
+   units/29
    
 Lecturers
 =========

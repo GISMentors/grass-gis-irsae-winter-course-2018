@@ -1,169 +1,203 @@
-Unit 16 - Spatio-temporal intro
-===============================
+Unit 16 - Lidar
+===============
 
-.. warning:: Materials under construction!
+There is open LiDAR data for Norway available at
+`hoydedata.no <http://www.hoydedata.no/>`__. Go to `Download 
+<http://www.hoydedata.no/>`__, choose region in map viewer and request data for download.
 
+LiDAR data used in this unit can be found in sample dataset, in
+:file:`~/geodata/lidar/laz` folder. Data are stored in LAZ (compressed LAS format).
+   
+Import data
+-----------
 
-GRASS comes in version 7 with high quality tools for spatio-temporal
-data processing, see :grasscmd:`GRASS documentation <temporalintro>`
-for details.
+For importing LAS/LAZ data there are available two GRASS modules:
 
-GRASS introduces three special datatypes that are designed to handle
-time series data:
+* :grasscmd:`r.in.lidar` for importing point cloud data as raster map
+* :grasscmd:`v.in.lidar` for importing point cloud data as vector point map
 
-* *Space time raster datasets* (``strds``) for managing raster map
-  time series.
-* *Space time 3D raster datasets* (``str3ds``) for managing 3D raster
-  map time series.
-* *Space time vector datasets* (``stvds``) for managing vector map time
-  series.
-            
-Spatio-temporal flooding simulation
------------------------------------
+.. note:: GRASS requires `libLAS <http://www.liblas.org>`_ library for
+   reading LAS data. For compressed LAS (LAZ) there is another
+   dependency, a `laszip <https://www.laszip.org/>`__ library.
 
-Module :grasscmd:`r.lake` itself allows to generating only one output
-raster map within one run. This limitation is surpassed by addon
-:grasscmdaddons:`r.lake.series`.
+   Basic metadata can be obtained by command line utility ``lasinfo``
+   which is part of libLAS library.
 
-.. _grass-addons:
+   .. code-block:: bash
+
+      lasinfo ~/geodata/lidar/laz/32-1-514-136-15.laz
+
+      ...
+      Min X Y Z:                   590400.00 6655800.00 283.31
+      Max X Y Z:                   591199.99 6656399.99 499.04
+      ...
+
+Vector import
+^^^^^^^^^^^^^
+
+Create a new mapset called `lidar` to save all the LiDAR data.
+
+Let's try to import selected tile into vector point map first. Flag
+:param:`-t` skips creation of attribute table. The import process will
+be significantly faster. Another flag which will speed up the import
+process is :param:`-b`. It skips building topology (which is not
+needed for point features anyway). Information about data SRS can be
+missing, we will skip projection check by :param:`-o` flag.
+
+.. code-block:: bash
                 
-.. note:: Addons modules are not internal part of GRASS installation
-   but can be easily installed by :grasscmd:`g.extension`
-   (:menuselection:`Settings --> Addons extensions --> Install
-   extension from addons`).
+   v.in.lidar -otb input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34
 
-   .. figure:: ../images/units/17/g-extension.png
+Note that computational region is ignored when importing data using
+:grasscmd:`v.in.lidar`.
 
-      Install :grasscmdaddons:`r.lake.series` GRASS Addon.
-
-:grasscmdaddons:`r.lake.series` module outputs multiple raster maps
-registered in space-time raster dataset.
-
-.. code-block:: bash
-
-   r.lake.series elevation=dem out=lakes start_water_level=134 end_water_level=145 \
-   water_level_step=0.1 coordinates=686668,5650664 \
-   time_step=10 nproc=3
-
-In the example above we created space-time series between water levels
-134 and 145 with step 0.1 m. Time step is 10 min. To increase
-computation speed we used three CPU cores. The result is stored in
-raster space-time dataset named :map:`lakes`.
-
-Basic information about output dataset can be obtained by
-:grasscmd:`t.info` command.
+We can also check the point overall point density by
+:grasscmd:`v.outlier`. Note that :grasscmd:`v.outlier` is working in
+the current computation region(!). So we also set up the region based on
+imported data (note that :grasscmd:`g.region` can run for a
+while. Since we skipped building topology, the map extent must
+computed by scanning all points in input vector map).
 
 .. code-block:: bash
 
-   t.info input=lakes
+   g.region vector=las_32_1_514_136_34
+   v.outlier -e input=las_32_1_514_136_34
+
+::
+
+   Estimated point density: 9.827
+   Estimated mean distance between points: 0.319
+
+.. note:: Point density is calculated for map (square) unit.
+          
+Basic metadata can be printed by :grasscmd:`v.info` (since no topology
+is built, the module must scan all features in the map):
+
+.. code-block:: bash
+                   
+   v.info map=las_32_1_514_136_34
 
 ::
    
    ...
-   +-------------------- Relative time -----------------------------------------+
-   | Start time:................. 1
-   | End time:................... 1101
-   | Relative time unit:......... minutes
-   | Granularity:................ 10
-   | Temporal type of maps:...... point
+   |   Number of points:       4716789         Number of centroids:  0          |
    ...
-    
-Time topology information can be obtained by :grasscmd:`t.topology`.
-
-.. code-block:: bash
-
-   t.topology input=lakes
-
-::
-
+   |   Map is 3D:              Yes                                              |
    ...
-   +-------------------- Temporal topology -------------------------------------+
-   ...
-   | Number of points: .......... 111
-   | Number of gaps: ............ 110
-   | Granularity: ............... 10
+   |   Projection: UTM (zone 32)                                                |
+   |                                                                            |
+   |               N:        6655799.99    S:           6655200                 |
+   |               E:         592799.99    W:            592000                 |
+   |               B:            315.87    T:            431.17                 |
    ...
    
-Space-time Data Querying
-^^^^^^^^^^^^^^^^^^^^^^^^
+Raster import
+^^^^^^^^^^^^^
 
-By :grasscmd:`t.rast.list` can be printed raster maps within given
-time period. In the example below are printed raster maps within the
-first hour of simulated flooding.
+Now let's try import input points into raster map. Flag :param:`-e`
+extends current computational region to cover all imported
+points. Otherwise user needs to set up computational region by
+:grasscmd:`g.region`. Spatial resolution for output raster map is
+defined by :param:`resolution` option. By default, for cells with more
+points involved, the value is computed by mean, see :param:`method`
+option. Cells covered by no points will get NULL values assigned.
+   
+.. code-block:: bash
+
+   r.in.lidar -oe input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34 resolution=1
+
+Basic metadata about created raster map can be obtained by
+:grasscmd:`r.info`.
 
 .. code-block:: bash
 
-   t.rast.list input=lakes order=start_time where="start_time < 60"
-
-Univariate statistic can be calculated by :grasscmd:`t.rast.univar`,
-in example below we compute statistics only for the first hour of
-flooding.
-
-.. code-block:: bash
-
-   t.rast.univar input=lakes where="start_time < 60"
+   r.info map=las_32_1_514_136_34
 
 ::
-
-   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
-   lakes_134.0@flooding|1|None|0.211415510911208|0.007537841796875|0.738616943359375|...
-   lakes_134.1@flooding|11|None|0.397385983853727|0.000823974609375|1.14051818847656|...
-   lakes_134.2@flooding|21|None|0.445528310686884|0.0003814697265625|1.24050903320312|...
-   lakes_134.3@flooding|31|None|0.502563093844781|0.0012054443359375|1.34051513671875|...
-   lakes_134.4@flooding|41|None|0.564594079032162|0.0021820068359375|1.44050598144531|...
-   lakes_134.5@flooding|51|None|0.582153865733045|0.0008697509765625|1.54051208496094|...
-
-Data aggregation can be performed by :grasscmd:`t.rast.aggregate`. In
-the example below data are aggregated by 1 hour.
-
-.. code-block:: bash
-
-   t.rast.aggregate input=lakes output=lakes_h basename=ag granularity=60 nproc=3
-
-The command generates a new space time dataset which can be used for
-subsequent analysis like univariate statistics:
-
-.. code-block:: bash
-
-   t.rast.univar input=lakes_h
-
-::
-
-   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
-   ag_00001@flooding|1|61|0.431898174745821|0.0008697509765625|1.34051208496094|...
+   
    ...
-   ag_00019@flooding|1081|1141|5.69696318836018|4.57763671875e-05|11.9405110677083|...
+   |            N:    6655800    S:    6655200   Res:     1                     |
+   |            E:     592800    W:     592000   Res:     1                     |
+   |   Range of data:    min = 315.92  max = 429.5867                           |
+   ...
 
-Space-time Data Extracting
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. figure:: ../images/units/16/import-rast-vect.png
 
-Raster spatio-temporal data can be extract into new datasets using
-:grasscmd:`t.rast.extract`. In the example below will be create three
-new datasets for first, second and third six hours of flooding.
+   Imported data as vector points. Raster map with 1m resolution in the
+   background.
 
-.. code-block:: bash
-		
-   t.rast.extract input=lakes where="start_time > 0 and start_time < 361" output=lakes_1
-   t.rast.extract input=lakes where="start_time > 360 and start_time < 720" output=lakes_2
-   t.rast.extract input=lakes where="start_time > 720" output=lakes_3         
+Filling gaps
+------------
 
-Aggregation into single raster output can be performed by
-:grasscmd:`t.rast.series`:
-
-.. code-block:: bash
-                
-   t.rast.series input=lakes_1 output=lakes_1_avg method=average
-
-Let's print univariate statistics for generated raster output by
-:grasscmd:`r.univar`:
+There are several GRASS modules for filling gaps in raster maps like
+:grasscmd:`r.fillnulls` or :grasscmd:`r.fill.stats`. The first module
+is based on spline interpolation, the second fills gaps with
+interpolated values using IDW. We will use the second module which
+fill nulls rapidly compared to :grasscmd:`r.fillnulls`. By
+:option:`-k` flag we ensure that original values will be kept. Only
+cells with no-data value will be modified.
 
 .. code-block:: bash
 
-   r.univar map=lakes_1_avg
+   r.fill.stats -k input=las_32_1_514_136_34 output=las_32_1_514_136_34_no_gaps
 
-::
+.. figure:: ../images/units/16/rast-gaps-fill.png
 
-   minimum: 0.00152588
-   maximum: 2.93515
-   range: 2.93362
-   mean: 1.0993
+   NULL values (on left part) filled by :grasscmd:`r.fill.stats`
+   (right part).
+
+.. note::
+
+   Note that only cells in given distance (8 pixels by default, see
+   :option:`cells` option) are processed.
+
+
+.. _edge-detection:
+
+Edge detection
+--------------
+
+The filter aims to recognize and extract attached and detached object
+(such as buildings, bridges, power lines, trees, etc.) in order to
+create a Digital Terrain Model. (source:
+:grasscmd:`v.lidar.edgedetection` manual page) Example of simple
+workflow based on :grasscmd:`v.lidar.edgedetection`,
+:grasscmd:`v.lidar.growing` and :grasscmd:`v.lidar.correction`
+below. Note that edge detection is usually a time consuming task, and
+the result is not perfect.
+
+.. code-block:: bash
+
+   v.lidar.edgedetection input=las_32_1_514_136_34 output=edge_32_1_514_136_34 ew_step=8 ns_step=8 lambda_g=0.5
+   v.in.lidar -otb input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34_first return_filter=first
+   v.lidar.growing input=edge_32_1_514_136_34 output=grow_32_1_514_136_34 first=las_32_1_514_136_34_first
+   v.lidar.correction input=grow_32_1_514_136_34 output=corr_32_1_514_136_34 terrain=terr_32_1_514_136_34
+
+..
+   .. figure:: ../images/units/16/terrain-only-points.png
+
+   Filtered terrain only points.
+   
+High resolution DSM
+-------------------
+
+Digital Surface Model (DSM) will interpolated by
+:grasscmd:`v.surf.rst` using regularized spline with tension
+approximation. Output resolution will be set to 0.5 meter. The
+computation can be really slow. You can turn computation time to be
+more reasonable by running it in parallel, see :option:`nprocs` option
+(GRASS 7.4+ only).
+
+.. code-block:: bash
+
+   g.region vector=las_32_1_514_136_34 res=0.5 -pa
+   v.surf.rst input=las_32_1_514_136_34 elevation=dsm_32_1_514_136_34 npmin=80 tension=20 smooth=1 nprocs=5
+
+.. tip:: Try also to set higher npmin to reduce artifacts.
+      
+.. figure:: ../images/units/16/dsm.png
+   :class: middle
+
+Similarly we can build Digital Terrain Model (DTM) from filtered
+terrain only points, see :ref:`edge-detection` for details.
+
