@@ -1,0 +1,27 @@
+Unit 23 - GRASS and R
+=====================
+
+.. warning:: Materials under construction!
+
+
+Running R from within GRASS GIS
+
+In your active GRASS session start R
+.. code-block:: bash
+                
+   R
+
+.. code-block:: R
+
+   library(rgrass7)
+
+Running GRASS GIS from within R (or RStudio)
+
+.. code-block:: bash
+                
+   R
+
+.. code-block:: R
+                
+   library(rgrass7)
+

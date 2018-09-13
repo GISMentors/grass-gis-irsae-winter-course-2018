@@ -1,48 +1,12 @@
-Unit 28 - MODIS Spatio-temporal scripting
-=========================================
+Unit 25 - Classification
+========================
 
 .. warning:: Materials under construction!
 
 
-Let's create a simple Python script for computing LST statistics in
-Germany area for given period. Input parameters:
+Supervised and unsupervised classification
 
-* :param:`input` - Name of the input space time raster dataset (line :lcode:`6`)
-* :param:`start` - Start date (line :lcode:`9`)
-* :param:`end` - End date (line :lcode:`15`)
+i.maxlik
+r.ml.learn
 
-The script prints minimum, maximum and mean LST value. The raster map
-for computing statistics is created by :grasscmd:`t.rast.series` (line
-:lcode:`50`), statistics is computed by :grasscmd:`r.univar` (line
-:lcode:`60`). Statistics will be printed in nicely formatted manner,
-see lines :lcode:`66-68`.
-
-In :doc:`25` we processed LST space time dataset only for
-year 2017. We will also check if input dates are valid, see line
-:lcode:`31`.
-
-.. tip::
-
-   You can globally set :param:`quiet` flag by :envvar:`GRASS_VERBOSE`
-   environment variable, see line :lcode:`47`.
-    
-.. literalinclude:: ../_static/scripts/modis-date-stats.py
-   :language: python
-   :linenos:
-   :emphasize-lines: 6, 9, 15, 31, 47, 50, 60, 66-68
-
-Example of usage:
-
-.. code-block:: bash
-                
-   modis-date-stats.py input=modis_c start=2017-03-01 end=2017-04-01
-
-::
-   
-   Min: -5.4
-   Max: 13.8
-   Mean: 8.0
-
-Sample script to download: `modis-date-stats.py
-<../_static/scripts/modis-date-stats.py>`__
-   
+Object based?
