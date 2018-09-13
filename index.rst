@@ -170,8 +170,8 @@ Units
    units/10
    units/11
    units/12
-   
-* Unit 13 - PyGRASS intro
+   units/13
+           
 * Unit 14 - PyGRASS scripting
 * Unit 15 - Reprojection
 * Unit 16 - Spatio-temporal intro

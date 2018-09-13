@@ -46,9 +46,27 @@ with basic vector primitives (points, lines, boundaries, centroids) or
 by :pygrass-vector:`VectorTopo` which allows accessing topological
 primitives like areas or isles. See :ref:`vector-topo-section` section
 for details.
+
+Example below prints nicely format region names and their area size in
+hectares.
+
+.. code-block:: python
+                
+   from grass.pygrass.vector import VectorTopo
+   fylke = VectorTopo('Fylke')
+   fylke.open('r')
    
-Raster statistics
------------------
+   for feat in fylke.viter('areas'):
+       print (u'{0}: {1:.1f}ha'.format(feat.attrs['navn'].split(':', 1)[1][:-1], feat.area() / 10e4))
+   
+   fylke.close()
+
+.. figure:: ../images/units/13/pygrass-shell-vector.png
+
+   PyGRASS vector example in action.
+   
+Raster statistics example
+-------------------------
 
 A simple PyGRASS script for computing basic univariate raster
 statistics below.
