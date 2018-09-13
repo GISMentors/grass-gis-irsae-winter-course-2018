@@ -1,127 +1,50 @@
-Unit 27 - MODIS Spatio-temporal
-===============================
+Unit 22 - Spatio-temporal basic analysis
+=========================================
 
-.. warning:: Materials under construction!
+Map algebra
+------------
 
+As we can see we have to convert DN into Celsius scale as we done for selected
+data in :ref:`Unit 24 <modis-dn-c>`. Instead of running :grasscmd:`r.mapcalc`
+we can use temporal command :grasscmd:`t.rast.mapcalc` which applies map algebra
+to all the maps registered in input space time dataset.
 
-In this unit we will perform time-series based LST reconstruction
-based on :ref:`Unit 24 <modis-lst>`. As we already know GRASS enables
-time-series data handling thanks to :grasscmd:`temporal data
-processing framework <temporalintro>`.
+.. tip::
 
-In :doc:`24` we have :ref:`imported <modis-import>` MODIS data into
-GRASS by :grasscmdaddons:`i.modis.import`. The command was called with
-:param:`-w` flag and :param:`outfile` parameter to generate special
-file which can be later used for creating space-time raster dataset
-(strds).
-
-Creation of space time dataset including basic operations is explained
-in :doc:`17`. Here we just apply our knowledge on MODIS dataset.
-
-At first we will create a new space time raster dataset by
-:grasscmd:`t.create`.
-
-.. code-block:: bash
-
-   t.create output=modis title="MODIS 2017" desc="MODIS data for Germany"
-
-In the next step will register to the dataset imported MODIS data by
-:grasscmd:`t.register`. We run this command twice, once for Aqua data
-than for Terra data.
-
-.. code-block:: bash
-                
-   t.register input=modis file=h18v03_04/tlist-mod.txt
-   t.register input=modis file=h18v03_04/tlist-myd.txt
-
-Let's check basic metedata about created dataset by
-:grasscmd:`t.info`.
-
-.. code-block:: bash
-
-   t.info input=modis
-
-::
-
-   ...
-   | Start time:................. 2017-01-01 00:00:00
-   | End time:................... 2018-01-04 00:00:00
-   ...
-   | Number of registered maps:.. 184
-
-.. _t-register-file:
+   Many of temporal data processing modules (t.*) support parallelization (see nproc option).
    
-.. note:: We are using composed product from the daily 1-kilometer LST
-   product (MOD11A1/MYD11A1) stored on a 1-km Sinusoidal grid as the
-   average values of clear-sky LSTs during an 8-day period.
-
-   ::
-      
-      MOD11A2.A2017297_mosaic_LST_Day_1km|2017-10-24|2017-11-01
-
-Data querying
--------------
-
-For querying space time raster dataset is designed
-:grasscmd:`t.rast.list`. Let's print raster data covering March 2017.
-
 .. code-block:: bash
-                
-   t.rast.list input=modis order=start_time \
-   where="start_time > '2017-03-01' and start_time < '2017-04-01'"
 
-Univariate statistics can be computed by :grasscmd:`t.rast.univar`
-(note that the command is running in the current computation region
-similarly as :grasscmd:`r.univar` does).
-
-.. code-block:: bash
-                
-   t.rast.univar input=modis where="start_time > '2017-03-01' and start_time < '2017-04-01'"
-
-::
-   
-   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
-   ...|2017-03-06 00:00:00|2017-03-14 00:00:00|11127.9119722696|0|14548|11127.9119722696|...
-
-As we can see we have to convert DN into Celsius scale as we done for
-selected data in :ref:`Unit 24 <modis-dn-c>`. Instead of running
-:grasscmd:`r.mapcalc` we can use temporal command
-:grasscmd:`t.rast.mapcalc` which applies map algebra to all the maps
-registered in input space time dataset.
-
-.. tip:: Many of temporal data processing modules (``t.*``) support
-   parallelization (see ``nproc`` option).
-
-.. code-block:: bash
-      
-   t.rast.mapcalc input=modis output=modis_c nproc=3 basename=c \
+   t.rast.mapcalc input=modis output=modis_c nproc=3 basename=modis_celsius \
    expression="if(modis != 0, modis * 0.02 - 273.15, null())"
-                
-The command will create a new space time raster dataset with raster
-maps in Celsius scale. Since new raster map will be created, the
-command requires to define :param:`basename` for them. Note that new
-raster maps will be produced in current computation region with mask
-respected.
+
+.. note::
+
+   In the expression we need to set the Spatio-temporal dataset name instead
+   of the raster maps name.
+
+Alternatively, we could have used :grasscmd:`t.rast.algebra` to perform the
+previous transformation. The command would look like this:
 
 .. code-block:: bash
 
-   t.rast.univar input=modis_c where="start_time > '2017-03-01' and start_time < '2017-04-01'"
+   t.rast.algebra basename=modis_celsius expression="modis_c = modis * 0.02 - 273.15"
 
-Looks better.
+We can easily set the color table for all the maps in a spatial-temporal
+raster dataset by :grasscmd:`t.rast.colors` similarly as :grasscmd:`r.colors`
+does for single raster map.
 
-::
-   
-   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
-   c_033@PERMANENT|2017-03-06 00:00:00|2017-03-14 00:00:00|8.38271624724276|-20.35|17.81|...
+.. code-block:: bash
 
-.. tip:: Color table can be easily set by :grasscmd:`t.rast.colors`
-         similarly as :grasscmd:`r.colors` does for single raster
-         map.
-            
+   t.rast.colors input=modis_c color=celsius 
+
 Data aggregation
 ----------------
 
-We can aggregate data monthly by using :grasscmd:`t.rast.aggregate`.
+The temporal framework enable the user to do data aggregation in a really
+simple way. The command to use is :grasscmd:`t.rast.aggregate`. You have just
+to choose the desidered :param:`granularity` and it will create the new
+temporal dataset
 
 .. code-block:: bash
                           
@@ -133,68 +56,59 @@ Statistics can be computed by :grasscmd:`t.rast.univar`.
                 
    t.rast.univar modis_cm
 
-Example for July and August only.
-
-.. code-block:: bash
-
-   t.rast.univar modis_cm where="start_time > '2017-07-01' and start_time < '2017-09-01'"
-
-Data extraction
----------------
-
-A new space time dataset only with subset of data can be created by
-:grasscmd:`t.rast.extract`. Example for the four seasons below.
-
-.. code-block:: bash
-                          
-   t.rast.extract input=modis_c where="start_time > '2017-03-01' and start_time < '2017-06-01'" \
-   output=modis_spring
-
-   t.rast.extract input=modis_c where="start_time > '2017-06-01' and start_time < '2017-09-01'" \
-   output=modis_summer
-                
-   t.rast.extract input=modis_c where="start_time > '2017-09-01' and start_time < '2017-12-01'" \
-   output=modis_autumn
-                
-   t.rast.extract input=modis_c where="start_time > '2017-12-01' or start_time < '2017-03-01'" \
-   output=modis_winter
-
-
-By the next command :grasscmd:`t.rast.series`, we will compute average
-temperature for each seasons.
+Another aggregations method is :grasscmd:`t.rast.series`, it  allows us to
+aggregate our STRDS or parts of it with different methods. It return a map
+as output and not a temporal dataset as :grasscmd:`t.rast.aggregate`.
+We will compute annual average temperature.
 
 .. code-block:: bash
                 
-   t.rast.series input=modis_spring output=modis_spring_avg method=average
-   t.rast.series input=modis_summer output=modis_summer_avg method=average
-   t.rast.series input=modis_autumn output=modis_autumn_avg method=average
-   t.rast.series input=modis_winter output=modis_winter_avg method=average
+   t.rast.series input=modis_c output=modis_avg method=average
 
 Four new raster maps are created, let's print univariate statistics
 for spring by using :grasscmd:`r.univar`.
    
 .. code-block:: bash
 
-   r.univar modis_spring_avg
+   r.univar modis_avg
 
 ::
 
-   minimum: -3.51545
-   maximum: 17.6643
-   range: 21.1797
-   mean: 10.7001
+   minimum: -11.0865
+   maximum: 16.085
+   range: 27.1715
+   mean: 3.39483
 
-#.. figure:: ../images/units/25/spring_avg.png
+.. figure:: ../images/units/22/annual_avg.png
 
-   Average temperature for spring 2017.
+   Average temperature for 2017.
 
 Data visualization
 ------------------
 
-In :ref:`Unit 17 <st-animation>` have been presented basic GRASS tools
-for temporal data visualization: :grasscmd:`g.gui.timeline` and
-:grasscmd:`g.gui.animation`. See animation example below.
+In addition to :grasscmd:`g.gui.timeline` there are other two GRASS tools
+for temporal data visualization: :grasscmd:`g.gui.animation` and
+:grasscmd:`g.gui.tplot`.
 
-#.. figure:: ../images/units/25/modis-animation.gif
+:grasscmd:`g.gui.animation` permit to the user to create animations and export
+them in different format, the example below show the monthly average
 
-   Monthly aggregated dataset animation.
+.. code-block:: bash
+
+   g.gui.animation strds=modis_cm
+
+.. figure:: ../images/units/22/modis_animation.gif
+
+   Monthly average dataset animation.
+
+The other tool, :grasscmd:`g.gui.tplot`, offer us to plot the time series
+of our variable of interest for a specific point or area of your study region.
+With point you need to set the strds or stvds and a pair of X,Y coordinates.
+
+.. code-block:: bash
+
+   g.gui.tplot strds=modis_c coordinates=258121.68627886,6662114.92897065
+   
+.. figure:: ../images/units/22/tplot_modis.png
+
+   The plot of MODIS monthly average @ Studenterhytta
