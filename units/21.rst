@@ -1,8 +1,5 @@
-Unit 16 - Spatio-temporal intro
+Unit 21 - Spatio-temporal intro
 ===============================
-
-.. warning:: Materials under construction!
-
 
 GRASS comes in version 7 with high quality tools for spatio-temporal
 data processing, see :grasscmd:`GRASS documentation <temporalintro>`
@@ -18,82 +15,148 @@ time series data:
 * *Space time vector datasets* (``stvds``) for managing vector map time
   series.
             
-Spatio-temporal flooding simulation
+Spatio-temporal MODIS data
 -----------------------------------
 
-Module :grasscmd:`r.lake` itself allows to generating only one output
-raster map within one run. This limitation is surpassed by addon
-:grasscmdaddons:`r.lake.series`.
-
-.. _grass-addons:
-                
-.. note:: Addons modules are not internal part of GRASS installation
-   but can be easily installed by :grasscmd:`g.extension`
-   (:menuselection:`Settings --> Addons extensions --> Install
-   extension from addons`).
-
-   #.. figure:: ../images/units/21/g-extension.png
-
-      Install :grasscmdaddons:`r.lake.series` GRASS Addon.
-
-:grasscmdaddons:`r.lake.series` module outputs multiple raster maps
-registered in space-time raster dataset.
+The first step to work with the spatio-temporal framework is to connect the
+database, we will set in the default place :param:`-d`
 
 .. code-block:: bash
 
-   r.lake.series elevation=dem out=lakes start_water_level=134 end_water_level=145 \
-   water_level_step=0.1 coordinates=686668,5650664 \
-   time_step=10 nproc=3
+   t.connect -d
 
-In the example above we created space-time series between water levels
-134 and 145 with step 0.1 m. Time step is 10 min. To increase
-computation speed we used three CPU cores. The result is stored in
-raster space-time dataset named :map:`lakes`.
-
-Basic information about output dataset can be obtained by
-:grasscmd:`t.info` command.
+After that we will create a new space time raster datasets by
+:grasscmd:`t.create`.
 
 .. code-block:: bash
 
-   t.info input=lakes
+   t.create output=modis title="MODIS 2017" desc="MODIS data for Norway"
+
+In the next step will register to the dataset imported MODIS data by
+:grasscmd:`t.register`.
+In :doc:`24` we have :ref:`imported <modis-import>` MODIS data into
+GRASS by :grasscmdaddons:`i.modis.import`. The command was called with
+:param:`-w` flag and :param:`outfile` parameter to generate special
+file which can be later used for creating space-time raster dataset
+(strds).
+We run this command twice, once for Aqua data than for Terra data.
+
+.. code-block:: bash
+
+   t.register input=modis file=~/geodata/modis/tlist-mod.txt
+   t.register input=modis file=~/geodata/modis/tlist-myd.txt
+
+Let's check basic metedata about created dataset by
+:grasscmd:`t.info`.
+
+.. code-block:: bash
+
+   t.info input=modis
 
 ::
-   
+
    ...
-   +-------------------- Relative time -----------------------------------------+
-   | Start time:................. 1
-   | End time:................... 1101
-   | Relative time unit:......... minutes
-   | Granularity:................ 10
-   | Temporal type of maps:...... point
+   | Start time:................. 2017-01-01 00:00:00
+   | End time:................... 2018-01-04 00:00:00
+   | Granularity:................ 8 days
+   | Temporal type of maps:...... interval
    ...
+   | Number of registered maps:.. 184
+
+.. _t-register-file:
+
+.. note:: We are using composed product from the daily 1-kilometer LST
+   product (MOD11A1/MYD11A1) stored on a 1-km Sinusoidal grid as the
+   average values of clear-sky LSTs during an 8-day period.
+
+   ::
+
+      MOD11A2.A2017297_mosaic_LST_Day_1km|2017-10-24|2017-11-01
     
 Time topology information can be obtained by :grasscmd:`t.topology`.
 
 .. code-block:: bash
 
-   t.topology input=lakes
+   t.topology input=modis
 
 ::
 
    ...
    +-------------------- Temporal topology -------------------------------------+
-   ...
-   | Number of points: .......... 111
-   | Number of gaps: ............ 110
-   | Granularity: ............... 10
+   | Is subset of dataset: ...... False
+   | Temporal topology is: ...... invalid
+   | Number of intervals: ....... 184
+   | Invalid time stamps: ....... 0
+   | Number of points: .......... 0
+   | Number of gaps: ............ 0
+   | Granularity: ............... 8 days
    ...
    
 Space-time Data Querying
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-By :grasscmd:`t.rast.list` can be printed raster maps within given
-time period. In the example below are printed raster maps within the
-first hour of simulated flooding.
+By :grasscmd:`t.rast.list` can be printed raster maps
 
 .. code-block:: bash
 
-   t.rast.list input=lakes order=start_time where="start_time < 60"
+   t.rast.list input=modis order=start_time
+
+::
+
+   name|mapset|start_time|end_time
+   MOD11A2.A2017001_mosaic_LST_Day_1km|modis|2017-01-01 00:00:00|2017-01-09 00:00:00
+   MOD11A2.A2017001_mosaic_LST_Night_1km|modis|2017-01-01 00:00:00|2017-01-09 00:00:00
+   MYD11A2.A2017001_mosaic_LST_Day_1km|modis|2017-01-01 00:00:00|2017-01-09 00:00:00
+   MYD11A2.A2017001_mosaic_LST_Night_1km|modis|2017-01-01 00:00:00|2017-01-09 00:00:00
+   ...
+   MOD11A2.A2017361_mosaic_LST_Day_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
+   MOD11A2.A2017361_mosaic_LST_Night_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
+   MYD11A2.A2017361_mosaic_LST_Day_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
+   MYD11A2.A2017361_mosaic_LST_Night_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
+
+
+It has the capabilities to limit the number of map according different
+parameters. In the example below are printed raster maps with data covering March 2017.
+
+.. code-block:: bash
+
+   t.rast.list input=modis order=start_time \
+   where="start_time > '2017-03-01' and start_time < '2017-04-01'"
+   # or
+   t.rast.list input=modis order=start_time \
+   where="strftime('%m', start_time)='03'"
+
+::
+
+   name|mapset|start_time|end_time
+   MOD11A2.A2017065_mosaic_LST_Day_1km|modis|2017-03-06 00:00:00|2017-03-14 00:00:00
+   MOD11A2.A2017065_mosaic_LST_Night_1km|modis|2017-03-06 00:00:00|2017-03-14 00:00:00
+   MYD11A2.A2017065_mosaic_LST_Day_1km|modis|2017-03-06 00:00:00|2017-03-14 00:00:00
+   MYD11A2.A2017065_mosaic_LST_Night_1km|modis|2017-03-06 00:00:00|2017-03-14 00:00:00
+   ...
+   MOD11A2.A2017089_mosaic_LST_Day_1km|modis|2017-03-30 00:00:00|2017-04-07 00:00:00
+   MOD11A2.A2017089_mosaic_LST_Night_1km|modis|2017-03-30 00:00:00|2017-04-07 00:00:00
+   MYD11A2.A2017089_mosaic_LST_Day_1km|modis|2017-03-30 00:00:00|2017-04-07 00:00:00
+   MYD11A2.A2017089_mosaic_LST_Night_1km|modis|2017-03-30 00:00:00|2017-04-07 00:00:00
+
+In the next example instead we are going to print only maps coming from Aqua satellite
+
+.. code-block:: bash
+
+   t.rast.list input=modis order=start_time where="name LIKE 'MYD%'"
+
+::
+
+   name|mapset|start_time|end_time
+   MYD11A2.A2017001_mosaic_LST_Day_1km|modis|2017-01-01 00:00:00|2017-01-09 00:00:00
+   MYD11A2.A2017001_mosaic_LST_Night_1km|modis|2017-01-01 00:00:00|2017-01-09 00:00:00
+   MYD11A2.A2017009_mosaic_LST_Day_1km|modis|2017-01-09 00:00:00|2017-01-17 00:00:00
+   MYD11A2.A2017009_mosaic_LST_Night_1km|modis|2017-01-09 00:00:00|2017-01-17 00:00:00
+   ...
+   MYD11A2.A2017353_mosaic_LST_Day_1km|modis|2017-12-19 00:00:00|2017-12-27 00:00:00
+   MYD11A2.A2017353_mosaic_LST_Night_1km|modis|2017-12-19 00:00:00|2017-12-27 00:00:00
+   MYD11A2.A2017361_mosaic_LST_Day_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
+   MYD11A2.A2017361_mosaic_LST_Night_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
 
 Univariate statistic can be calculated by :grasscmd:`t.rast.univar`,
 in example below we compute statistics only for the first hour of
@@ -101,69 +164,61 @@ flooding.
 
 .. code-block:: bash
 
-   t.rast.univar input=lakes where="start_time < 60"
+   t.rast.univar input=modis where="start_time > '2017-03-01' and start_time < '2017-04-01'"
 
 ::
 
    id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
-   lakes_134.0@flooding|1|None|0.211415510911208|0.007537841796875|0.738616943359375|...
-   lakes_134.1@flooding|11|None|0.397385983853727|0.000823974609375|1.14051818847656|...
-   lakes_134.2@flooding|21|None|0.445528310686884|0.0003814697265625|1.24050903320312|...
-   lakes_134.3@flooding|31|None|0.502563093844781|0.0012054443359375|1.34051513671875|...
-   lakes_134.4@flooding|41|None|0.564594079032162|0.0021820068359375|1.44050598144531|...
-   lakes_134.5@flooding|51|None|0.582153865733045|0.0008697509765625|1.54051208496094|...
-
-Data aggregation can be performed by :grasscmd:`t.rast.aggregate`. In
-the example below data are aggregated by 1 hour.
-
-.. code-block:: bash
-
-   t.rast.aggregate input=lakes output=lakes_h basename=ag granularity=60 nproc=3
-
-The command generates a new space time dataset which can be used for
-subsequent analysis like univariate statistics:
-
-.. code-block:: bash
-
-   t.rast.univar input=lakes_h
-
-::
-
-   id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells
-   ag_00001@flooding|1|61|0.431898174745821|0.0008697509765625|1.34051208496094|...
-   ...
-   ag_00019@flooding|1081|1141|5.69696318836018|4.57763671875e-05|11.9405110677083|...
+   MOD11A2.A2017065_mosaic_LST_Day_1km@modis|2017-03-06 00:00:00|2017-03-14 00:00:00|...
+   MOD11A2.A2017065_mosaic_LST_Night_1km@modis|2017-03-06 00:00:00|2017-03-14 00:00:00|...
+   MYD11A2.A2017065_mosaic_LST_Day_1km@modis|2017-03-06 00:00:00|2017-03-14 00:00:00|...
+   MYD11A2.A2017065_mosaic_LST_Night_1km@modis|2017-03-06 00:00:00|2017-03-14 00:00:00|...
 
 Space-time Data Extracting
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Raster spatio-temporal data can be extract into new datasets using
-:grasscmd:`t.rast.extract`. In the example below will be create three
-new datasets for first, second and third six hours of flooding.
-
-.. code-block:: bash
-		
-   t.rast.extract input=lakes where="start_time > 0 and start_time < 361" output=lakes_1
-   t.rast.extract input=lakes where="start_time > 360 and start_time < 720" output=lakes_2
-   t.rast.extract input=lakes where="start_time > 720" output=lakes_3         
-
-Aggregation into single raster output can be performed by
-:grasscmd:`t.rast.series`:
-
-.. code-block:: bash
-                
-   t.rast.series input=lakes_1 output=lakes_1_avg method=average
-
-Let's print univariate statistics for generated raster output by
-:grasscmd:`r.univar`:
+:grasscmd:`t.rast.extract`. In the example below will be create four
+new datasets containing data for different satellite and time
 
 .. code-block:: bash
 
-   r.univar map=lakes_1_avg
+   t.rast.extract input=modis where="name LIKE 'MOD%LST_Day_1km'" output=modis_terra_day
+   t.rast.extract input=modis where="name LIKE 'MOD%LST_Night_1km'" output=modis_terra_night
+   t.rast.extract input=modis where="name LIKE 'MYD%LST_Day_1km'" output=modis_aqua_day
+   t.rast.extract input=modis where="name LIKE 'MYD%LST_Night_1km'" output=modis_aqua_night
+
+At this point we can check the basic information
+
+.. code-block:: bash
+
+   t.info input=modis_terra_day
 
 ::
 
-   minimum: 0.00152588
-   maximum: 2.93515
-   range: 2.93362
-   mean: 1.0993
+   ...
+   | Start time:................. 2017-01-01 00:00:00
+   | End time:................... 2018-01-04 00:00:00
+   | Granularity:................ 8 days
+   | Temporal type of maps:...... interval
+   ...
+   | Number of registered maps:.. 46
+   ...
+
+
+and later the topology, this time it is valid!
+
+.. code-block:: bash
+
+   t.topology input=modis_terra_day
+
+::
+
+   ...
+   | Temporal topology is: ...... valid
+   | Number of intervals: ....... 46
+   | Invalid time stamps: ....... 0
+   | Number of points: .......... 0
+   | Number of gaps: ............ 0
+   | Granularity: ............... 8 days
+   ...
