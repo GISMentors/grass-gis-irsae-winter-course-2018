@@ -9,6 +9,10 @@ package). GRASS is not an exception. In reality, many GRASS modules
 are simple Python scripts, eg. :grasscmd:`r.mask` (see *Source Code*
 section).
 
+.. important:: GRASS GIS currently only works Python version 2! Python
+   3 support is currently under development. First GRASS GIS version
+   with full Python 3 support will be probably 7.8.
+               
 GRASS Python environment includes various libraries, see
 :grasscmd2:`GRASS documentation <libpython/index.html>` for
 details. We will focus on three main libraries related to this
@@ -21,6 +25,16 @@ workshop:
 * space-temporal :grasscmd2:`GRASS GIS Temporal Framework
   <libpython/temporal_framework.html>`
 
+:grasscmd2:`PyGRASS <libpython/pygrass_index.html>` has been
+originally design as an **object-oriented** Python API for GRASS
+GIS. This is a major difference to :grasscmd2:`GRASS Scripting Library
+<libpython/script_intro.html>` which consists of procedures - Python
+functions. It is important to mention that PyGRASS has not been
+designed as replacement of GRASS Scripting Library, the both libraries
+are living next to each other. It is up to the user (you) which
+library use in his/her scripts. It's also possible to compine the both
+libraries in one script.
+  
 Let's do our first steps towards Python scripting in GRASS GIS using
 Layer Manager's :item:`Python` tab.
 
