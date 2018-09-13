@@ -32,7 +32,7 @@ raster map within one run. This limitation is surpassed by addon
    (:menuselection:`Settings --> Addons extensions --> Install
    extension from addons`).
 
-   .. figure:: ../images/units/17/g-extension.png
+   #.. figure:: ../images/units/21/g-extension.png
 
       Install :grasscmdaddons:`r.lake.series` GRASS Addon.
 

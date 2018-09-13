@@ -1,4 +1,4 @@
-Unit 18 - Lidar scripting
+Unit 17 - Lidar scripting
 =========================
 
 In this unit we will recover our knowledge of PyGRASS scripting (see
@@ -57,7 +57,7 @@ computed as average, it is a main reason why we do not use
 
 	Use :file:`/tmp/lidar` as :option:`input` in the :file:`create-dem.py` script
 	
-.. figure:: ../images/units/18/dsm_patched.png
+.. figure:: ../images/units/17/dsm_patched.png
    :class: middle
    
    The DSM created from all tiles
@@ -71,7 +71,7 @@ using :menuselection:`File --> Import raster data --> Simplified raster
 import with reprojection` checking :item:`Directory` as :item:`Source type`
 and selecting :file:`/home/geodata/lidar/dtm/`
 
-.. figure:: ../images/units/18/import_dtm.png
+.. figure:: ../images/units/17/import_dtm.png
    :class: middle
    
    Import all DTM from :file:`/home/geodata/lidar/dtm/`
@@ -88,7 +88,7 @@ and set the color to `elevation`
    r.series input=`g.list type=raster pattern=DTM_* sep=','` output=DTM_patch
    r.colors map=DTM_patch@lidar color=elevation
 
-.. figure:: ../images/units/18/dtm_patched.png
+.. figure:: ../images/units/17/dtm_patched.png
    :class: middle
    
    The patched DTM
@@ -100,7 +100,7 @@ the created DSM, using :grasscmd:`r.mapcalc`
 
    r.mapcalc expression="chm = new_ele - DTM_patch"
 
-.. figure:: ../images/units/18/chm.png
+.. figure:: ../images/units/17/chm.png
    :class: middle
    
    The CHM map (difference between DSM and DTM)

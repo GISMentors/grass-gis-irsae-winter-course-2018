@@ -1,4 +1,4 @@
-Unit 19 - Sentinel downloader
+Unit 18 - Sentinel downloader
 =============================
 
 .. warning:: Materials under construction!
@@ -42,7 +42,7 @@ requires also `sentinelsat library
 First we are going to create a new mapset to store all the Sentinel data
 and start to work in it
 
-.. figure:: ../images/units/19/sentinel_mapset.png
+.. figure:: ../images/units/18/sentinel_mapset.png
 	:class: small
 	
 	Create a new mapset for Sentinel data and switch to it
@@ -151,19 +151,19 @@ features by :param:`-c` flag.
 We can now visualize the imported Sentinel scene as RGB image.
 To load as RGB image we have to select :item:`Add RGB map layer` from the Layer Manager
 
-.. figure:: ../images/units/19/add_rgb.png
+.. figure:: ../images/units/18/add_rgb.png
 
 The result appears really dark
 
-.. figure:: ../images/units/19/rgb_dark.png
+.. figure:: ../images/units/18/rgb_dark.png
     
 To have a better visualization, it is required to perform color auto-balancing for RGB bands.
 The module to use is :grasscmd:`i.color.enhance`. This module modifies the color table of
 each image band to provide a more natural color mixture, but the base data remains untouched. 
 
-.. figure:: ../images/units/19/icolorsenhance.png
+.. figure:: ../images/units/18/icolorsenhance.png
     :class: small
 
 The result is an enhanced image, to see it just click on :item:`Render Map`
 
-.. figure:: ../images/units/19/rgb_good.png
+.. figure:: ../images/units/18/rgb_good.png

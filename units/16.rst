@@ -1,4 +1,4 @@
-Unit 17 - Lidar
+Unit 16 - Lidar
 ===============
 
 There is open LiDAR data for Norway available at
@@ -121,7 +121,7 @@ Basic metadata about created raster map can be obtained by
    |   Range of data:    min = 315.92  max = 429.5867                           |
    ...
 
-.. figure:: ../images/units/17/import-rast-vect.png
+.. figure:: ../images/units/16/import-rast-vect.png
 
    Imported data as vector points. Raster map with 1m resolution in the
    background.
@@ -141,7 +141,7 @@ cells with no-data value will be modified.
 
    r.fill.stats -k input=las_32_1_514_136_34 output=las_32_1_514_136_34_no_gaps
 
-.. figure:: ../images/units/17/rast-gaps-fill.png
+.. figure:: ../images/units/16/rast-gaps-fill.png
 
    NULL values (on left part) filled by :grasscmd:`r.fill.stats`
    (right part).
@@ -174,7 +174,7 @@ the result is not perfect.
    v.lidar.correction input=grow_32_1_514_136_34 output=corr_32_1_514_136_34 terrain=terr_32_1_514_136_34
 
 ..
-   .. figure:: ../images/units/18/terrain-only-points.png
+   .. figure:: ../images/units/16/terrain-only-points.png
 
    Filtered terrain only points.
    
@@ -195,7 +195,7 @@ more reasonable by running it in parallel, see :option:`nprocs` option
 
 .. tip:: Try also to set higher npmin to reduce artifacts.
       
-.. figure:: ../images/units/17/dsm.png
+.. figure:: ../images/units/16/dsm.png
    :class: middle
 
 Similarly we can build Digital Terrain Model (DTM) from filtered

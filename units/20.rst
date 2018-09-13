@@ -1,4 +1,4 @@
-Unit 26 - MODIS
+Unit 20 - MODIS
 ===============
 
 There are two satellites, Aqua and Terra which carry the MODIS sensor
@@ -81,7 +81,7 @@ automatically, see :numref:`modis-mosaics`.
 
 .. _modis-mosaics:
 
-.. figure:: ../images/units/26/modis-mosaics.png
+.. figure:: ../images/units/20/modis-mosaics.png
    :class: middle
         
    Final mosaics created from h18v02 and h18v03 tiles.
@@ -149,7 +149,7 @@ Let's check range values of new LST data
    min=-45.09
    max=7.15000000000003
 
-.. figure:: ../images/units/26/lst-c.png
+.. figure:: ../images/units/20/lst-c.png
    :class: middle
         
    LST reconstruction for Norway in Celsius scale (color table
