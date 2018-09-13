@@ -17,6 +17,8 @@ on his/her project. GRASS is different, which makes this software
 harder to enter for newcomers. *But don't worry, we will enter our
 first GRASS sessions in few steps.*
 
+.. _location-mapset-section:
+
 The GRASS GIS startup screen requires to set up three items:
 
 #. **Database directory.** A directory on local or network disc which

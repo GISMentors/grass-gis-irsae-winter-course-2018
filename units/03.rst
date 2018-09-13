@@ -157,6 +157,24 @@ importing data, be awere of :param:`snap` option of
 :grasscmd:`v.import` module. Topological errors which is not possible
 repair automatically without user specification can fixed using
 :grasscmd:`v.clean` module.
+
+Work organization
+-----------------
+
+GRASS GIS allows organizing work within one project (GRASS location) by
+creating different **mapsets**, see :ref:`Unit 02
+<location-mapset-section>`. In the next units various analysis will be
+performed in "Oslo" region. Let's create a new mapset called "oslo"
+for upcoming work.
+
+A new mapset can be created by :grasscmd:`g.mapset` or from menu
+:menuselection:`Settings --> GRASS working environment --> Create new
+mapset`.
+
+.. figure:: ../images/units/03/create-mapset.png
+   :class: small
+                    
+   Create a new mapset.
    
 Querying data
 -------------
