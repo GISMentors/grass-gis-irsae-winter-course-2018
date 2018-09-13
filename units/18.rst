@@ -41,6 +41,27 @@ computed as average, it is a main reason why we do not use
    :linenos:
    :emphasize-lines: 6, 9, 13, 18, 33, 37, 42, 56, 57, 59, 66, 72-75, 81, 88
 
+.. note::
+
+	The script is tacking long time with all the tiles in the 
+	:file:`/home/geodata/lidar/laz/`
+	
+.. tip::
+	
+	Create a new directory like :file:`/tmp/lidar` and link some (2 or 3) of the LAZ
+	files with
+	
+	.. code ::
+		
+		ln -s /home/geodata/lidar/laz/32-1-514-136-15.laz /tmp/lidar/
+
+	Use :file:`/tmp/lidar` as :option:`input` in the :file:`create-dem.py` script
+	
+.. figure:: ../images/units/18/dsm_patched.png
+   :class: middle
+   
+   The DSM created from all tiles
+
 Compare with existing raster
 ----------------------------
 
@@ -52,6 +73,12 @@ and selecting :file:`/home/geodata/lidar/dtm/`
 
 .. figure:: ../images/units/18/import_dtm.png
    :class: middle
+   
+   Import all DTM from :file:`/home/geodata/lidar/dtm/`
+
+.. note::
+
+   In your case select only the tiles selected before
 
 Once the DTM are imported you can patch them using :grasscmd:`r.series`
 and set the color to `elevation`
@@ -63,6 +90,17 @@ and set the color to `elevation`
 
 .. figure:: ../images/units/18/dtm_patched.png
    :class: middle
+   
+   The patched DTM
 
 The last step is to calculate the difference beetween the imported DTM and
-the created DSM with the previous Python script.
+the created DSM, using :grasscmd:`r.mapcalc`
+
+.. code-block:: bash
+
+   r.mapcalc expression="chm = new_ele - DTM_patch"
+
+.. figure:: ../images/units/18/chm.png
+   :class: middle
+   
+   The CHM map (difference between DSM and DTM)
