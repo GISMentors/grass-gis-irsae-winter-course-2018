@@ -126,6 +126,38 @@ displayed in map window.
            
    Imported Norway administrative regions.
 
+.. _vector-topo-section:
+
+Vector topology
+^^^^^^^^^^^^^^^
+
+Let's take a closer look at vector metadata of imported administrative
+regions. Instead of "polygons" there are "areas" and other kind of
+primitites (points, lines, boundaries, centroids, isles), see
+:numref:`vector-metadata`.
+
+.. _vector-metadata:
+
+.. figure:: ../images/units/03/vector-metadata-features.png
+
+   Vector metadata of imported file.
+
+GRASS GIS is a **topological GIS**. Importing vector data into GRASS also
+means converting features from simple feature model (points,
+linestrings, polygons, ...) into GRASS topological model.
+
+.. figure:: ../images/units/03/grass7-topo.png
+   :class: middle
+                    
+   GRASS topological model with primitives (nodes, lines,
+   boundaries, centroids, areas, and isles).
+
+Topological errors are checked and repaired by GRASS GIS when
+importing data, be awere of :param:`snap` option of
+:grasscmd:`v.import` module. Topological errors which is not possible
+repair automatically without user specification can fixed using
+:grasscmd:`v.clean` module.
+   
 Querying data
 -------------
 
