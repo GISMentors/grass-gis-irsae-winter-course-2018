@@ -14,7 +14,8 @@ with :param:`producttype=S2MSI1C`
    start=2018-04-01 end=2018-10-01 area_relation=Contains clouds=10
 
 
-The next step is to import the download data into GRASS GIS using another
+
+The next step is to import the downloaded data into GRASS GIS using another
 command provided by :grasscmd:`i.sentinel` addons, :grasscmd:`i.sentinel.preproc`.
 This module require some inputs used to perform the atmospheric correction of Sentinel-2 images.
 
