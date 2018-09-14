@@ -1,0 +1,33 @@
+Unit 19 - Sentinel preprocessing
+=================================
+
+In this unit we will see how to be able to use Sentinel-2 L1C data with
+GRASS GIS.
+
+The first step is to download few images following the previous example
+in :doc:18, this time we have to replace :param:`producttype=S2MSI2Ap`
+with :param:`producttype=S2MSI1C`
+
+.. code-block:: bash
+
+   i.sentinel.download -l map=oslo producttype=S2MSI1C settings=~/sentinel.txt \
+   start=2018-04-01 end=2018-10-01 area_relation=Contains clouds=10
+
+
+The next step is to import the download data into GRASS GIS using another
+command provided by :grasscmd:`i.sentinel` addons, :grasscmd:`i.sentinel.preproc`.
+This module require some inputs used to perform the atmospheric correction of Sentinel-2 images.
+
+As elevetion model we can use the DEM imported in the previous LiDAR unit :doc:17,
+What we need to obtain yet is a visibility map or an Aerosol Optical Depth
+value, the second one is possible to obtain from
+`http://aeronet.gsfc.nasa.gov <http://aeronet.gsfc.nasa.gov/cgi-bin/webtool_opera_v2_inv>`__
+
+First you have to select the station closer to your Sentinel-2 scene, in
+our case Birkenes, and click on download
+
+.. figure:: ../images/units/19/aeronet_station.png
+
+Now tick the box near the bottom labelled as 'Combined file (all products without phase functions)' 
+
+.. figure:: ../images/units/19/aeronet_download.png
