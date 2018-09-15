@@ -55,7 +55,9 @@ Enter new location (PERMANENT mapset) and reproject Oslo region vector
 map by :grasscmd:`v.proj` (:menuselection:`Vector --> Develop vector
 map --> Reproject vector map from different GRASS location`) or simply
 from :item:`Data` tab in Layer Manager just by copying and pasting the
-maps, see :numref:`x`.
+maps, see :numref:`data-reproject-fig`.
+
+.. _data-reproject-fig:
 
 .. figure:: ../images/units/15/data-reproject.png
 
