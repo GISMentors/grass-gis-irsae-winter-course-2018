@@ -1,26 +1,19 @@
 Unit 15 - Reprojection
 ======================
 
-In order to perform simple flooding simulation in :doc:`16` a digital
-elevation model (DEM) for area of interest (AOI) is needed.  There are
-several options from global DEM datasets (SRTM, EU-DEM, ...) to
-high-resolution DEMs created as a product of laser scanning
-techniques.
-
 In our example EU-DEM global dataset provided by `Copernicus programme
 <https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem#tab-gis-data>`__
 will be used. Oslo region is covered by tile E40N40. Be aware that
 EU-DEM tiles covers large regions (4GB per tile).
 
-.. important:: Normally :grasscmd:`r.import` could be used to import
-   and automatically reproject data into target location. In this case
-   there is no need to import into GRASS a whole big DEM tile. By using
-   ``-r`` flag of :grasscmd:`r.in.gdal` GRASS module only a subregion
-   covering AOI could be imported. Unfortunately :grasscmd:`r.import` do
-   not offer such flag. In this unit manual reprojection will be
-   presented. A new location for imported data (:epsg:`4258`) must be
-   created and data reprojected into target *oslo* (:epsg:`32632`)
-   location manually.
+Normally :grasscmd:`r.import` could be used to import and
+automatically reproject data into target location. In this case there
+is no need to import into GRASS a whole big DEM tile. By using ``-r``
+flag of :grasscmd:`r.in.gdal` GRASS module only a subregion covering
+AOI could be imported. Unfortunately :grasscmd:`r.import` do not offer
+such flag. In this unit manual reprojection will be presented. A new
+location for imported data (:epsg:`4258`) must be created and data
+reprojected into target *oslo* (:epsg:`32632`) location manually.
 
 .. note:: To save space the original EU-DEM tile was clipped by larger
    region than Oslo AOI. Modified tile is available from
@@ -93,9 +86,9 @@ forget to enable :option:`-r` flag.
 Reproject DEM into target location
 ----------------------------------
 
-Now switch back to our *oslo-region* location and create within this location
-a new mapset for flooding simulation :menuselection:`Settings -->
-GRASS working environment --> Change location and mapset`.
+Now switch back to our *oslo-region* location and create within this
+location a new mapset for *eu-dem* :menuselection:`Settings --> GRASS
+working environment --> Change location and mapset`.
 
 .. figure:: ../images/units/15/switch-location.png
    :class: small
