@@ -171,7 +171,8 @@ Units
    units/11
    units/12
    units/13
-           
+   units/15
+   
 * Unit 14 - PyGRASS scripting
 * Unit 15 - Reprojection
 * Unit 16 - Lidar
