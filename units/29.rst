@@ -104,6 +104,8 @@ R vs. Python
 Python and R are both popular languages for data science. And the question which language to use (and for what purposes) has often been discussed, e.g. at `Data-Driven Science <https://medium.com/@data_driven/python-vs-r-for-data-science-and-the-winner-is-3ebb1a968197>`__ or `Dataquest <https://www.dataquest.io/blog/python-vs-r/>`__ . There, Python and R are often considered as complementing each other with R being stronger on data visualisation and statistics while Python is considered more general purpose programming language with advantages in performance. For more computational demanding processes, Python can have significant advantages, esp. if looping is involved as the following example illustrates:
 
 .. code-block:: bash
+
+   # Create a simple loop-script in R
    echo 'library("iterpc")
    it <- iterpc(10000, 2, replace=TRUE)
 
@@ -111,6 +113,7 @@ Python and R are both popular languages for data science. And the question which
        iN <- i[1]
    }' > loop.r
 
+   # Create a simple loop-script in Python
    echo 'import itertools
 
    it = itertools.combinations(range(0,10000),2)
@@ -118,6 +121,9 @@ Python and R are both popular languages for data science. And the question which
        iN = i[0]' > loop.py
 
 
+.. code-block:: bash
+
+   # Run the R script while tracing memory usage
    ./memusg Rscript loop.r
 
 ::
@@ -125,6 +131,8 @@ Python and R are both popular languages for data science. And the question which
    memusg: peak=436312\\
 
 .. code-block:: bash
+
+   # Run the Python script while tracing memory usage
    ./memusg python loop.py
 
 ::
@@ -132,6 +140,8 @@ Python and R are both popular languages for data science. And the question which
    memusg: peak=5528\\
 
 .. code-block:: bash
+
+   # Run the Python script and measure execution time
    time python loop.py
 
 ::
@@ -141,6 +151,8 @@ Python and R are both popular languages for data science. And the question which
    sys     0m0.004s\\
 
 .. code-block:: bash
+
+   # Run the R script and measure execution time
    time Rscript loop.r
 
 ::
