@@ -1,5 +1,5 @@
- Unit 15 - Reprojection
-=======================
+Unit 15 - Reprojection
+======================
 
 In order to perform simple flooding simulation in :doc:`16` a digital
 elevation model (DEM) for area of interest (AOI) is needed.  There are
