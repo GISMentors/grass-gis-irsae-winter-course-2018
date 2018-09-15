@@ -95,3 +95,67 @@ mean values of MODIS LST
 
 .. figure:: ../images/units/29/boxplot.png 
    :class: large
+
+
+
+R vs. Python
+============
+
+Python and R are both popular languages for data science. And the question which language to use (and for what purposes) has often been discussed, e.g. at `Data-Driven Science <https://medium.com/@data_driven/python-vs-r-for-data-science-and-the-winner-is-3ebb1a968197>`__ or `Dataquest <https://www.dataquest.io/blog/python-vs-r/>`__ . There, Python and R are often considered as complementing each other with R being stronger on data visualisation and statistics while Python is considered more general purpose programming language with advantages in performance. For more computational demanding processes, Python can have significant advantages, esp. if looping is involved as the following example illustrates:
+
+.. code-block:: bash
+   echo 'library("iterpc")
+   it <- iterpc(10000, 2, replace=TRUE)
+
+   for (i in getall(it)) {
+       iN <- i[1]
+   }' > loop.r
+
+   echo 'import itertools
+
+   it = itertools.combinations(range(0,10000),2)
+   for i in it:                              
+       iN = i[0]' > loop.py
+
+
+   ./memusg Rscript loop.r
+
+::
+
+   memusg: peak=436312\\
+
+.. code-block:: bash
+   ./memusg python loop.py
+
+::
+
+   memusg: peak=5528\\
+
+.. code-block:: bash
+   time python loop.py
+
+::
+
+   real    0m4.516s\\
+   user    0m4.506s\\
+   sys     0m0.004s\\
+
+.. code-block:: bash
+   time Rscript loop.r
+
+::
+
+   real    0m36.733s\\
+   user    0m36.084s\\
+   sys     0m0.273s\\
+
+
+As you can see, in the case above, R uses ~80 times more memory and takes ~9 times longer to complete the loop-test above.
+
+For people comng from ''R'' the ''Python'' library ''pandas'' is worth exploring. It provides data organisation and methods very similar data frames in ''R''. 
+
+Getting started with ''Python'' and ''pandas'' gets easy with the `Pandas Cheat Sheet <https://github.com/pandas-dev/pandas/blob/master/doc/cheatsheet/Pandas_Cheat_Sheet.pdf>`__ or a more general Python cheat sheet from `DataScience <http://www.datasciencefree.com/cheatsheets.html>`__.
+
+A nice comparison between R and functions/data management offered by pandas library can be found `here <http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html>`__
+
+For getting a basic, hands-on introduction to Python `Codeacademy <https://www.codecademy.com/catalog/language/python>`__ can be recommended as a free learning platform.
