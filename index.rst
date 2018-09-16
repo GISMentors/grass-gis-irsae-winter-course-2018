@@ -160,7 +160,8 @@ The simplest way how to follow this training. `VirtualBox
 
 A customized virtual machine (VM) based on `OSGeoLive
 <http://live.osgeo.org>`__ is available at ... This VM contains all
-software dependecies including sample dataset. 
+software dependecies including sample dataset in :file:`geodata`
+directory.
 
 .. todo:: Download link, http://training.gismentors.eu/vm/irsae-norway-2018
           
