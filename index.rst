@@ -139,16 +139,31 @@ created based on Open Data covering `Studenterhytta venue region
 <https://www.openstreetmap.org/node/879127732>`__. See detailed
 description below.
 
-* administrative borders (:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml`, source: `GeoNorge <https://kartkatalog.geonorge.no/metadata/kartverket/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671>`__)
-* Digital Elevation Model (source: `GeoNorge <https://kartkatalog.geonorge.no/metadata/kartverket/dtm-10-terrengmodell-utm33/dddbb667-1303-4ac5-8640-7ec04c0e3918>`__)
- * :file:`Basisdata_6602-1_Celle_25833_DTM10UTM33_TIFF.zip`
- * :file:`Basisdata_6602-2_Celle_25833_DTM10UTM33_TIFF.zip`
- * :file:`Basisdata_6602-3_Celle_25833_DTM10UTM33_TIFF.zip`
- * :file:`Basisdata_6602-4_Celle_25833_DTM10UTM33_TIFF.zip`
- * :file:`Basisdata_6702-2_Celle_25833_DTM10UTM33_TIFF.zip`
- * :file:`Basisdata_6702-3_Celle_25833_DTM10UTM33_TIFF.zip`
-* Sentinel-2 sample bands (:file:`sentinel/sample`, source: Copernicus Open Access Hub)
-  
+* administrative borders (directory: :file:`administrative`, source: `GeoNorge
+  <https://kartkatalog.geonorge.no/metadata/kartverket/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671>`__)
+* Digital Elevation Model (directory: :file:`dem`, source: `GeoNorge
+  <https://kartkatalog.geonorge.no/metadata/kartverket/dtm-10-terrengmodell-utm33/dddbb667-1303-4ac5-8640-7ec04c0e3918>`__)
+* EU-DEM (directory: :file:`eu-dem`, source: `Copernicus Land Monitoring
+  Service - EU-DEM
+  <https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem>`__)
+* Sentinel-2 sample bands (directory: :file:`sentinel/sample`, source:
+  Copernicus Open Access Hub)
+
+.. todo:: Download link, http://training.gismentors.eu/geodata/irsae-norway-2018
+
+Virtual machine
+===============
+
+The simplest way how to follow this training. `VirtualBox
+<http://virtualbox.org>`__ must be installed on your PC, enable also
+*virtualization support* in BIOS.
+
+A customized virtual machine (VM) based on `OSGeoLive
+<http://live.osgeo.org>`__ is available at ... This VM contains all
+software dependecies including sample dataset. 
+
+.. todo:: Download link, http://training.gismentors.eu/vm/irsae-norway-2018
+          
 Units
 =====
 
@@ -172,9 +187,8 @@ Units
    units/12
    units/13
    units/15
-   
+
 * Unit 14 - PyGRASS scripting
-* Unit 15 - Reprojection
 * Unit 16 - Lidar
 * Unit 17 - Lidar scripting
 * Unit 18 - Sentinel downloader
