@@ -6,9 +6,10 @@ There is open LiDAR data for Norway available at
 <http://www.hoydedata.no/>`__, choose region in map viewer and request data for download.
 
 LiDAR data used in this unit can be found in sample dataset, in
-:file:`~/geodata/lidar/laz` folder. Data are stored in LAZ (compressed LAS format).
+:file:`~/geodata/lidar/laz` folder. Data is stored in LAZ format
+(compressed LAS format).
    
-Import data
+Data import
 -----------
 
 For importing LAS/LAZ data there are available two GRASS modules:
@@ -40,9 +41,10 @@ Create a new mapset called `lidar` to save all the LiDAR data.
 Let's try to import selected tile into vector point map first. Flag
 :param:`-t` skips creation of attribute table. The import process will
 be significantly faster. Another flag which will speed up the import
-process is :param:`-b`. It skips building topology (which is not
-needed for point features anyway). Information about data SRS can be
-missing, we will skip projection check by :param:`-o` flag.
+process is :param:`-b`. It skips building :ref:`topology
+<vector-topo-section>` (which is not needed for point features
+anyway). Information about data SRS can be missing, projection check
+can be skipped by :param:`-o` flag.
 
 .. code-block:: bash
                 
@@ -51,12 +53,12 @@ missing, we will skip projection check by :param:`-o` flag.
 Note that computational region is ignored when importing data using
 :grasscmd:`v.in.lidar`.
 
-We can also check the point overall point density by
-:grasscmd:`v.outlier`. Note that :grasscmd:`v.outlier` is working in
-the current computation region(!). So we also set up the region based on
-imported data (note that :grasscmd:`g.region` can run for a
-while. Since we skipped building topology, the map extent must
-computed by scanning all points in input vector map).
+Overall point density can be checked by :grasscmd:`v.outlier`. Note
+that :grasscmd:`v.outlier` is working in the current computation
+region(!). Computational region must be set based on imported
+data. Since building topology was skipped by :param:`-b` flag, the map
+extent must be computed by scanning all points in input vector
+map. That is reason why :grasscmd:`g.region` can run for a while.
 
 .. code-block:: bash
 
@@ -94,13 +96,14 @@ is built, the module must scan all features in the map):
 Raster import
 ^^^^^^^^^^^^^
 
-Now let's try import input points into raster map. Flag :param:`-e`
-extends current computational region to cover all imported
-points. Otherwise user needs to set up computational region by
-:grasscmd:`g.region`. Spatial resolution for output raster map is
-defined by :param:`resolution` option. By default, for cells with more
-points involved, the value is computed by mean, see :param:`method`
-option. Cells covered by no points will get NULL values assigned.
+Input point cloud can be imported by :grasscmd:`r.in.lidar` into
+raster map. Flag :param:`-e` extends current computational region to
+cover all imported points. Otherwise user needs to set up
+computational region by :grasscmd:`g.region`. Spatial resolution for
+output raster map is defined by :param:`resolution` option. By
+default, for cells with more points involved, the value is computed by
+mean value, see :param:`method` option. Cells covered by no points
+will get NULL values assigned.
    
 .. code-block:: bash
 
@@ -154,39 +157,14 @@ cells with no-data value will be modified.
 
 .. _edge-detection:
 
-Edge detection
---------------
-
-The filter aims to recognize and extract attached and detached object
-(such as buildings, bridges, power lines, trees, etc.) in order to
-create a Digital Terrain Model. (source:
-:grasscmd:`v.lidar.edgedetection` manual page) Example of simple
-workflow based on :grasscmd:`v.lidar.edgedetection`,
-:grasscmd:`v.lidar.growing` and :grasscmd:`v.lidar.correction`
-below. Note that edge detection is usually a time consuming task, and
-the result is not perfect.
-
-.. code-block:: bash
-
-   v.lidar.edgedetection input=las_32_1_514_136_34 output=edge_32_1_514_136_34 ew_step=8 ns_step=8 lambda_g=0.5
-   v.in.lidar -otb input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34_first return_filter=first
-   v.lidar.growing input=edge_32_1_514_136_34 output=grow_32_1_514_136_34 first=las_32_1_514_136_34_first
-   v.lidar.correction input=grow_32_1_514_136_34 output=corr_32_1_514_136_34 terrain=terr_32_1_514_136_34
-
-..
-   .. figure:: ../images/units/16/terrain-only-points.png
-
-   Filtered terrain only points.
-   
 High resolution DSM
 -------------------
 
-Digital Surface Model (DSM) will interpolated by
-:grasscmd:`v.surf.rst` using regularized spline with tension
-approximation. Output resolution will be set to 0.5 meter. The
-computation can be really slow. You can turn computation time to be
-more reasonable by running it in parallel, see :option:`nprocs` option
-(GRASS 7.4+ only).
+Digital Surface Model (DSM) is interpolated by :grasscmd:`v.surf.rst`
+using regularized spline with tension approximation. Output resolution
+set to 0.5 meter. The computation can be really slow. You can turn
+computation time to be more reasonable by running it in parallel, see
+:option:`nprocs` option (GRASS 7.4+ only).
 
 .. code-block:: bash
 
@@ -198,6 +176,29 @@ more reasonable by running it in parallel, see :option:`nprocs` option
 .. figure:: ../images/units/16/dsm.png
    :class: middle
 
-Similarly we can build Digital Terrain Model (DTM) from filtered
-terrain only points, see :ref:`edge-detection` for details.
+   Resultant DSM.
 
+.. note:: Similarly can build Digital Terrain Model (DTM) from
+   filtered terrain only points by *edge detection*.
+
+   The filter aims to recognize and extract attached and detached object
+   (such as buildings, bridges, power lines, trees, etc.) in order to
+   create a Digital Terrain Model. (source:
+   :grasscmd:`v.lidar.edgedetection` manual page) Example of simple
+   workflow based on :grasscmd:`v.lidar.edgedetection`,
+   :grasscmd:`v.lidar.growing` and :grasscmd:`v.lidar.correction`
+   below. Note that edge detection is usually a time consuming task, and
+   the result is not perfect.
+
+   .. code-block:: bash
+
+      v.lidar.edgedetection input=las_32_1_514_136_34 output=edge_32_1_514_136_34 ew_step=8 ns_step=8 lambda_g=0.5
+      v.in.lidar -otb input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34_first return_filter=first
+      v.lidar.growing input=edge_32_1_514_136_34 output=grow_32_1_514_136_34 first=las_32_1_514_136_34_first
+      v.lidar.correction input=grow_32_1_514_136_34 output=corr_32_1_514_136_34 terrain=terr_32_1_514_136_34
+
+..
+   .. figure:: ../images/units/16/terrain-only-points.png
+
+   Filtered terrain only points.
+   

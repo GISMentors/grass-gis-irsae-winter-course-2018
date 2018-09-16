@@ -188,9 +188,9 @@ Units
    units/12
    units/13
    units/15
-
+   units/16
+   
 * Unit 14 - PyGRASS scripting
-* Unit 16 - Lidar
 * Unit 17 - Lidar scripting
 * Unit 18 - Sentinel downloader
 * Unit 19 - Sentinel preprocessing
