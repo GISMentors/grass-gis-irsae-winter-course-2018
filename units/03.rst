@@ -87,8 +87,9 @@ Vector data
 ^^^^^^^^^^^
 
 Norway administrative regions are stored in
-:file:`Basisdata_0000_Norge_25833_Fylker_GML.gml` :wikipedia:`GML`
-file, which is a commonly used GIS exchange *vector* format.
+:file:`~/geodata/counties/Basisdata_0000_Norge_25833_Fylker_GML.gml`
+:wikipedia:`GML` file, which is a commonly used GIS exchange *vector*
+format.
 
 .. figure:: ../images/units/03/import-vector-toolbar.png
 
