@@ -186,8 +186,8 @@ computation time to be more reasonable by running it in parallel, see
    :grasscmd:`v.lidar.edgedetection` manual page) Example of simple
    workflow based on :grasscmd:`v.lidar.edgedetection`,
    :grasscmd:`v.lidar.growing` and :grasscmd:`v.lidar.correction`
-   below. Note that edge detection is usually a time consuming task, and
-   the result is not perfect.
+   below. Note that edge detection is usually a time and RAM consuming task,
+   and the result is not perfect.
 
    .. code-block:: bash
 
