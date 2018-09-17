@@ -56,20 +56,24 @@ Once we have downloaded Sentinel data and AOD we need to decompress them
 
 .. code-block:: bash
 
-   unzip ~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.zip
-   unzip ~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.zip
-   unzip PATH/180501_180731_Birkenes.zip
+   cd ~/geodata/sentinel/
+   unzip S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.zip
+   unzip S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.zip
+   cd ~/Downloads/
+   unzip 180501_180731_Birkenes.zip
 
 Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
 
 .. code-block:: bash
 
-   i.sentinel.preproc -a -t input_dir=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE \
+   i.sentinel.preproc -a -t \
+   input_dir=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE \
    elevation=DEM atmospheric_model=Automatic aerosol_model="Continental model" \
-   aeronet_file=PATH/180501_180731_Birkenes.dubovik suffix=cor \ 
+   aeronet_file=~/Downloads//180501_180731_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt
    
-   i.sentinel.preproc -a -t input_dir=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE \
+   i.sentinel.preproc -a -t \
+   input_dir=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE \
    elevation=DEM atmospheric_model=Automatic aerosol_model="Continental model" \
    aeronet_file=PATH/180501_180731_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt
@@ -84,10 +88,11 @@ and conveniently refined.
 
 .. code-block:: bash
 
-   i.sentinel.mask -r input_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt \
-   cloud_mask=FIX shadow_mask=FIX cloud_threshold=25000 shadow_threshold=5000 \
+   i.sentinel.mask -r cloud_mask=FIX shadow_mask=FIX cloud_threshold=25000 shadow_threshold=5000 \
+   input_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt \
    mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/MTD_MSIL1C.xml
    
-   i.sentinel.mask -r input_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt \
-   cloud_mask=FIX shadow_mask=FIX cloud_threshold=25000 shadow_threshold=5000 \
+   i.sentinel.mask -r cloud_mask=FIX shadow_mask=FIX cloud_threshold=25000 shadow_threshold=5000 \
+   input_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt \
    mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/MTD_MSIL1C.xml
+
