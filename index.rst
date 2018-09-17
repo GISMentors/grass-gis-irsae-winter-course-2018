@@ -151,6 +151,8 @@ description below.
 
 .. todo:: Download link, http://training.gismentors.eu/geodata/irsae-norway-2018
 
+.. _virtual-machine:
+
 Virtual machine
 ===============
 
@@ -192,9 +194,9 @@ Units
    units/15
    units/16
    units/17
-   
+   units/18
+
 * Unit 14 - PyGRASS scripting
-* Unit 18 - Sentinel downloader
 * Unit 19 - Sentinel preprocessing
 * Unit 20 - MODIS
 * Unit 21 - Spatio-temporal intro

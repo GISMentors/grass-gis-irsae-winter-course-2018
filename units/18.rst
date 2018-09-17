@@ -1,68 +1,78 @@
-Unit 18 - Sentinel downloader
-=============================
+===============================
+ Unit 18 - Sentinel downloader
+===============================
 
-There are plenty of libraries or tools which enable downloading
+There are plenty of libraries or tools which allows downloading
 Sentinel products from `Copernicus Open Access Hub
 <https://scihub.copernicus.eu/>`__.
 
-One of such tool will be introduced in this unit. For GRASS GIS there
-is available :grasscmdaddons:`i.sentinel` Addon extension. It consists
-of fours GRASS modules:
+For GRASS GIS there is available :grasscmdaddons:`i.sentinel` Addon
+extension. It consists of fours GRASS modules:
 
 * :grasscmdaddons:`i.sentinel.download`
 * :grasscmdaddons:`i.sentinel.import`
 * :grasscmdaddons:`i.sentinel.preproc`
 * :grasscmdaddons:`i.sentinel.mask`
 
-Let's install this addon by using :grasscmd:`g.extension` and try it
-out (more about installing addons in :ref:`Unit 17
-<grass-addons>`). Note that :grasscmdaddons:`i.sentinel.download`
-requires also `sentinelsat library
-<https://pypi.python.org/pypi/sentinelsat>`__ to be installed.
-
-.. note::
-
-	Sentinelsat is already installed in the working Virtual Machine. If
-	you need to install it, you can easily do that with 
-	
-	.. code-block:: bash
-	
-		pip install sentinelsat
-	
-	If you have not `pip` command, look  
-	`how install it <https://pip.pypa.io/en/stable/installing/>`__
+Addons modules are not internal part of GRASS installation but can be
+easily installed by :grasscmd:`g.extension` (:menuselection:`Settings
+--> Addons extensions --> Install extension from addons`).
 
 .. code-block:: bash
 
    g.extension extension=i.sentinel
 
-First we are going to create a new mapset to store all the Sentinel data
-and start to work in it
+.. figure:: ../images/units/18/g-extension.png
+
+   Install :grasscmdaddons:`i.sentinel` GRASS Addon.
+
+Note that :grasscmdaddons:`i.sentinel.download` requires also
+`sentinelsat library <https://pypi.python.org/pypi/sentinelsat>`__ to
+be installed.
+
+.. note::
+
+	Sentinelsat is already installed in the :ref:`tailored virtual
+	machine <virtual-machine>`. If you need to install it on your
+	machine, you can easily do that with
+	
+	.. code-block:: bash
+	
+	   pip install sentinelsat
+	
+	If you have not `pip` command, look `how install it
+	<https://pip.pypa.io/en/stable/installing/>`__.
+
+First we are going to create a new mapset (:menuselection:`Settings
+--> GRASS working environment --> Create new mapset`) in the original
+*oslo-region* location created in :doc:`02` to store all the Sentinel
+data and start to work in it.
 
 .. figure:: ../images/units/18/sentinel_mapset.png
 	:class: small
 	
-	Create a new mapset for Sentinel data and switch to it
+	Create a new mapset for Sentinel data and switch to it.
 
-.. note::
-	It is possible to do this from command line with a single command
+.. note:: It is possible to create a new mapset and switch to it using
+   :grasscmd:`g.mapset` GRASS module.
 	
-	.. code-block:: bash
+   .. code-block:: bash
 	
-		g.mapset -c mapset=sentinel
+      g.mapset -c mapset=sentinel
 
-Let's download suitable Sentinel product for you favorite place and
-perform for simplicity NDVI calculation as described in :doc:`05`
-(implemented as a Python script in :doc:`12`).
+Let's download suitable Sentinel products for our area of interest
+(AOI) and perform NDVI calculation as described in :doc:`05`
+(implemented as a model in :doc:`08` or as a Python script in
+:doc:`11`).
 
-At first we need to define our area of interest. In our case AOI
-region will be the Oslo municipality.
+In our case AOI region is defined by Oslo county imported in
+:doc:`03`.
 
-Now we can search for suitable Sentinel products. We will prefer
-`Sentinel-2 L2A products
-<https://www.sentinel-hub.com/blog/sentinel-2-l2a-products-available-sentinel-hub>`__,
-we don't want to compute atmospheric corrections on our own at this
-moment. Let's search for latest available product by
+Now we can search for suitable Sentinel products. `Sentinel-2 L2A
+products
+<https://www.sentinel-hub.com/blog/sentinel-2-l2a-products-available-sentinel-hub>`__
+will be used to avoid need of computing atmospheric corrections at
+this moment. Let's search for latest available product by
 :grasscmd:`i.sentinel.download`. At first with :param:`-l` flag given,
 just to print results, download procedure will be performed later. In
 order to search and download Sentinel products, you have to create an
@@ -81,8 +91,7 @@ password.
 
 .. code-block:: bash
 
-   i.sentinel.download -l map=oslo producttype=S2MSI2Ap settings=~/sentinel.txt
-   
+   i.sentinel.download -l map=oslo producttype=S2MSI2Ap settings=sentinel.txt
           
 ::
 
@@ -111,56 +120,68 @@ that our AOI is fully covered by a Sentinel product we also set
    :param:`limit` option.
 
 Let's download desired product(s). Just remove :param:`-l` flag and
-add :param:`output` options in order to define path to output
-directory where data should be saved.
+add :param:`output` option in order to define path to output directory
+where data should be saved.
 
 .. code-block:: bash
                 
    i.sentinel.download map=oslo producttype=S2MSI2Ap settings=sentinel.txt \
-   start=2017-01-01 end=2017-10-01 area_relation=Contains clouds=10 limit=1 output=~/geodata/sentinel
+   start=2017-01-01 end=2017-10-01 area_relation=Contains clouds=10 limit=1 output=geodata/sentinel
 
-When download is successfully finished we can import data by
+In the next step downloaded data can be imported to GRASS by
 :grasscmdaddons:`i.sentinel.import`. The command will import **all**
 Sentinel bands from :param:`input` directory recursively. Sentinel
 bands to be imported can be optionally filtered by :param:`pattern`
-option. In example below 2nd, 3rd, 4th and 8th bands in 10m resolution will
-be imported. By default input data are imported into GRASS format,
-alternatively data can be linked (see :ref:`Unit 03 <link-external>`)
-if :param:`-l` is given. It is also useful to import cloud mask
-features by :param:`-c` flag.
+option. In example below 2nd, 3rd, 4th and 8th bands in 10m resolution
+will be imported. By default input data are imported into GRASS
+format, alternatively data can be linked if :param:`-l` is given. It
+is also useful to import cloud mask vector features by :param:`-c`
+flag.
 
 .. code-block:: bash
 
-   i.sentinel.import -l -c input=~/geodata/sentinel pattern="B0[2|3|4|8]_10m"
+   i.sentinel.import -l -c input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
 
-.. tip:: Before importing or linking try to print list of found raster
-   files including projection match. If projection of input data
-   differs from current location consider reprojection (:param:`-r`)
-   or creating a new location for import.
+.. tip:: Before importing or linking try to print list of filtered
+   raster files including projection match. If projection of input
+   data differs from current location consider reprojection
+   (:param:`-r`) or creating a new location for import.
 
    .. code-block:: bash
 
-      i.sentinel.import -p input=~/geodata/sentinel pattern="B0[2|3|4|8]_10m"
+      i.sentinel.import -p input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
 
-.. tip:: If you need to import more bands you can change the pattern 
-   parameter like :item:`pattern="B(02|03|04|08|8A|11|12)"`
+RGB composition
+---------------
 
-We can now visualize the imported Sentinel scene as RGB image.
-To load as RGB image we have to select :item:`Add RGB map layer` from the Layer Manager
+Imported Sentinel bands can be vizualized as a RGB composition. Select
+|grass-layer-rgb-add| :sup:`Add RGB map layer` from the Layer Manager.
 
 .. figure:: ../images/units/18/add_rgb.png
+   :class: large
 
-The result appears really dark
+   Add RGB map layer.
+   
+The result appears really dark.
 
 .. figure:: ../images/units/18/rgb_dark.png
+   :class: large
+
+   RGB composition with default grey color table.
     
-To have a better visualization, it is required to perform color auto-balancing for RGB bands.
-The module to use is :grasscmd:`i.color.enhance`. This module modifies the color table of
-each image band to provide a more natural color mixture, but the base data remains untouched. 
+Color table can be auto-balanced for RGB bands by GRASS module
+:grasscmd:`i.color.enhance`. This module modifies the color table of
+each image band to provide a more natural color mixture, the base data
+remains untouched.
 
 .. figure:: ../images/units/18/icolorsenhance.png
-    :class: small
 
-The result is an enhanced image, to see it just click on :item:`Render Map`
+   Auto-balance color table for RGB composition.
+   
+To see enhanced RGB composition click on |grass-layer-redraw|
+:sup:`Render map` in Map Display.
 
 .. figure:: ../images/units/18/rgb_good.png
+   :class: large
+   
+   Enhanced RGB composition.
