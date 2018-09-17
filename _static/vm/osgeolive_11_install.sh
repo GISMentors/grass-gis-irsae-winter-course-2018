@@ -34,7 +34,7 @@ sudo make install
 # GRASS 7.4.1
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
-sudo apt-get install grass qgis
+sudo apt-get install grass grass-core grass-gui grass-doc grass-dev qgis
 
 # GRASS Addons
 grass74 --exec ./grass-addons.sh
