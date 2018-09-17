@@ -191,9 +191,9 @@ Units
    units/13
    units/15
    units/16
+   units/17
    
 * Unit 14 - PyGRASS scripting
-* Unit 17 - Lidar scripting
 * Unit 18 - Sentinel downloader
 * Unit 19 - Sentinel preprocessing
 * Unit 20 - MODIS

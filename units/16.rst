@@ -1,5 +1,5 @@
-Unit 16 - Lidar
-===============
+Unit 16 - Lidar, DTM interpolation
+==================================
 
 There is open LiDAR data for Norway available at
 `hoydedata.no <http://www.hoydedata.no/>`__. Go to `Download 
@@ -157,10 +157,10 @@ cells with no-data value will be modified.
 
 .. _edge-detection:
 
-High resolution DSM
+High resolution DTM
 -------------------
 
-Digital Surface Model (DSM) is interpolated by :grasscmd:`v.surf.rst`
+Digital Surface Model (DTM) is interpolated by :grasscmd:`v.surf.rst`
 using regularized spline with tension approximation. Output resolution
 set to 0.5 meter. The computation can be really slow. You can turn
 computation time to be more reasonable by running it in parallel, see
@@ -169,14 +169,14 @@ computation time to be more reasonable by running it in parallel, see
 .. code-block:: bash
 
    g.region vector=las_32_1_514_136_34 res=0.5 -pa
-   v.surf.rst input=las_32_1_514_136_34 elevation=dsm_32_1_514_136_34 npmin=80 tension=20 smooth=1 nprocs=5
+   v.surf.rst input=las_32_1_514_136_34 elevation=dtm_32_1_514_136_34 npmin=80 tension=20 smooth=1 nprocs=5
 
 .. tip:: Try also to set higher npmin to reduce artifacts.
       
 .. figure:: ../images/units/16/dsm.png
    :class: middle
 
-   Resultant DSM.
+   Resultant DTM.
 
 .. note:: Similarly can build Digital Terrain Model (DTM) from
    filtered terrain only points by *edge detection*.

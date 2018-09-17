@@ -1,9 +1,8 @@
-=========================
- Unit 12 - Script tuning
-=========================
+Unit 12 - Script User Interface
+===============================
 
 Standard input
-==============
+--------------
 
 There is one problem with our script from :doc:`11`. Some modules
 (:grasscmd:`r.recode`, :grasscmd:`r.colors`) uses hardcoded paths
@@ -53,8 +52,8 @@ We can also define cleanup routine which removes intermediate data by
    def cleanup():
        Module('g.remove', flags='f', name='region_mask', type='vector')
 
-User input
-==========
+User interface (UI)
+-------------------
 
 The script lacks user input, all input paramaters are hardcoded. We
 have to modify our script similarly as we did for model :ref:`Unit 09
