@@ -146,8 +146,7 @@ cells with no-data value will be modified.
 
 .. figure:: ../images/units/16/rast-gaps-fill.png
 
-   NULL values (on left part) filled by :grasscmd:`r.fill.stats`
-   (right part).
+   Raster map filled by :grasscmd:`r.fill.stats`.
 
 .. note::
 
