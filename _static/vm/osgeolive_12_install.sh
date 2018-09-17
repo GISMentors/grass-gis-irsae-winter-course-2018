@@ -21,6 +21,7 @@ cd LASzip-2.0.1/ && mkdir build && cd build
 cmake -G "Unix Makefiles" ..
 make
 sudo make install
+rm -rf 2.0.1.tar.gz LASzip-2.0.1
 
 # liblas 1.8.1
 wget http://download.osgeo.org/liblas/libLAS-1.8.1.tar.bz2
@@ -28,6 +29,7 @@ tar xvjf libLAS-1.8.1.tar.bz2
 cd libLAS-1.8.1/ && mkdir build && cd build
 cmake -G "Unix Makefiles" ../ -DWITH_LASZIP=YESmake
 sudo make install
+rm -rf libLAS-1.8.1.tar.bz2 libLAS-1.8.1
 
 # GRASS 7.4.1
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
