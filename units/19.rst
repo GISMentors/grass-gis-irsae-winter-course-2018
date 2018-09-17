@@ -96,3 +96,30 @@ and conveniently refined.
    input_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt \
    mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/MTD_MSIL1C.xml
 
+
+The next step before using Sentinel data is to execute topographic correction of reflectance.
+We need to calculate the sun position for a given date with :grasscmd:`r.sunmask`
+
+.. code-block:: bash
+
+   r.sunmask -gs dtm_oslo year=2018 month=5 day=23 hour=10 minute=40 timezone=0
+   
+::
+
+   Using map center coordinates: 250000.000000 6675000.000000
+   ...
+   sunazimuth=167.292191
+   sunangleabovehorizon=50.010803
+   sunrise=02:31:19
+   sunset=19:58:34
+
+Now we have to run :grasscmd:`i.topo.corr` to calculate a illumination model from the elevation map 
+
+.. code-block:: bash
+
+   i.topo.corr -i base=dtm_oslo zenith=50.010803 azimuth=167.292191 output=dtm_oslo.illu
+   
+.. code-block:: bash
+
+   i.topo.corr base=dtm_oslo.illu input= output=tcor \ 
+   zenith=50.010803 method=c-factor
