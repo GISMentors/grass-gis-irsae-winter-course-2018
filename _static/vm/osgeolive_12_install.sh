@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install proj-bin \
+sudo apt install -y proj-bin \
      python \
      python-numpy \
      python-pil \
@@ -32,9 +32,9 @@ sudo make install
 rm -rf libLAS-1.8.1.tar.bz2 libLAS-1.8.1
 
 # GRASS 7.4.1
-sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get update
-sudo apt-get install grass grass-core grass-gui grass-doc grass-dev qgis
+sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+sudo apt update
+sudo apt install -y grass grass-core grass-gui grass-doc grass-dev qgis
 
 # GRASS Addons
 grass74 --exec ./grass-addons.sh
