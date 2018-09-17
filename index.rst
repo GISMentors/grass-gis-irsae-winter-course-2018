@@ -156,7 +156,9 @@ Virtual machine
 
 The simplest way how to follow this training. `VirtualBox
 <http://virtualbox.org>`__ must be installed on your PC, enable also
-*virtualization support* in BIOS.
+*virtualization support* in BIOS. See `Virtualization Quickstart
+<https://live.osgeo.org/en/quickstart/virtualization_quickstart.html>`__
+for details.
 
 A customized virtual machine (VM) based on `OSGeoLive
 <http://live.osgeo.org>`__ is available at ... This VM contains all
