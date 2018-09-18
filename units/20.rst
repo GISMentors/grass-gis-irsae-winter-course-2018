@@ -119,7 +119,9 @@ by :grasscmd:`g.region`.
 Let's check range values of our LST data (by :grasscmd:`r.info` module
 or from Layer Manager).
 
-.. todo:: Add screenshot.
+.. figure:: ../images/units/20/raster-metadata.png
+
+   Raster map metadata.
           
 .. code-block:: bash
 
