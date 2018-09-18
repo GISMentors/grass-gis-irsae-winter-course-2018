@@ -48,11 +48,7 @@ Let's download desired tiles (h18v02 and h18v03) for year 2017 by
 products (both Aqua and Terra satellites).
 
 .. note:: Already downloaded MODIS can be found in sample dataset in
-   :file:`modis/h18v02_03` folder. Or alternatively you can use GRASS
-   location with imported data (:file:`grassdata/norway-modis.tar.gz`)
-   and continue with :ref:`LST computation <modis-lst>`.
-
-.. todo:: Prepare GRASS location for download.
+   :file:`modis/h18v02_03` folder.
           
 .. code-block:: bash
 
