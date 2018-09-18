@@ -195,9 +195,9 @@ Units
    units/16
    units/17
    units/18
-
+   units/19
+   
 * Unit 14 - PyGRASS scripting
-* Unit 19 - Sentinel preprocessing
 * Unit 20 - MODIS
 * Unit 21 - Spatio-temporal intro
 * Unit 22 - Spatio-temporal basic analysis

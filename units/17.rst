@@ -59,6 +59,8 @@ Sample script to download: `create-dtm.py <../_static/scripts/create-dtm.py>`__
    
    DTM created from all available tiles.
 
+.. _dmt-comparision:
+
 DTM comparision
 ---------------
 
