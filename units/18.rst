@@ -13,6 +13,8 @@ extension. It consists of fours GRASS modules:
 * :grasscmdaddons:`i.sentinel.preproc`
 * :grasscmdaddons:`i.sentinel.mask`
 
+.. _grass-addons:
+
 Addons modules are not internal part of GRASS installation but can be
 easily installed by :grasscmd:`g.extension` (:menuselection:`Settings
 --> Addons extensions --> Install extension from addons`).

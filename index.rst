@@ -196,7 +196,8 @@ Units
    units/17
    units/18
    units/19
-   
+   units/20
+
 * Unit 14 - PyGRASS scripting
 * Unit 20 - MODIS
 * Unit 21 - Spatio-temporal intro

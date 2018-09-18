@@ -3,12 +3,12 @@ Unit 20 - MODIS
 
 There are two satellites, Aqua and Terra which carry the MODIS sensor
 as payload. The **Moderate Resolution Imaging Spectroradiometer**
-(:wikipedia-en:`MODIS`) is a 36-channel from visible to
-thermal-infrared sensor that was launched as part of the Terra
-satellite payload in December 1999 and Aqua satellite (May 2002). The
-Terra satellite passes twice a day (at about 10:30am, and 22:30pm
-local time), also the Aqua satellite passes twice a day (at about
-01:30am, and 13:30pm local time). (source: `GRASS Wiki
+(:wikipedia:`MODIS`) is a 36-channel from visible to thermal-infrared
+sensor that was launched as part of the Terra satellite payload in
+December 1999 and Aqua satellite (May 2002). The Terra satellite
+passes twice a day (at about 10:30am, and 22:30pm local time), also
+the Aqua satellite passes twice a day (at about 01:30am, and 13:30pm
+local time). (source: `GRASS Wiki
 <https://grasswiki.osgeo.org/wiki/MODIS>`__)
 
 Our area of interest, Norway, is covered by two tiles (see `MODLAND
@@ -26,14 +26,17 @@ to ETRS89 / UTM 32N :epsg:`25832`.
 
 Create a new GRASS mapset called `modis` and install
 :grasscmdaddons:`i.modis` addons extension (more about installing
-addons in :ref:`Unit 17 <grass-addons>`) for downloading and importing
+addons in :ref:`Unit 18 <grass-addons>`) for downloading and importing
 MODIS data (note that you have to install also `pyMODIS Python Library
-<http://www.pymodis.org/>`__).
+<http://www.pymodis.org/>`__). 
 
 .. code-block:: bash
 
    pip install pymodis
    g.extension extension=i.modis
+
+.. note:: :grasscmd:`i.modis` including dependecies is already
+   installed on tailored :ref:`virtual machine <virtual-machine>`.
 
 GRASS MODIS addon consists of two modules:
 
@@ -43,40 +46,42 @@ GRASS MODIS addon consists of two modules:
 Let's download desired tiles (h18v02 and h18v03) for year 2017. We are
 interested about LST products (both Aqua and Terra satellites).
 
-.. note:: Already downloaded MODIS can be found in sample dataset
-   in :file:`modis/h18v02_03` folder. Or alternatively you can use
-   GRASS location with imported data
-   (:file:`grassdata/germany-modis.tar.gz`) and continue with
-   :ref:`LST computation <modis-lst>`.
-  
+.. note:: Already downloaded MODIS can be found in sample dataset in
+   :file:`modis/h18v02_03` folder. Or alternatively you can use GRASS
+   location with imported data (:file:`grassdata/norway-modis.tar.gz`)
+   and continue with :ref:`LST computation <modis-lst>`.
+
+.. todo:: Prepare GRASS location for download.
+          
 .. code-block:: bash
 
-   i.modis.download settings=- folder=~/geodata/modis \
+   i.modis.download settings=settings.txt folder=geodata/modis \
    tiles=h18v02,h18v03 product=lst_aqua_eight_1000,lst_terra_eight_1000 \
    startday=2017-01-01 endday=2017-12-31
 
-.. note:: Output folder (:file:`~/geodata/modis` in this case) must exists,
+.. note:: Output folder (:file:`geodata/modis` in this case) must exists,
    otherwise the module will fail.
              
    File :file:`settings.txt` contains two lines: *username* and
    *password* for accessing MODIS download service.
    
    Please read carefully how to register and set up your account on
-   `pyModis documentation <http://www.pymodis.org/info.html#user-and-password>`__
+   `pyModis documentation
+   <http://www.pymodis.org/info.html#user-and-password>`__.
 
-Then we can import data including reprojection into our location.
+Data will be imported including reprojection into target location.
 
 .. _modis-import:
 
 .. code-block:: bash
 
-   i.modis.import -mw files=~/geodata/modis/listfileMOD11A2.006.txt \
-   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=~/geodata/modis/tlist-mod.txt
+   i.modis.import -mw files=geodata/modis/listfileMOD11A2.006.txt \
+   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=geodata/modis/tlist-mod.txt
 
-   i.modis.import -mw files=~/geodata/modis/listfileMYD11A2.006.txt \
-   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=~/geodata/modis/tlist-myd.txt
+   i.modis.import -mw files=geodata/modis/listfileMYD11A2.006.txt \
+   spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=geodata/modis/tlist-myd.txt
 
-If ``-m`` flag is given, the import tool creates mosaics from tiles
+If ``-m`` flag is given mosaics from input tiles is created
 automatically, see :numref:`modis-mosaics`.
 
 .. _modis-mosaics:
@@ -84,21 +89,22 @@ automatically, see :numref:`modis-mosaics`.
 .. figure:: ../images/units/20/modis-mosaics.png
    :class: middle
         
-   Final mosaics created from h18v02 and h18v03 tiles.
+   Mosaics created from h18v02 and h18v03 tiles.
 
 .. _modis-lst:
    
 LST
 ---
 
-In this section we will perform **Land Surface Temperature** (LST)
-analysis in Norway region. At first we will import layer with Norway
-administrative border.
+In this section **Land Surface Temperature** (LST) analysis will be
+perfmored for Norway. 
 
-Now we can create a desired mask (:grasscmd:`r.mask`). Don't forget
-that a mask is created in the current computation region. First you
-set computation extent based on Norway vector map and than align
-computation grid to input data by :grasscmd:`g.region`.
+Mask based on Norway administrate border is set by :grasscmd:`r.mask`
+based on data imported in :ref:`Unit 03
+<import-vector-section>`. Don't forget that a mask is created in the
+current computation region. Computation extent needs to be set based
+on :map:`Fylke` vector map and computational grid aligned input data
+by :grasscmd:`g.region`.
 
 .. code-block:: bash
 
@@ -106,8 +112,10 @@ computation grid to input data by :grasscmd:`g.region`.
    r.mask vector=Fylke
 
 Let's check range values of our LST data (by :grasscmd:`r.info` module
-or from Layer Manager, see :ref:`Unit 03 <raster-metadata>`).
+or from Layer Manager).
 
+.. todo:: Add screenshot.
+          
 .. code-block:: bash
 
    r.info -r map=MOD11A2.A2017001_mosaic_LST_Day_1km
@@ -154,3 +162,5 @@ Let's check range values of new LST data
         
    LST reconstruction for Norway in Celsius scale (color table
    ``celsius`` applied).
+
+.. todo:: Fig. above: Norway should be clipped. Mask is missing.
