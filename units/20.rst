@@ -84,6 +84,9 @@ Data will be imported including reprojection into target location.
 If ``-m`` flag is given mosaics from input tiles is created
 automatically, see :numref:`modis-mosaics`.
 
+.. note:: The command was run twice, once for Aqua data than for Terra
+          data.
+
 .. _modis-mosaics:
 
 .. figure:: ../images/units/20/modis-mosaics.png

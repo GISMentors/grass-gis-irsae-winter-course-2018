@@ -1,9 +1,10 @@
 Unit 21 - Spatio-temporal intro
 ===============================
 
-GRASS comes in version 7 with high quality tools for spatio-temporal
-data processing, see :grasscmd:`GRASS documentation <temporalintro>`
-for details.
+GRASS GIS 7 comes with high quality and flexibility tools for
+spatio-temporal data processing, see :grasscmd:`GRASS documentation
+<temporalintro>` for details. All GRASS modules from spatio-temporal
+framework start with ``t.*`` prefix.
 
 GRASS introduces three special datatypes that are designed to handle
 time series data:
@@ -16,35 +17,34 @@ time series data:
   series.
             
 Spatio-temporal MODIS data
------------------------------------
+--------------------------
 
-The first step to work with the spatio-temporal framework is to connect the
-database, we will set in the default place :param:`-d`
+The first step to work with the spatio-temporal framework is to
+connect a space-time database by :grasscmd:`t.connect`. Default
+settings is forced by :param:`-d` flag.
 
 .. code-block:: bash
 
    t.connect -d
 
-After that we will create a new space time raster datasets by
-:grasscmd:`t.create`.
+A new space time raster datasets is created by :grasscmd:`t.create`.
 
 .. code-block:: bash
 
    t.create output=modis title="MODIS 2017" desc="MODIS data for Norway"
 
-In the next step will register to the dataset imported MODIS data by
-:grasscmd:`t.register`.
-In :doc:`24` we have :ref:`imported <modis-import>` MODIS data into
-GRASS by :grasscmdaddons:`i.modis.import`. The command was called with
+In the next step register to the dataset imported MODIS data from
+:ref:`Unit 20 <modis-import>` by :grasscmd:`t.register`. Note that
+:grasscmdaddons:`i.modis.import` in :doc:`20` was called with
 :param:`-w` flag and :param:`outfile` parameter to generate special
 file which can be later used for creating space-time raster dataset
-(strds).
-We run this command twice, once for Aqua data than for Terra data.
+(strds). The command needs to be run twice, once for Aqua data than
+for Terra data.
 
 .. code-block:: bash
 
-   t.register input=modis file=~/geodata/modis/tlist-mod.txt
-   t.register input=modis file=~/geodata/modis/tlist-myd.txt
+   t.register input=modis file=geodata/modis/tlist-mod.txt
+   t.register input=modis file=geodata/modis/tlist-myd.txt
 
 Let's check basic metedata about created dataset by
 :grasscmd:`t.info`.
@@ -65,9 +65,10 @@ Let's check basic metedata about created dataset by
 
 .. _t-register-file:
 
-.. note:: We are using composed product from the daily 1-kilometer LST
-   product (MOD11A1/MYD11A1) stored on a 1-km Sinusoidal grid as the
-   average values of clear-sky LSTs during an 8-day period.
+.. note:: See granularity. In this case a composed product from the
+   daily 1-kilometer LST product (MOD11A1/MYD11A1) stored on a 1-km
+   Sinusoidal grid as the average values of clear-sky LSTs during an
+   8-day period is used.
 
    ::
 
@@ -92,16 +93,20 @@ Time topology information can be obtained by :grasscmd:`t.topology`.
    | Granularity: ............... 8 days
    ...
 
-It is possible to see our spatial-temporal dataset also graphically using
-:grasscmd:`g.gui.timeline`
+It is possible to see our spatio-temporal dataset also graphically
+using :grasscmd:`g.gui.timeline` (:menuselection:`Temporal --> GUI
+tools --> Timeline tool`).
 
 .. figure:: ../images/units/21/timeline.png
    :class: large
 
+   Download MODIS data presented by Timeline tool.
+   
 Space-time Data Querying
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-By :grasscmd:`t.rast.list` can be printed raster maps
+List of registered raster maps in spatio-temporal dataset can be
+printed by :grasscmd:`t.rast.list`.
 
 .. code-block:: bash
 
@@ -121,8 +126,8 @@ By :grasscmd:`t.rast.list` can be printed raster maps
    MYD11A2.A2017361_mosaic_LST_Night_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
 
 
-It has the capabilities to limit the number of map according different
-parameters. In the example below are printed raster maps with data covering March 2017.
+Printed maps can be filtered by various parameters. In the example
+below are printed raster maps with data covering March 2017 only.
 
 .. code-block:: bash
 
@@ -145,7 +150,8 @@ parameters. In the example below are printed raster maps with data covering Marc
    MYD11A2.A2017089_mosaic_LST_Day_1km|modis|2017-03-30 00:00:00|2017-04-07 00:00:00
    MYD11A2.A2017089_mosaic_LST_Night_1km|modis|2017-03-30 00:00:00|2017-04-07 00:00:00
 
-In the next example instead we are going to print only maps coming from Aqua satellite
+In the next example only raster maps coming from Aqua satellite are
+printed.
 
 .. code-block:: bash
 
@@ -164,9 +170,8 @@ In the next example instead we are going to print only maps coming from Aqua sat
    MYD11A2.A2017361_mosaic_LST_Day_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
    MYD11A2.A2017361_mosaic_LST_Night_1km|modis|2017-12-27 00:00:00|2018-01-04 00:00:00
 
-Univariate statistic can be calculated by :grasscmd:`t.rast.univar`,
-in example below we compute statistics only for the first hour of
-flooding.
+Univariate statistics can be calculated by :grasscmd:`t.rast.univar`.
+In example below statistics only for March 2017 is calculated.
 
 .. code-block:: bash
 
@@ -183,9 +188,9 @@ flooding.
 Space-time Data Extracting
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Raster spatio-temporal data can be extract into new datasets using
-:grasscmd:`t.rast.extract`. In the example below will be create four
-new datasets containing data for different satellite and time
+Raster spatio-temporal data can be extracted into new dataset using
+:grasscmd:`t.rast.extract`. In the example below are created four new
+datasets containing data of different satellite and datetime.
 
 .. code-block:: bash
 
@@ -211,8 +216,8 @@ At this point we can check the basic information
    | Number of registered maps:.. 46
    ...
 
-
-and later the topology, this time it is valid!
+and later time topology which should be valid compared to original
+dataset.
 
 .. code-block:: bash
 
