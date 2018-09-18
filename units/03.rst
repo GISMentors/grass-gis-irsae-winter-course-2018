@@ -159,6 +159,8 @@ importing data, be awere of :param:`snap` option of
 repair automatically without user specification can fixed using
 :grasscmd:`v.clean` module.
 
+.. _work-organization-section:
+
 Work organization
 -----------------
 

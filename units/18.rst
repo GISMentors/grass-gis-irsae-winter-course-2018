@@ -127,8 +127,13 @@ where data should be saved.
 .. code-block:: bash
                 
    i.sentinel.download map=oslo producttype=S2MSI2Ap settings=sentinel.txt \
-   start=2017-01-01 end=2017-10-01 area_relation=Contains clouds=10 limit=1 output=geodata/sentinel
+   start=2017-01-01 end=2017-10-01 area_relation=Contains clouds=10 limit=1 output=geodata/sentinel/2017
 
+.. note:: Pre-downloaded Sentinel scene is available in sample
+   dataset:
+   
+   :file:`geodata/sentinel/2017/S2A_MSIL2A_20170523T104031_N0205_R008_T32VNM_20170523T104025.zip`.
+   
 .. tip:: Before importing or linking try to print list of filtered
    raster files including projection match (second column 1 for match
    otherwise 0). If projection of input data differs from current
@@ -137,7 +142,7 @@ where data should be saved.
 
    .. code-block:: bash
 
-      i.sentinel.import -p input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
+      i.sentinel.import -p input=geodata/sentinel/2017 pattern="20170523T104031_B0(2|3|4|8)_10m"
 
    ::
 
@@ -156,7 +161,7 @@ flag.
 
 .. code-block:: bash
 
-   i.sentinel.import -l -c input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
+   i.sentinel.import -l -c input=geodata/sentinel pattern="20170523T104031_B0(2|3|4|8)_10m"
 
 RGB composition
 ---------------

@@ -1,64 +1,54 @@
-Unit 20 - Sentinel Spatio-temporal
-==================================
+Unit 23 - Spatio-temporal NDVI computation
+==========================================
 
-.. warning:: Materials under construction!
+Create a new mapset in *oslo-region* location, eg. *sentinel-st-ndvi*,
+see :ref:`Work organization <work-organization-section>` section.
 
-
-This unit is dedicated to downloading and processing time-series
-Sentinel products.
-
-Let's download Sentinel products (still *Sentinel L2A* as we did in
-:doc:`20`) for year 2017. There are 7 products available as shown
-below. Is is enough for our purpose.
+Let's download Sentinel L2A products for spring/summer
+2017/2018. There are 4 products available as shown below. Note that in
+given period there are no Sentinel L2A products for 2018.
 
 .. code-block:: bash
                 
-   i.sentinel.download -l settings=sentinel.txt map=jena_boundary area_relation=Contains \
-   start=2017-01-01 end=2017-12-31 producttype=S2MSI2Ap
+   i.sentinel.download -l settings=sentinel.txt map=oslo area_relation=Contains \
+   start=2017-04-01 end=2017-10-01 producttype=S2MSI2A
 
 ::
    
-   7 Sentinel product(s) found
-   e5df8b4f-a4c6-47bd-88f3-e16b7540cc7a 2017-05-27T10:20:31Z  2% S2MSI2Ap
-   b62afeda-a28d-475c-8220-91e24fc368ff 2017-05-17T10:20:31Z  2% S2MSI2Ap
-   9a6bc289-98e9-4489-84eb-1aac95aaa056 2017-08-15T10:20:21Z  3% S2MSI2Ap
-   35c72002-78a0-45f8-b39d-66c2d7b4ad87 2017-10-14T10:20:21Z  6% S2MSI2Ap
-   c0ae8085-c1bb-4a27-89f2-2138a0866586 2017-07-06T10:20:21Z 12% S2MSI2Ap
-   433ebfbc-5144-42f8-97dc-b9f4f1eb7b5a 2017-11-03T10:22:01Z 12% S2MSI2Ap
-   fc56a594-d9d8-4e93-8dec-af3a58b24080 2017-09-04T10:20:21Z 19% S2MSI2Ap
+   2a894e37-1cf5-4bfc-ab42-9e32b99f423f 2017-05-23T10:40:31Z  1% S2MSI2Ap
+   71e0c5be-d008-4b71-a8f3-97f4c42ba09a 2017-05-06T10:50:31Z  2% S2MSI2Ap
+   74cf18cf-3cae-4d80-b1c8-9f2ee29972b4 2017-05-26T10:50:31Z  4% S2MSI2Ap
+   06724aba-9269-492c-a1d5-208a06c3f282 2017-07-05T10:50:31Z 27% S2MSI2Ap
 
-.. note:: For simplification you can find this data in sample dataset (`download
-   7z-archive
-   <http://geo102.fsv.cvut.cz/geoforall/grass-gis-workshop-jena-2018/jena-sample-data.7z>`__)
-   in :file:`sentinel/2017` folder or as GRASS mapset as
-   :file:`grassdata/st.tar.gz`. You can use this mapset (extract to
-   *jena-utm* location) and go to :ref:`next part <sentinel-go-to>` if
-   you like.
 
-Now we can start downloading data.
+Download selected Sentinel scenes:
 
 .. code-block:: bash
                 
-   i.sentinel.download settings=sentinel.txt map=jena_boundary area_relation=Contains \
-   start=2017-01-01 end=2017-12-31 producttype=S2MSI2Ap output=/opt/geodata/sentinel-2017
+   i.sentinel.download settings=sentinel.txt map=oslo area_relation=Contains \
+   start=2017-05-01 end=2017-10-01 producttype=S2MSI2Ap output=geodata/sentinel/2017
+   
+.. note:: Pre-downloaded Sentinel scenes are available in sample
+   dataset :file:`geodata/sentinel/2017`.
 
-When data are downloaded we can import them into our *jena-utm*
-location. It is a good idea to import data into newly created mapset
-(:grasscmd:`g.mapset`, see :ref:`Unit 16 <create-mapset>`). In command
-below we force linking instead of importing data.
+Data are imported by :grasscmd:`i.sentinel.import` similarly as done
+in :doc:`18`. At fisrt check list of bands to be imported by
+:param:`-p` flag. Since we are going to compute NDVI only 4th and 8th
+band are selected.
 
 .. code-block:: bash
 
-   g.mapset -c mapset=st
-   i.sentinel.import -l -c input=/opt/geodata/sentinel-2017 pattern="B0[4|8]_10m"
+   i.sentinel.import -p input=geodata/sentinel/2017 pattern="B0(4|8)_10m"
+   
+   i.sentinel.import -l -c input=geodata/sentinel/2017 pattern="B0(4|8)_10m"
 
 .. _sentinel-go-to:
 
-In next step a new space time raster dataset will created and imported
-maps registered. Unfortunately we don't have timestamps for imported
-maps required by :grasscmd:`t.register` (as shown in :ref:`Unit 25
-<t-register-file>`). For this purpose we will design a simple Python
-script as shown below.
+In next step a new space time raster dataset will be created and
+imported maps registered. Unfortunately there are no timestamps for
+imported maps required by :grasscmd:`t.register` as shown in
+:ref:`Unit 21 <t-register-file>`. For this purpose a simple Python
+script has been designed.
 
 .. literalinclude:: ../_static/scripts/sentinel-timestamp.py
    :language: python
@@ -72,33 +62,61 @@ Timestamps can be easily determined from raster map name, for example
 .. note:: To avoid error in computation we also set up endtime
    timestamp as starttime+1sec, see :lcode:`27`.
 
-   This workaround should be avoided. Determine how?
+.. todo:: This workaround should be avoided. Determine how?
 
 Sample script to download: `sentinel-timestamp.py
 <../_static/scripts/sentinel-timestamp.py>`__
 
-Now we can run our script to produce timestamp file.
+By running this script a timestamp file will be produced.
 
 .. code-block:: bash
 
-   sentinel-timestamp.py output=sentinel.txt
-   
-At this moment we can create a new space time dataset
-(:grasscmd:`t.create`) and register all imported Sentinel bands
-(:grasscmd:`t.register`).
+   sentinel-timestamp.py output=sentinel-timestamps.txt
+
+Example of created timestamps file show below.
+
+::
+
+   L2A_T32VNM_20170523T104031_B04_10m|2017-05-23 10:40:31|2017-05-23 10:40:32
+   L2A_T32VNM_20170506T105031_B08_10m|2017-05-06 10:50:31|2017-05-06 10:50:32
+   L2A_T32VNM_20170526T105031_B04_10m|2017-05-26 10:50:31|2017-05-26 10:50:32
+   ...
+
+At this moment a new space time dataset can be created by
+:grasscmd:`t.create` and all imported Sentinel bands registered by
+:grasscmd:`t.register`.
 
 .. code-block:: bash
 
-   t.create output=sentinel title="Sentinel L2A 2017" desc="Jena region"
-   t.register input=sentinel file=sentinel.txt
+   t.create output=sentinel2017 title="Sentinel L2A 2017" desc="Oslo region NDVI computation"
+   t.register input=sentinel2017 file=sentinel-timestamps.txt
 
 Let's check basic metadata (:grasscmd:`t.info`) and list of registered
 maps (:grasscmd:`t.rast.list`).
 
 .. code-block:: bash
 
-   t.info input=sentinel
-   t.rast.list input=sentinel
+   t.info input=sentinel2017
+
+::
+
+   ...
+   | Start time:................. 2017-05-06 10:50:31
+   | End time:................... 2017-07-05 10:50:32
+   ...
+   | Number of registered maps:.. 8
+
+
+.. code-block:: bash
+                
+   t.rast.list input=sentinel2017
+
+::
+
+   name|mapset|start_time|end_time
+   L2A_T32VNM_20170506T105031_B04_10m|sentinel-st-ndvi|2017-05-06 10:50:31|2017-05-06 10:50:32
+   L2A_T32VNM_20170506T105031_B08_10m|sentinel-st-ndvi|2017-05-06 10:50:31|2017-05-06 10:50:32
+   L2A_T32VNM_20170523T104031_B04_10m|sentinel-st-ndvi|2017-05-23 10:40:31|2017-05-23 10:40:32
 
 NDVI ST computation
 -------------------
