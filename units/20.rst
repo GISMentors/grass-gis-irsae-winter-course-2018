@@ -43,8 +43,9 @@ GRASS MODIS addon consists of two modules:
 * :grasscmdaddons:`i.modis.download`
 * :grasscmdaddons:`i.modis.import`
 
-Let's download desired tiles (h18v02 and h18v03) for year 2017. We are
-interested about LST products (both Aqua and Terra satellites).
+Let's download desired tiles (h18v02 and h18v03) for year 2017 by
+:grasscmdaddons:`i.modis.download`. We are interested about LST
+products (both Aqua and Terra satellites).
 
 .. note:: Already downloaded MODIS can be found in sample dataset in
    :file:`modis/h18v02_03` folder. Or alternatively you can use GRASS
@@ -55,7 +56,7 @@ interested about LST products (both Aqua and Terra satellites).
           
 .. code-block:: bash
 
-   i.modis.download settings=settings.txt folder=geodata/modis \
+   i.modis.download settings=modis.txt folder=geodata/modis/h18v02_03 \
    tiles=h18v02,h18v03 product=lst_aqua_eight_1000,lst_terra_eight_1000 \
    startday=2017-01-01 endday=2017-12-31
 
@@ -69,16 +70,17 @@ interested about LST products (both Aqua and Terra satellites).
    `pyModis documentation
    <http://www.pymodis.org/info.html#user-and-password>`__.
 
-Data will be imported including reprojection into target location.
+Data are imported by :grasscmdaddons:`i.modis.import` including
+reprojection into target location.
 
 .. _modis-import:
 
 .. code-block:: bash
 
-   i.modis.import -mw files=geodata/modis/listfileMOD11A2.006.txt \
+   i.modis.import -mw files=geodata/modis/h18v02_03/listfileMOD11A2.006.txt \
    spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=geodata/modis/tlist-mod.txt
 
-   i.modis.import -mw files=geodata/modis/listfileMYD11A2.006.txt \
+   i.modis.import -mw files=geodata/modis/h18v02_03/listfileMYD11A2.006.txt \
    spectral='( 1 0 0 0 1 0 0 0 0 0 0 0 )' outfile=geodata/modis/tlist-myd.txt
 
 If ``-m`` flag is given mosaics from input tiles is created
@@ -90,7 +92,7 @@ automatically, see :numref:`modis-mosaics`.
 .. _modis-mosaics:
 
 .. figure:: ../images/units/20/modis-mosaics.png
-   :class: middle
+   :class: large
         
    Mosaics created from h18v02 and h18v03 tiles.
 
@@ -147,23 +149,22 @@ Example (replace :map:`tile` with real map name):
    
 .. code-block:: bash
                 
-   r.mapcalc expression="tile_c = if(tile != 0, tile * 0.02 - 273.15, null())"
+   r.mapcalc expression="MOD11A2.A2017001_mosaic_LST_Day_1km_celsius = \
+   if(MOD11A2.A2017001_mosaic_LST_Day_1km != 0, MOD11A2.A2017001_mosaic_LST_Day_1km * 0.02 - 273.15, null())"
 
 Let's check range values of new LST data
 
 .. code-block:: bash
 
-   r.info -r map=MOD11A2.A2017001_mosaic_LST_Day_1km_c
+   r.info -r map=MOD11A2.A2017001_mosaic_LST_Day_1km_celsius
 
 ::
 
    min=-45.09
-   max=7.15000000000003
+   max=6.05000000000001
 
 .. figure:: ../images/units/20/lst-c.png
-   :class: middle
+   :class: large
         
    LST reconstruction for Norway in Celsius scale (color table
    ``celsius`` applied).
-
-.. todo:: Fig. above: Norway should be clipped. Mask is missing.
