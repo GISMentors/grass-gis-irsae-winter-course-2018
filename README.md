@@ -1,4 +1,4 @@
-# GRASS GIS IESAE winter course 2018
+# GRASS GIS IRSAE winter course 2018
 
 ## Topic
 
