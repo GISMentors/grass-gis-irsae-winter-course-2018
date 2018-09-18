@@ -1,17 +1,19 @@
 Unit 22 - Spatio-temporal basic analysis
-=========================================
+========================================
 
 Map algebra
 ------------
 
-As we can see we have to convert DN into Celsius scale as we done for selected
-data in :ref:`Unit 24 <modis-dn-c>`. Instead of running :grasscmd:`r.mapcalc`
-we can use temporal command :grasscmd:`t.rast.mapcalc` which applies map algebra
-to all the maps registered in input space time dataset.
+Digital numbers (DN) need to be converted into Celsius scale
+similarly as done in :ref:`Unit 24 <modis-dn-c>`. Instead of running
+:grasscmd:`r.mapcalc` repeatedly there is a specialized temporal
+command :grasscmd:`t.rast.mapcalc` which applies map algebra to all
+the maps registered in input space time dataset.
 
 .. tip::
 
-   Many of temporal data processing modules (t.*) support parallelization (see nproc option).
+   Many temporal data processing modules (``t.*``) support
+   parallelization (see :param:`nproc` option).
    
 .. code-block:: bash
 
@@ -20,19 +22,19 @@ to all the maps registered in input space time dataset.
 
 .. note::
 
-   In the expression we need to set the Spatio-temporal dataset name instead
-   of the raster maps name.
+   Compared to expression used in :ref:`Unit 24 <modis-dn-c>`, raster
+   map name is replaced by spatio-temporal dataset name.
 
-Alternatively, we could have used :grasscmd:`t.rast.algebra` to perform the
-previous transformation. The command would look like this:
+   Alternatively :grasscmd:`t.rast.algebra` could be used to perform
+   the DN transformation, see command below.
 
-.. code-block:: bash
+   .. code-block:: bash
+                   
+      t.rast.algebra basename=modis_celsius expression="modis_c = modis * 0.02 - 273.15"
 
-   t.rast.algebra basename=modis_celsius expression="modis_c = modis * 0.02 - 273.15"
-
-We can easily set the color table for all the maps in a spatial-temporal
-raster dataset by :grasscmd:`t.rast.colors` similarly as :grasscmd:`r.colors`
-does for single raster map.
+Color table for all the maps in a spatio-temporal raster dataset can
+be easily set by :grasscmd:`t.rast.colors` similarly as
+:grasscmd:`r.colors` does for a single raster map.
 
 .. code-block:: bash
 
@@ -41,10 +43,10 @@ does for single raster map.
 Data aggregation
 ----------------
 
-The temporal framework enable the user to do data aggregation in a really
-simple way. The command to use is :grasscmd:`t.rast.aggregate`. You have just
-to choose the desidered :param:`granularity` and it will create the new
-temporal dataset
+The temporal framework enables the user to perform data aggregation in
+a really simple way. The command to be used is
+:grasscmd:`t.rast.aggregate`. Based on specified :param:`granularity`
+a new temporal dataset with aggregated data is created.
 
 .. code-block:: bash
                           
@@ -56,17 +58,24 @@ Statistics can be computed by :grasscmd:`t.rast.univar`.
                 
    t.rast.univar modis_cm
 
-Another aggregations method is :grasscmd:`t.rast.series`, it  allows us to
-aggregate our STRDS or parts of it with different methods. It return a map
-as output and not a temporal dataset as :grasscmd:`t.rast.aggregate`.
-We will compute annual average temperature.
+::
+
+   id|start|end|mean|min|max|...
+   cm_2017_01@modis|2017-01-01 00:00:00|2017-02-01 00:00:00|-9.44159183015945|-24.37|5.09000000000003|...
+   cm_2017_02@modis|2017-02-01 00:00:00|2017-03-01 00:00:00|-9.53477082170954|-21.0066666666666|5.41000000000003|...
+
+Another aggregation method is based on :grasscmd:`t.rast.series`, it
+allows to aggregate spatio-temporal raster dataset or part of it by
+various methods. The module returns a single raster map as output and
+not a temporal dataset as by :grasscmd:`t.rast.aggregate`. In example
+below annual average temperature is computed.
 
 .. code-block:: bash
                 
    t.rast.series input=modis_c output=modis_avg method=average
 
-Four new raster maps are created, let's print univariate statistics
-for spring by using :grasscmd:`r.univar`.
+Univariate statistics of created raster map with average temperature
+values can be calculated by :grasscmd:`r.univar`.
    
 .. code-block:: bash
 
@@ -74,41 +83,47 @@ for spring by using :grasscmd:`r.univar`.
 
 ::
 
-   minimum: -11.0865
-   maximum: 16.085
-   range: 27.1715
-   mean: 3.39483
+   minimum: -10.8297
+   maximum: 15.9633
+   range: 26.7931
+   mean: -0.876881
 
 .. figure:: ../images/units/22/annual_avg.png
 
-   Average temperature for 2017.
+   Average temperature in Norway for 2017.
 
 Data visualization
 ------------------
 
-In addition to :grasscmd:`g.gui.timeline` there are other two GRASS tools
-for temporal data visualization: :grasscmd:`g.gui.animation` and
-:grasscmd:`g.gui.tplot`.
+In addition to :grasscmd:`g.gui.timeline` introduced in :ref:`Unit 21
+<g-gui-timeline>` there are other two GRASS tools for temporal data
+visualization: :grasscmd:`g.gui.animation` (:menuselection:`Temporal
+--> GUI tools --> Animation tool`) and :grasscmd:`g.gui.tplot`
+(:menuselection:`Temporal --> GUI tools --> Temporal plot tool`).
 
-:grasscmd:`g.gui.animation` permit to the user to create animations and export
-them in different format, the example below show the monthly average
+Tool :grasscmd:`g.gui.animation` allows creating animations in
+different formats, the example below showing the monthly average
+values.
 
 .. code-block:: bash
 
    g.gui.animation strds=modis_cm
 
 .. figure:: ../images/units/22/modis_animation.gif
+   :class: middle
+           
+   Monthly average dataset animation with celsius color table applied.
 
-   Monthly average dataset animation.
-
-The other tool, :grasscmd:`g.gui.tplot`, offer us to plot the time series
-of our variable of interest for a specific point or area of your study region.
-With point you need to set the strds or stvds and a pair of X,Y coordinates.
+The second tool, :grasscmd:`g.gui.tplot`, allows plotting the time
+series of defined variable of interest for a specific point or area of
+a study region. In example below coordinates of Studenterhytta venue
+are used.
 
 .. code-block:: bash
 
    g.gui.tplot strds=modis_c coordinates=258121.68627886,6662114.92897065
    
 .. figure:: ../images/units/22/tplot_modis.png
+   :class: middle
 
-   The plot of MODIS monthly average @ Studenterhytta
+   The plot of MODIS monthly average temperature @ Studenterhytta

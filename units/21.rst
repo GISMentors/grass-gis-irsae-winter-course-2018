@@ -93,6 +93,8 @@ Time topology information can be obtained by :grasscmd:`t.topology`.
    | Granularity: ............... 8 days
    ...
 
+.. _g-gui-timeline:
+
 It is possible to see our spatio-temporal dataset also graphically
 using :grasscmd:`g.gui.timeline` (:menuselection:`Temporal --> GUI
 tools --> Timeline tool`).
@@ -102,8 +104,8 @@ tools --> Timeline tool`).
 
    Download MODIS data presented by Timeline tool.
    
-Space-time Data Querying
-^^^^^^^^^^^^^^^^^^^^^^^^
+Data querying
+-------------
 
 List of registered raster maps in spatio-temporal dataset can be
 printed by :grasscmd:`t.rast.list`.
@@ -185,8 +187,8 @@ In example below statistics only for March 2017 is calculated.
    MYD11A2.A2017065_mosaic_LST_Day_1km@modis|2017-03-06 00:00:00|2017-03-14 00:00:00|...
    MYD11A2.A2017065_mosaic_LST_Night_1km@modis|2017-03-06 00:00:00|2017-03-14 00:00:00|...
 
-Space-time Data Extracting
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Data extracting
+---------------
 
 Raster spatio-temporal data can be extracted into new dataset using
 :grasscmd:`t.rast.extract`. In the example below are created four new
