@@ -1,6 +1,5 @@
-===============================
- Unit 18 - Sentinel downloader
-===============================
+Unit 18 - Sentinel downloader
+=============================
 
 There are plenty of libraries or tools which allows downloading
 Sentinel products from `Copernicus Open Access Hub
@@ -44,7 +43,7 @@ be installed.
 	<https://pip.pypa.io/en/stable/installing/>`__.
 
 First we are going to create a new mapset (:menuselection:`Settings
---> GRASS working environment --> Create new mapset`) in the original
+
 *oslo-region* location created in :doc:`02` to store all the Sentinel
 data and start to work in it.
 
@@ -128,6 +127,21 @@ where data should be saved.
    i.sentinel.download map=oslo producttype=S2MSI2Ap settings=sentinel.txt \
    start=2017-01-01 end=2017-10-01 area_relation=Contains clouds=10 limit=1 output=geodata/sentinel
 
+.. tip:: Before importing or linking try to print list of filtered
+   raster files including projection match (second column 1 for match
+   otherwise 0). If projection of input data differs from current
+   location consider reprojection (:param:`-r`) or creating a new
+   location for import.
+
+   .. code-block:: bash
+
+      i.sentinel.import -p input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
+
+   ::
+
+      .../L2A_T32VNM_20170523T104031_B02_10m.jp2 1 (EPSG: 32632)
+      ...
+
 In the next step downloaded data can be imported to GRASS by
 :grasscmdaddons:`i.sentinel.import`. The command will import **all**
 Sentinel bands from :param:`input` directory recursively. Sentinel
@@ -141,15 +155,6 @@ flag.
 .. code-block:: bash
 
    i.sentinel.import -l -c input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
-
-.. tip:: Before importing or linking try to print list of filtered
-   raster files including projection match. If projection of input
-   data differs from current location consider reprojection
-   (:param:`-r`) or creating a new location for import.
-
-   .. code-block:: bash
-
-      i.sentinel.import -p input=geodata/sentinel pattern="B0(2|3|4|8)_10m"
 
 RGB composition
 ---------------
