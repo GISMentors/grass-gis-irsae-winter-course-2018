@@ -20,7 +20,6 @@ given period there are no Sentinel L2A products for 2018.
    74cf18cf-3cae-4d80-b1c8-9f2ee29972b4 2017-05-26T10:50:31Z  4% S2MSI2Ap
    06724aba-9269-492c-a1d5-208a06c3f282 2017-07-05T10:50:31Z 27% S2MSI2Ap
 
-
 Download selected Sentinel scenes:
 
 .. code-block:: bash
@@ -121,13 +120,16 @@ maps (:grasscmd:`t.rast.list`).
 NDVI ST computation
 -------------------
 
-For NDVI computation we will create new space time datasets for 4th
-and 8th bands respectively (by :grasscmd:`t.rast.extract`).
+For NDVI computation 4th and 8th bands are required (:doc:`05`). Map
+algebra is performed in the case of spatio-temporal data by
+:grasscmd:`t.rast.mapcalc` which requires data separated into
+spatio-temporal datasets (see example in :doc:`22`). Such datasets can
+be prepared by :grasscmd:`t.rast.extract`.
 
 .. code-block:: bash
 
-   t.rast.extract input=sentinel where="name like '%B04%'" output=b4
-   t.rast.extract input=sentinel where="name like '%B08%'" output=b8
+   t.rast.extract input=sentinel2017 where="name like '%B04%'" output=b4
+   t.rast.extract input=sentinel2017 where="name like '%B08%'" output=b8
 
 Let's check content of the new datasets by :grasscmd:`t.rast.list`.
 
@@ -136,88 +138,88 @@ Let's check content of the new datasets by :grasscmd:`t.rast.list`.
    t.rast.list input=b4
    t.rast.list input=b8
 
-Before computation let's desired computation region by :grasscmd:`g.region`.
+Set computational region by :grasscmd:`g.region` including mask for
+area of interest by :grasscmd:`r.mask`.
 
 .. code-block:: bash
 
-   g.region vector=jena_boundary align=L2A_T32UPB_20170517T102031_B04_10m
+   g.region vector=oslo align=L2A_T32VNM_20170506T105031_B04_10m
+   r.mask vector=oslo
 
-And perform NDVI computation based map algebra expression as described
-in :doc:`05` in parallel (:param:`nproc`) by
-:grasscmd:`t.rast.mapcalc`.
+NDVI computation on spatio-temporal datasets can be performed in
+parallel (:param:`nproc`).
 
 .. code-block:: bash
 
-   t.rast.mapcalc input=b4,b8 output=ndvi \
-   expression="ndvi = float(b8 - b4) / ( b8 + b4 )" \
+   t.rast.mapcalc input=b4,b8 output=ndvi expression="ndvi = float(b8 - b4) / ( b8 + b4 )" \
    basename=ndvi nproc=3
 
-When computation is finished we can set up *ndvi* color table in order
-to create fancy animation as shown below.
+When computation is finished *ndvi* color table can be by
+:grasscmd:`t.rast.colors`.
 
 .. code-block:: bash
 
    t.rast.colors input=ndvi color=ndvi
 
-#.. figure:: ../images/units/21/simple-animation.gif
-   :class: middle
+.. figure:: ../images/units/23/simple-animation.gif
+   :class: large
 
-   Simple NDVI animation (no clouds mask applied) created by
+   Simple NDVI animation (no cloud mask applied) created by
    :grasscmd:`g.gui.animation`.
 
-.. note:: Load maps as multiple raster maps instead of space time
-          datasets. There is problem with sampling related to trick
+.. note:: Load data as multiple raster maps instead of space time
+          dataset. There is problem with sampling related to trick
           with endtime mentioned above.
 
-The result is not perfect as we can see. We should apply at least
-cloud mask before NDVI computation. This operation can be easily
-solved by applying new space time dataset containing computed raster
-masks. We will create a new Python script for this purpose. The script
-will also produce timestamp file similarly to
-:file:`sentinel-timestamp.py`. The mask can be created as we know from
-:doc:`05` by :grasscmd:`r.mask`, see line :lcode:`39`. But in this
-case we need to keep mask for further usage. We will use simple trick,
-:grasscmd:`r.mask` produces normal raster map with unique name
-*MASK*. It's enough to rename this map by :grasscmd:`g.rename`, see
-line :lcode:`30`.
+Cloud mask
+^^^^^^^^^^
 
-.. literalinclude:: ../_static/scripts/sentinel-clouds-mask.py
+The result is not perfect enough. At least cloud mask should be
+applied before NDVI computation. This operation can be easily solved
+by applying new space time dataset containing computed raster masks. A
+sample Python script has been designed for this purpose below. The
+script also produces a timestamp file similarly to
+:file:`sentinel-timestamp.py`. Such mask can be created by
+:grasscmd:`r.mask`, see line :lcode:`29`. But in this case a mask
+should be kept for further usage. Note that :grasscmd:`r.mask` module
+produces normal raster map with unique name *MASK*. To disable mask it
+is enough to rename *MASK* map by :grasscmd:`g.rename`, see line
+:lcode:`30`.
+
+.. literalinclude:: ../_static/scripts/sentinel-cloud-mask.py
    :language: python
    :linenos:
    :emphasize-lines: 29, 30
 
-Sample script to download: `sentinel-clouds-mask.py
-<../_static/scripts/sentinel-clouds-mask.py>`__
+Sample script to download: `sentinel-cloud-mask.py
+<../_static/scripts/sentinel-cloud-mask.py>`__
 	     
 .. code-block:: bash
 		
-   sentinel-clouds-mask.py output=clouds.txt
+   sentinel-cloud-mask.py map=oslo output=cloud-timestamps.txt
 
 Now we can create a new space time dataset with raster cloud masks
 registered.
 
 .. code-block:: bash
 
-   t.create output=clouds title="Sentinel L2A 2017 (clouds)" desc="Jena region"
-   t.register input=clouds file=clouds.txt
+   t.create output=cloud title="Sentinel L2A 2017 (cloud)" desc="Oslo region"
+   t.register input=cloud file=cloud-timestamps.txt
 
 And apply modified expression for map algebra.
 
 .. code-block:: bash
 
-   t.rast.mapcalc input=b4,b8,clouds output=ndvi \
-   expression="ndvi = if(isnull(clouds), null(), float(b8 - b4) / ( b8 + b4 ))" \
-   basename=ndvi nproc=3 --overwrite
+   t.rast.mapcalc input=b4,b8,cloud output=ndvi_cloud \
+   expression="ndvi = if(isnull(cloud), null(), float(b8 - b4) / ( b8 + b4 ))" \
+   basename=ndvi_cloud nproc=3
 
-   t.rast.colors in=ndvi color=ndvi
+   t.rast.colors input=ndvi_cloud color=ndvi
 
-The result is a little bit better, provided cloud mask are not perfect
-as we already know.
+.. figure:: ../images/units/23/simple-animation-cloud.gif
+   :class: large
 
-#.. figure:: ../images/units/21/simple-animation-clouds.gif
-   :class: middle
-
-   Simple NDVI animation with clouds mask applied.
+   Simple NDVI animation with cloud mask applied.
 
 
    

@@ -199,9 +199,9 @@ Units
    units/20
    units/21
    units/22
+   units/23
    
 * Unit 14 - PyGRASS scripting
-* Unit 23 - Sentinel Spatio-temporal
 * Unit 24 - Spatio-temporal scripting
 * Unit 25 - Spatio-temporal script tuning
 * Unit 26 - MODIS Spatio-temporal scripting
