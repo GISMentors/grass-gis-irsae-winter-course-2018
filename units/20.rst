@@ -20,10 +20,6 @@ grid <https://modis-land.gsfc.nasa.gov/MODLAND_grid.html>`__):
 Download and import
 -------------------
 
-Data are provided in 3 projections (Sinusoidal, Lambert Azimuthal
-Equal-Area, and Geographic). For our purpose, data will be reprojected
-to ETRS89 / UTM 32N :epsg:`25832`.
-
 Create a new GRASS mapset called `modis` and install
 :grasscmdaddons:`i.modis` addons extension (more about installing
 addons in :ref:`Unit 18 <grass-addons>`) for downloading and importing
