@@ -180,16 +180,16 @@ by applying new space time dataset containing computed raster masks. A
 sample Python script has been designed for this purpose below. The
 script also produces a timestamp file similarly to
 :file:`sentinel-timestamp.py`. Such mask can be created by
-:grasscmd:`r.mask`, see line :lcode:`29`. But in this case a mask
+:grasscmd:`r.mask`, see line :lcode:`30`. But in this case a mask
 should be kept for further usage. Note that :grasscmd:`r.mask` module
 produces normal raster map with unique name *MASK*. To disable mask it
 is enough to rename *MASK* map by :grasscmd:`g.rename`, see line
-:lcode:`30`.
+:lcode:`43`.
 
-.. literalinclude:: ../_static/scripts/sentinel-cloud-mask.py
+.. literalinclude:: ../_static/scripts/sentinel-clouds-mask.py
    :language: python
    :linenos:
-   :emphasize-lines: 29, 30
+   :emphasize-lines: 30, 43
 
 Sample script to download: `sentinel-cloud-mask.py
 <../_static/scripts/sentinel-cloud-mask.py>`__
@@ -216,7 +216,7 @@ And apply modified expression for map algebra.
 
    t.rast.colors input=ndvi_cloud color=ndvi
 
-.. figure:: ../images/units/23/simple-animation-cloud.gif
+.. figure:: ../images/units/23/simple-animation-clouds.gif
    :class: large
 
    Simple NDVI animation with cloud mask applied.
