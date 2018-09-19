@@ -34,7 +34,7 @@ command to download specified scenes by UUID below.
    i.sentinel.download settings=sentinel.txt output=geodata/sentinel/l1c \
    uuid=97a5820c-c1c8-4300-a076-174c9e7694fa,b40c6c72-da2d-427e-ae8f-a9461ca65c33
 
-In the next step downloaded data is imported into GRASS GIS using
+In the next step downloaded data are imported into GRASS GIS using
 another command provided by :grasscmd:`i.sentinel` addons,
 :grasscmd:`i.sentinel.preproc`.  This module requires some inputs used
 to perform the atmospheric correction of Sentinel-2 images.
@@ -42,7 +42,7 @@ to perform the atmospheric correction of Sentinel-2 images.
 As elevetion model DMT imported in :ref:`Unit 17 <dmt-comparision>`
 can be used. What we need to obtain yet is a visibility map or an
 Aerosol Optical Depth (AOD) value, the second one is possible to
-obtain from `http://aeronet.gsfc.nasa.gov
+get from `http://aeronet.gsfc.nasa.gov
 <http://aeronet.gsfc.nasa.gov/cgi-bin/webtool_opera_v2_inv>`__.
 
 First you have to select a station close to your Sentinel-2 scene
@@ -64,7 +64,7 @@ products without phase functions)'.
    
 Last step is to accept the license (Public domain data).
 
-Once we have downloaded Sentinel data and AOD we need to decompress
+Once we have downloaded Sentinel and AOD data we need to decompress
 them.
 
 .. code-block:: bash
@@ -81,19 +81,25 @@ Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
 
    i.sentinel.preproc -a -t \
    input_dir=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE \
-   elevation=DEM atmospheric_model=Automatic aerosol_model="Continental model" \
-   aeronet_file=~/Downloads/180501_180731_Birkenes.dubovik suffix=cor \ 
+   elevation=DTM_patch atmospheric_model=Automatic aerosol_model="Continental model" \
+   aeronet_file=~/geodata/sentinel/180501_180731_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt
    
    i.sentinel.preproc -a -t \
    input_dir=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE \
-   elevation=DEM atmospheric_model=Automatic aerosol_model="Continental model" \
-   aeronet_file=PATH/180501_180731_Birkenes.dubovik suffix=cor \ 
+   elevation=DTM_patch atmospheric_model=Automatic aerosol_model="Continental model" \
+   aeronet_file=~/geodata/sentinel/180501_180731_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt
 
 The :param:`-a` flag is needed since we use AOD file, :param:`-t` is used
 to write a text file (:param:`text_file`) ready to be used as input for
 the next step, creating cloud mask by :grasscmd:`i.sentinel.mask`.
+
+Set the region based on :raster:`DTM_patched` and resolution 10 meter
+
+.. code-block:: bash
+
+   g.region raster=DTM_patch res=10 -ap
 
 :grasscmd:`i.sentinel.mask` creates clouds and cloud shadows masks for
 Sentinel-2 images, the algorithm has been developed starting from
@@ -102,11 +108,13 @@ refined.
 
 .. code-block:: bash
 
-   i.sentinel.mask -r cloud_mask=FIX shadow_mask=FIX cloud_threshold=25000 shadow_threshold=5000 \
+   i.sentinel.mask -r cloud_mask=T32VNM_20180523T104019_cloud shadow_mask=T32VNM_20180523T104019_shadow \
+   cloud_threshold=25000 shadow_threshold=5000 \
    input_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt \
    mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/MTD_MSIL1C.xml
    
-   i.sentinel.mask -r cloud_mask=FIX shadow_mask=FIX cloud_threshold=25000 shadow_threshold=5000 \
+   i.sentinel.mask -r cloud_mask=T32VNM_20180705T130423_cloud shadow_mask=T32VNM_20180705T130423_shadow \
+   cloud_threshold=25000 shadow_threshold=5000 \
    input_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt \
    mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/MTD_MSIL1C.xml
 
@@ -129,7 +137,19 @@ position for a given date is computed by :grasscmd:`r.sunmask`.
    sunset=19:58:34
 
 Now we have to run :grasscmd:`i.topo.corr` to calculate a illumination
-model from the elevation map.
+model from the elevation map. And finally the corrected bands. Pay attention that
+:grasscmd:`i.topo.corr` wants DCELL (double) type raster map so before run :grasscmd:`i.topo.corr`
+we need to convert the maps with the following code
+
+.. code-block:: bash
+
+   # make a for loop for each Sentinel band
+   for m in `g.list type=raster patt=T32VNM_20180523T104019_B*_cor`; do 
+       # set the right region 
+       g.region raster=$m
+       # convert the data
+       r.mapcalc expr="${m}_d=double(${m})"
+   done
 
 .. code-block:: bash
 
@@ -137,4 +157,17 @@ model from the elevation map.
    
 .. code-block:: bash
 
-   i.topo.corr base=dtm_oslo.illu input= output=tcor zenith=50.010803 method=c-factor
+   i.topo.corr base=dtm_oslo.illu input=T32VNM_20180523T104019_B08_cor_d,\
+   T32VNM_20180523T104019_B02_cor_d,T32VNM_20180523T104019_B03_cor_d,T32VNM_20180523T104019_B04_cor_d \
+   output=tcor zenith=50.010803 method=c-factor
+
+.. figure:: ../images/units/19/mapswipe.png
+   :class: large
+
+   In the left the original RGB data improved using :grasscmd:`i.color.enhance`,
+   in the right the RGB of topographic corrected bands
+
+.. tip::
+   
+   To visualize RGB images read the note at :ref:`Unit 03 <rgb_bands>`
+   To create the previous RGB rast maps, :grasscmd:`r.composite` was used.
