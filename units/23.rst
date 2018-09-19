@@ -1,5 +1,5 @@
-Unit 23 - Spatio-temporal NDVI computation
-==========================================
+Unit 23 - Spatio-temporal NDVI
+==============================
 
 Create a new mapset in *oslo-region* location, eg. *sentinel-st-ndvi*,
 see :ref:`Work organization <work-organization-section>` section.
