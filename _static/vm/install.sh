@@ -10,7 +10,8 @@ sudo apt install -y proj-bin \
      libboost-thread-dev \
      libboost-filesystem-dev \
      libboost-program-options-dev \
-     p7zip-full
+     p7zip-full \
+     mc
 
 if [ `lsb_release -rs` == '18.04' ] ; then
      sudo apt install -y libboost-iostreams1.65
@@ -48,5 +49,10 @@ grass74 --exec ./grass-addons.sh
 
 # clean up
 sudo apt autoremove
+
+# data
+wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
+cd ~/
+7z e data.7z
 
 exit 0
