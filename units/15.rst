@@ -1,5 +1,5 @@
-Unit 15 - Reprojection
-======================
+Unit 15 - DMT reprojection
+==========================
 
 In our example EU-DEM global dataset provided by `Copernicus programme
 <https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem#tab-gis-data>`__

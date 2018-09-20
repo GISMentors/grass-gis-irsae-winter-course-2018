@@ -6,7 +6,7 @@ There is open LiDAR data for Norway available at
 <http://www.hoydedata.no/>`__, choose region in map viewer and request data for download.
 
 LiDAR data used in this unit can be found in sample dataset, in
-:file:`~/geodata/lidar/laz` folder. Data is stored in LAZ format
+:file:`geodata/lidar/laz` folder. Data is stored in LAZ format
 (compressed LAS format).
    
 Data import
@@ -26,7 +26,7 @@ For importing LAS/LAZ data there are available two GRASS modules:
 
    .. code-block:: bash
 
-      lasinfo ~/geodata/lidar/laz/32-1-514-136-15.laz
+      lasinfo geodata/lidar/laz/32-1-514-136-15.laz
 
       ...
       Min X Y Z:                   590400.00 6655800.00 283.31
@@ -48,7 +48,7 @@ can be skipped by :param:`-o` flag.
 
 .. code-block:: bash
                 
-   v.in.lidar -otb input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34
+   v.in.lidar -otb input=geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34
 
 Note that computational region is ignored when importing data using
 :grasscmd:`v.in.lidar`.
@@ -107,7 +107,7 @@ will get NULL values assigned.
    
 .. code-block:: bash
 
-   r.in.lidar -oe input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34 resolution=1
+   r.in.lidar -oe input=geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34 resolution=1
 
 Basic metadata about created raster map can be obtained by
 :grasscmd:`r.info`.
@@ -192,7 +192,7 @@ computation time to be more reasonable by running it in parallel, see
    .. code-block:: bash
 
       v.lidar.edgedetection input=las_32_1_514_136_34 output=edge_32_1_514_136_34 ew_step=8 ns_step=8 lambda_g=0.5
-      v.in.lidar -otb input=~/geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34_first return_filter=first
+      v.in.lidar -otb input=geodata/lidar/laz/32-1-514-136-34.laz output=las_32_1_514_136_34_first return_filter=first
       v.lidar.growing input=edge_32_1_514_136_34 output=grow_32_1_514_136_34 first=las_32_1_514_136_34_first
       v.lidar.correction input=grow_32_1_514_136_34 output=corr_32_1_514_136_34 terrain=terr_32_1_514_136_34
 

@@ -1,10 +1,13 @@
-Unit 17 - Script parallelization
-================================
+Unit 17 - DMT script parallelization
+====================================
 
 This unit is focused on **computing parallelization**. Sample script
 below produces seamless DTM (Digital Surface Model, see :doc:`16`)
 from bunch of LAS/LAZ files. Computation will be split into tiles and
 performed in parallel.
+
+DMT interpolation in parallel
+-----------------------------
 
 User interface contains two major parameters, :param:`directory` (line
 :lcode:`6`) for input directory with input LAS/LAZ files, and
@@ -68,7 +71,7 @@ Import all the DTM files downloaded from `hoydedata.no
 <http://www.hoydedata.no/>`__. You can import all TIF files using
 :menuselection:`File --> Import raster data --> Simplified raster
 import with reprojection` checking :item:`Directory` as :item:`Source
-type` and selecting :file:`geodata/lidar/dtm/`.
+type` and selecting :file:`geodata/lidar/dtm`.
 
 .. figure:: ../images/units/17/import_dtm.png
    :class: middle
