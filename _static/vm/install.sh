@@ -10,8 +10,13 @@ sudo apt install -y proj-bin \
      libboost-thread-dev \
      libboost-filesystem-dev \
      libboost-program-options-dev \
-     libboost-iostreams1.65
+     p7zip-full
 
+if [ `lsb_release -rs` == '18.04' ] ; then
+     sudo apt install -y libboost-iostreams1.65
+else
+     sudo apt install -y libboost-iostreams1.58
+fi
 sudo pip install pymodis sentinelsat pandas
 
 # laszip 2.0.1 is required by liblas
