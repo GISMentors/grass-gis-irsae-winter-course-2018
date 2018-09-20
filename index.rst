@@ -139,17 +139,23 @@ created based on Open Data covering `Studenterhytta venue region
 <https://www.openstreetmap.org/node/879127732>`__. See detailed
 description below.
 
-* administrative borders (directory: :file:`administrative`, source: `GeoNorge
+* administrative borders (directory: :file:`counties`, source: `GeoNorge
   <https://kartkatalog.geonorge.no/metadata/kartverket/administrative-enheter-fylker/6093c8a8-fa80-11e6-bc64-92361f002671>`__)
-* Digital Elevation Model (directory: :file:`dem`, source: `GeoNorge
-  <https://kartkatalog.geonorge.no/metadata/kartverket/dtm-10-terrengmodell-utm33/dddbb667-1303-4ac5-8640-7ec04c0e3918>`__)
 * EU-DEM (directory: :file:`eu-dem`, source: `Copernicus Land Monitoring
   Service - EU-DEM
   <https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem>`__)
-* Sentinel-2 sample bands (directory: :file:`sentinel/sample`, source:
-  Copernicus Open Access Hub)
+* Digital Terrain Model (directory: :file:`lidar/dmt`, source: `GeoNorge
+  <https://kartkatalog.geonorge.no/metadata/kartverket/dtm-10-terrengmodell-utm33/dddbb667-1303-4ac5-8640-7ec04c0e3918>`__)
+* LIDAR LAZ data (directory: :file:`lidar/laz`, source: `GeoNorge
+  <https://kartkatalog.geonorge.no/metadata/kartverket/hoydedata-hidra-2012/3b69a983-f3e9-4946-be3a-ceaf8d2766da>`__)
+* MODIS Land Surface Temperature eight day 1 Km (directory:
+  :file:`modis`, source: `LP DAAC
+  <https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table>`__)
+* Sentinel-2 data (directory: :file:`sentinel`, source: `Copernicus
+  Open Access Hub <https://scihub.copernicus.eu/>`__)
 
-.. todo:: Download link, http://training.gismentors.eu/geodata/irsae-norway-2018
+Download sample dataset as `7z archive
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z>`__ (6.1GB).
 
 .. _virtual-machine:
 
