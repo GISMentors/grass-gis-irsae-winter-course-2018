@@ -1,8 +1,7 @@
-Unit 24 - Regression analysis
+Unit 27 - Regression analysis
 =============================
 
 .. warning:: Materials under construction!
-
 
 Geographically Weighted Regression
 
