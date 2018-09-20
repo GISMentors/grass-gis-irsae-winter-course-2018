@@ -146,7 +146,7 @@ description below.
   <https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem>`__)
 * Digital Terrain Model (directory: :file:`lidar/dmt`, source: `GeoNorge
   <https://kartkatalog.geonorge.no/metadata/kartverket/dtm-10-terrengmodell-utm33/dddbb667-1303-4ac5-8640-7ec04c0e3918>`__)
-* LIDAR LAZ data (directory: :file:`lidar/laz`, source: `GeoNorge
+* Lidar LAZ data (directory: :file:`lidar/laz`, source: `GeoNorge
   <https://kartkatalog.geonorge.no/metadata/kartverket/hoydedata-hidra-2012/3b69a983-f3e9-4946-be3a-ceaf8d2766da>`__)
 * MODIS Land Surface Temperature eight day 1 Km (directory:
   :file:`modis`, source: `LP DAAC
