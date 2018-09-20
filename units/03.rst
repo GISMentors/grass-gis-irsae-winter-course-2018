@@ -172,6 +172,9 @@ creating different **mapsets**, see :ref:`Unit 02
 performed in "Oslo" region. Let's create a new mapset called "oslo"
 for upcoming work.
 
+Create a new mapset
+^^^^^^^^^^^^^^^^^^^
+
 A new mapset can be created by :grasscmd:`g.mapset` or from menu
 :menuselection:`Settings --> GRASS working environment --> Create new
 mapset`.
@@ -180,7 +183,21 @@ mapset`.
    :class: small
                     
    Create a new mapset.
-   
+
+.. note:: A new mapset can be created from command line by
+   :grasscmd:`g.mapset`.
+
+   .. code-block:: bash
+
+      g.mapset -c mapset=oslo
+
+Switch to existing mapset
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Current mapset can be changed from menu :menuselection:`Settings -->
+GRASS working environment --> Change mapset` or from command line by
+:grasscmd:`g.mapset`.
+
 Querying data
 -------------
 

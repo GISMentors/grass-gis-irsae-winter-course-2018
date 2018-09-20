@@ -1,5 +1,5 @@
-Unit 20 - MODIS
-===============
+Unit 20 - MODIS LST
+===================
 
 There are two satellites, Aqua and Terra which carry the MODIS sensor
 as payload. The **Moderate Resolution Imaging Spectroradiometer**

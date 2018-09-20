@@ -1,48 +1,57 @@
-Unit 28 - MODIS Spatio-temporal scripting
-=========================================
+Unit 26 - Spatio-temporal LST script
+====================================
 
-.. warning:: Materials under construction!
-
-
-Let's create a simple Python script for computing LST statistics in
-Germany area for given period. Input parameters:
+This unit is based on :doc:`20` and LST computation. The goal is to
+design a simple Python script for computing LST statistics in Norway
+area for given period. Input parameters:
 
 * :param:`input` - Name of the input space time raster dataset (line :lcode:`6`)
 * :param:`start` - Start date (line :lcode:`9`)
 * :param:`end` - End date (line :lcode:`15`)
+* :param:`output` - Name for output raster map with statistics (line :lcode:`20`)
 
-The script prints minimum, maximum and mean LST value. The raster map
+A script outputs minimum, maximum and mean LST value. The raster map
 for computing statistics is created by :grasscmd:`t.rast.series` (line
-:lcode:`50`), statistics is computed by :grasscmd:`r.univar` (line
-:lcode:`60`). Statistics will be printed in nicely formatted manner,
-see lines :lcode:`66-68`.
+:lcode:`47`) from input space time raster dataset. Statistics is
+computed by :grasscmd:`r.univar` (line :lcode:`57`). Module output is
+formatted on lines :lcode:`63-65`.
 
-In :doc:`25` we processed LST space time dataset only for
-year 2017. We will also check if input dates are valid, see line
-:lcode:`31`.
+In :doc:`20` space time dataset was created from data in 2017. It is
+reasonable also to check input dates range, see line :lcode:`34`.
+
+Before running the script switch to mapset created :doc:`20` -
+*modis*. Procedure of changing current mapset is described in
+:ref:`Workflow organization <work-organization-section>`.
 
 .. tip::
 
-   You can globally set :param:`quiet` flag by :envvar:`GRASS_VERBOSE`
-   environment variable, see line :lcode:`47`.
+   To decrease GRASS modules verbosity a :param:`quiet` flag can be
+   set globally for the whole script by :envvar:`GRASS_VERBOSE`
+   environment variable, see line :lcode:`44`. See :grasscmd:`GRASS
+   GIS documentation <variables>` for other useful GRASS enviromental
+   variables.
     
 .. literalinclude:: ../_static/scripts/modis-date-stats.py
    :language: python
    :linenos:
-   :emphasize-lines: 6, 9, 15, 31, 47, 50, 60, 66-68
+   :emphasize-lines: 6, 9, 15, 20, 34, 44, 47, 57, 63-65
 
+Sample script to download: `modis-date-stats.py
+<../_static/scripts/modis-date-stats.py>`__
+                     
 Example of usage:
 
 .. code-block:: bash
                 
-   modis-date-stats.py input=modis_c start=2017-03-01 end=2017-04-01
+   modis-date-stats.py input=modis_c start=2017-03-01 end=2017-04-01 output=stats_sep
 
 ::
    
-   Min: -5.4
-   Max: 13.8
-   Mean: 8.0
+   Min: -21.6
+   Max: 5.4
+   Mean: -9.4
 
-Sample script to download: `modis-date-stats.py
-<../_static/scripts/modis-date-stats.py>`__
-   
+.. figure:: ../images/units/26/stats_sep.png
+   :class: large
+
+   Average LST in September produced by the script.

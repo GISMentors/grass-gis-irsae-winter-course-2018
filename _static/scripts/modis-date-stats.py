@@ -7,15 +7,18 @@
 #%end
 #%option 
 #% key: start
-#% description: Start date (eg. 2017-03-01)
+#% description: Start date 2017 (eg. 2017-03-01)
 #% type: string
 #% required: yes
 #%end
 #%option 
 #% key: end
-#% description: End date (eg. 2017-04-01)
+#% description: End date 2017 (eg. 2017-04-01)
 #% type: string
 #% required: yes
+#%end
+#%option G_OPT_R_OUTPUT
+#% description: Name for output raster map with statistics
 #%end
 
 import os
@@ -33,12 +36,6 @@ def check_date(date_str):
     if d.year != 2017:
         gs.fatal("Only year 2017 allowed")
 
-def cleanup():
-    try:
-        Module('g.remove', flags='f', type='raster', name=output)
-    except CalledModuleError:
-        pass
-    
 def main():
     check_date(options['start'])
     check_date(options['end'])
@@ -49,7 +46,7 @@ def main():
     try:
         Module('t.rast.series',
                input=options['input'],
-               output=output,
+               output=options['output'],
                method='average',
                where="start_time > '{start}' and start_time < '{end}'".format(
                    start=options['start'], end=options['end']
@@ -59,7 +56,7 @@ def main():
         
     ret = Module('r.univar',
                  flags='g',
-                 map=output,
+                 map=options['output'],
                  stdout_=PIPE
     )
     stats = gs.parse_key_val(ret.outputs.stdout)
@@ -69,9 +66,5 @@ def main():
         
 if __name__ == "__main__":
     options, flags = gs.parser()
-    output = '{}_{}'.format(
-        options['input'].split('@')[0], os.getpid()
-    )
 
-    atexit.register(cleanup)
     sys.exit(main())
