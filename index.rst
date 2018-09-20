@@ -201,9 +201,9 @@ Units
    units/22
    units/23
    units/24
-
+   units/25
+   
 * Unit 14 - PyGRASS scripting
-* Unit 25 - Spatio-temporal script tuning
 * Unit 26 - MODIS Spatio-temporal scripting
 * Unit 27 - Regression analysis
 * Unit 28 - Classification
