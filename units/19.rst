@@ -1,7 +1,5 @@
 Unit 19 - Sentinel preprocessing
 ================================
-
-.. warning:: Unit under construction.
              
 In this unit Sentinel-2 L1C (see Sentinel `Product Types
 <https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/product-types>`__
@@ -62,7 +60,7 @@ products without phase functions)'.
 
    Combined file requested.
    
-Last step is to accept the license (Public domain data).
+Last step is to accept the license (:wikipedia:`Public domain` data).
 
 Once we have downloaded Sentinel and AOD data we need to decompress
 them.
@@ -95,7 +93,7 @@ The :param:`-a` flag is needed since we use AOD file, :param:`-t` is used
 to write a text file (:param:`text_file`) ready to be used as input for
 the next step, creating cloud mask by :grasscmd:`i.sentinel.mask`.
 
-Set the region based on :raster:`DTM_patched` and resolution 10 meter
+Set the region based on `DTM_patched` and resolution 10 meter
 
 .. code-block:: bash
 
@@ -136,10 +134,11 @@ position for a given date is computed by :grasscmd:`r.sunmask`.
    sunrise=02:31:19
    sunset=19:58:34
 
-Now we have to run :grasscmd:`i.topo.corr` to calculate a illumination
-model from the elevation map. And finally the corrected bands. Pay attention that
+Now we have to run :grasscmd:`i.topo.corr` to calculate an illumination
+model from the elevation map, and finally correct the bands. Pay attention that
 :grasscmd:`i.topo.corr` wants DCELL (double) type raster map so before run :grasscmd:`i.topo.corr`
-we need to convert the maps with the following code
+we need to convert the maps. To convert all the maps is possible to run a
+`for loop` in Bash with the following code
 
 .. code-block:: bash
 
@@ -153,11 +152,11 @@ we need to convert the maps with the following code
 
 .. code-block:: bash
 
-   i.topo.corr -i base=dtm_oslo zenith=50.010803 azimuth=167.292191 output=dtm_oslo.illu
+   i.topo.corr -i base=DTM_patch zenith=50.010803 azimuth=167.292191 output=dtm_illu
    
 .. code-block:: bash
 
-   i.topo.corr base=dtm_oslo.illu input=T32VNM_20180523T104019_B08_cor_d,\
+   i.topo.corr base=dtm_illu input=T32VNM_20180523T104019_B08_cor_d,\
    T32VNM_20180523T104019_B02_cor_d,T32VNM_20180523T104019_B03_cor_d,T32VNM_20180523T104019_B04_cor_d \
    output=tcor zenith=50.010803 method=c-factor
 
@@ -169,5 +168,5 @@ we need to convert the maps with the following code
 
 .. tip::
    
-   To visualize RGB images read the note at :ref:`Unit 03 <rgb_bands>`
+   To visualize RGB images read the note at :ref:`Unit 03 <rgb_bands>`.
    To create the previous RGB rast maps, :grasscmd:`r.composite` was used.
