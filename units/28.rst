@@ -3,6 +3,31 @@ Unit 25 - Classification
 
 .. warning:: Materials under construction!
 
+In GRASS GIS imagery data can be group (e.g. channel-wise) with :grasscmd:`i.group`.
+Group and subgroups are used to enable the user to run analyses on any combination of
+the raster map layers in a group. Some commands ask the user for the imagery group
+and imagery subgroup whose data are to be analyzed.
+
+.. code-block:: bash
+
+   i.group group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031 input=`g.list rast pattern=L2A_T32VNM_20170523T104031_B* sep=comma`
+
+Segmentation
+-------------
+
+GRASS GIS has a command, :grasscmd:`i.segment`, to run the identification of segments
+(objects) from imagery data. 
+
+.. code-block:: bash
+
+   i.segment group=L2A_T32VNM_20170523T104031 output=L2A_T32VNM_20170523T104031_seg_04 threshold=0.4 memory=1000
+
+.. figure:: ../images/units/28/segment.png
+   :class: large
+
+   In the left the :grasscmd:`i.segment` output, in the right the original
+   RGB bands
+
 
 Supervised and unsupervised classification
 
