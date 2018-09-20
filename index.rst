@@ -172,9 +172,6 @@ directory.
 Units
 =====
 
-.. important:: Teaser. Check out first few units online. Rest of units will be
-   published online later.
-   
 .. toctree::
    :maxdepth: 2
 
