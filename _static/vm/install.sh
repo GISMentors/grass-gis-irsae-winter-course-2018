@@ -73,4 +73,18 @@ else
 fi
 (cd grass-gis-irsae-winter-course-2018; make html)
 
+if [ ! -d /var/www/html/grass-irsae ] ; then
+    ln -s ~/grass-gis-irsae-winter-course-2018/_build/html /var/www/html/grass-irsae
+fi
+
+# set the workshop material as home page in firefox
+# code from OSGeoLive prject
+# https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_docs.sh
+
+PREFS_FILE=`find "$HOME/.mozilla/firefox/" | grep -w default/prefs.js | head -n 1`
+if [ -n "$PREFS_FILE" ] ; then
+    sed -i -e 's+\(homepage", "\)[^"]*+\1http://localhost/grass-irsae+' \
+    "$PREFS_FILE"
+fi
+
 exit 0
