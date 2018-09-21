@@ -18,7 +18,7 @@ if [ `lsb_release -rs` == '18.04' ] ; then
 else
      sudo apt install -y libboost-iostreams1.58
 fi
-sudo pip install pymodis sentinelsat pandas
+sudo pip install pymodis sentinelsat pandas scikit-learn
 
 # laszip 2.0.1 is required by liblas
 wget -c https://github.com/LASzip/LASzip/archive/2.0.1.tar.gz
