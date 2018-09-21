@@ -54,6 +54,6 @@ sudo apt autoremove
 # data
 wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
 cd ~/
-7z e /tmp/data.7z
+7z x /tmp/data.7z
 
 exit 0
