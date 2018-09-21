@@ -160,14 +160,16 @@ image classification using sequential maximum a posteriori (SMAP) estimation.
    signaturefile=gensigset_nosegment output=L2A_T32VNM_20170523T104031_smap \
    goodness=L2A_T32VNM_20170523T104031_smap_good
 
-The machine learning method can be calculated using :grasscmd:`r.ml.learn`,
+The machine learning method can be calculated using :grasscmdaddons:`r.learn.ml`,
 the module represents a front-end to the `scikit-learn <http://scikit-learn.org>`__
 python package.
 
 .. note::
 
-   :grasscmd:`r.ml.learn` is an add-ons so you have to install it through
-   :grasscmd:`g.extension`.
+   :grasscmdaddons:`r.learn.ml` is an add-on so you have to install it
+   through :grasscmd:`g.extension`. Note that
+   :grasscmdaddons:`r.learn.ml` including dependecies is already
+   installed on tailored :ref:`virtual machine <virtual-machine>`.
 
 .. code-block:: bash
 

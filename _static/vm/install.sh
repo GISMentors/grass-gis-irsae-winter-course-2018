@@ -45,7 +45,8 @@ sudo apt update
 sudo apt install -y grass grass-core grass-gui grass-doc grass-dev qgis
 
 # GRASS Addons
-grass74 --exec ./grass-addons.sh
+SCRIPT=`realpath $0`
+grass74 --exec `dirname $SCRIPT`/grass-addons.sh
 
 # clean up
 sudo apt autoremove
