@@ -18,7 +18,7 @@ if [ `lsb_release -rs` == '18.04' ] ; then
 else
      sudo apt install -y libboost-iostreams1.58
 fi
-sudo pip install pymodis sentinelsat pandas
+sudo pip install pymodis sentinelsat pandas scikit-learn
 
 # laszip 2.0.1 is required by liblas
 wget -c https://github.com/LASzip/LASzip/archive/2.0.1.tar.gz
@@ -54,6 +54,6 @@ sudo apt autoremove
 # data
 wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
 cd ~/
-7z e data.7z
+7z e /tmp/data.7z
 
 exit 0
