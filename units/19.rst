@@ -134,6 +134,20 @@ position for a given date is computed by :grasscmd:`r.sunmask`.
    sunrise=02:31:19
    sunset=19:58:34
 
+The :grasscmd:`r.sunmask` output is returning the sun angle above the horizont
+(h), instead we need the zenith (z). So we need to do a simple substraction
+
+.. code-block:: math
+
+   z = 90 - h
+
+In our example the zenith value is 39.99 
+
+.. figure:: ../images/units/19/i_topo_corr_angles.png
+
+   Figure showing terrain and solar angles.
+   Derived from Neteler & Mitasova, 2008. 
+
 Now we have to run :grasscmd:`i.topo.corr` to calculate an illumination
 model from the elevation map, and finally correct the bands. Pay attention that
 :grasscmd:`i.topo.corr` wants DCELL (double) type raster map so before run :grasscmd:`i.topo.corr`
@@ -152,13 +166,13 @@ we need to convert the maps. To convert all the maps is possible to run a
 
 .. code-block:: bash
 
-   i.topo.corr -i base=DTM_patch zenith=50.010803 azimuth=167.292191 output=dtm_illu
+   i.topo.corr -i base=DTM_patch zenith=39.99 azimuth=167.292191 output=dtm_illu
    
 .. code-block:: bash
 
    i.topo.corr base=dtm_illu input=T32VNM_20180523T104019_B08_cor_d,\
    T32VNM_20180523T104019_B02_cor_d,T32VNM_20180523T104019_B03_cor_d,T32VNM_20180523T104019_B04_cor_d \
-   output=tcor zenith=50.010803 method=c-factor
+   output=tcor zenith=39.99 method=c-factor
 
 .. figure:: ../images/units/19/mapswipe.png
    :class: large
