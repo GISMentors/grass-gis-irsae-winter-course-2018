@@ -53,16 +53,24 @@ grass74 --exec `dirname $SCRIPT`/grass-addons.sh
 sudo apt autoremove
 
 # data
-wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
-cd ~/
-7z e /tmp/data.7z
+DATA_DIR=~/geodata
+if [ ! -d $DATA_DIR ] ; then
+    wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
+    cd ~/
+    7z e /tmp/data.7z
+fi
 
 # materials
 DIR=~/materials
 mkdir $DIR; cd $DIR
-git clone https://github.com/GISMentors/grass-gis-irsae-winter-course-2018.git
-git clone https://github.com/GISMentors/sphinx-template.git
-(cd sphinx-template; git checkout en)
+if [ ! -d grass-gis-irsae-winter-course-2018 ] ; then
+    git clone https://github.com/GISMentors/grass-gis-irsae-winter-course-2018.git
+    git clone https://github.com/GISMentors/sphinx-template.git
+    (cd sphinx-template; git checkout en)
+else
+    (cd sphinx-template; git pull)
+    (cd grass-gis-irsae-winter-course-2018; git pull)
+fi
 (cd grass-gis-irsae-winter-course-2018; make html)
 
 exit 0
