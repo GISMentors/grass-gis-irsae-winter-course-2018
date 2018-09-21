@@ -11,7 +11,8 @@ sudo apt install -y proj-bin \
      libboost-filesystem-dev \
      libboost-program-options-dev \
      p7zip-full \
-     mc
+     mc \
+     python-sphinx
 
 if [ `lsb_release -rs` == '18.04' ] ; then
      sudo apt install -y libboost-iostreams1.65
@@ -52,8 +53,38 @@ grass74 --exec `dirname $SCRIPT`/grass-addons.sh
 sudo apt autoremove
 
 # data
-wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
-cd ~/
-7z x /tmp/data.7z
+DATA_DIR=~/geodata
+if [ ! -d $DATA_DIR ] ; then
+    wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
+    cd ~/
+    7z x /tmp/data.7z
+fi
+
+# materials
+DIR=~/materials
+mkdir $DIR; cd $DIR
+if [ ! -d grass-gis-irsae-winter-course-2018 ] ; then
+    git clone https://github.com/GISMentors/grass-gis-irsae-winter-course-2018.git
+    git clone https://github.com/GISMentors/sphinx-template.git
+    (cd sphinx-template; git checkout en)
+else
+    (cd sphinx-template; git pull)
+    (cd grass-gis-irsae-winter-course-2018; git pull)
+fi
+(cd grass-gis-irsae-winter-course-2018; make html)
+
+if [ ! -d /var/www/html/grass-irsae ] ; then
+    ln -s ~/grass-gis-irsae-winter-course-2018/_build/html /var/www/html/grass-irsae
+fi
+
+# set the workshop material as home page in firefox
+# code from OSGeoLive prject
+# https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_docs.sh
+
+PREFS_FILE=`find "$HOME/.mozilla/firefox/" | grep -w default/prefs.js | head -n 1`
+if [ -n "$PREFS_FILE" ] ; then
+    sed -i -e 's+\(homepage", "\)[^"]*+\1http://localhost/grass-irsae+' \
+    "$PREFS_FILE"
+fi
 
 exit 0

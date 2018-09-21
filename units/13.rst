@@ -1,9 +1,9 @@
-Unit 13 - PyGRASS Data Access
-=============================
+Unit 13 - PyGRASS Raster Access
+===============================
 
 PyGRASS allows directly accessing native GRASS raster and vector maps
 in the sense of Python objects. This unit shows how to deal with GRASS
-data by PyGRASS API.
+raster data by PyGRASS API, see :doc:`14` for vector data.
 
 Raster data
 -----------
@@ -38,33 +38,6 @@ Don't forget to close the raster map at the end.
 
    ndvi.close()
 
-Vector data
------------
-
-Vector map can be treated by :pygrass-vector:`Vector` when dealing
-with basic vector primitives (points, lines, boundaries, centroids) or
-by :pygrass-vector:`VectorTopo` which allows accessing topological
-primitives like areas or isles. See :ref:`vector-topo-section` section
-for details.
-
-Example below prints nicely format region names and their area size in
-hectares.
-
-.. code-block:: python
-                
-   from grass.pygrass.vector import VectorTopo
-   fylke = VectorTopo('Fylke')
-   fylke.open('r')
-   
-   for feat in fylke.viter('areas'):
-       print (u'{0}: {1:.1f}ha'.format(feat.attrs['navn'].split(':', 1)[1][:-1], feat.area() / 10e4))
-   
-   fylke.close()
-
-.. figure:: ../images/units/13/pygrass-shell-vector.png
-
-   PyGRASS vector example in action.
-   
 Raster statistics example
 -------------------------
 
@@ -83,4 +56,3 @@ statistics below.
              
 Sample script to download: `ndvi-pygrass-univar.py
 <../_static/scripts/ndvi-pygrass-univar.py>`__
-                   

@@ -194,6 +194,7 @@ Units
    units/11
    units/12
    units/13
+   units/14
    units/15
    units/16
    units/17
@@ -207,7 +208,6 @@ Units
    units/25
    units/26
    
-* Unit 14 - PyGRASS scripting
 * Unit 27 - Regression analysis
 * Unit 28 - Classification
 * Unit 29 - GRASS and R
