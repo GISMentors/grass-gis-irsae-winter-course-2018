@@ -63,12 +63,22 @@ used as input for :grasscmd:`i.maxlik`, to generate an unsupervised image classi
    i.maxlik group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031
    signaturefile=cluster output=L2A_T32VNM_20170523T104031_cluster
 
+.. figure:: ../images/units/28/cluster.png
+   :class: medium
+
+   The unsupervised classification output
+
 Supervised classification
 --------------------------
 
 To run supervised classification the first step is to create the training areas.
 You can use :grasscmd:`g.gui.iclass` or the vector digitizer :grasscmd:`g.gui.vdigit`
 to create the vector containing your training areas.
+
+.. figure:: ../images/units/28/vdigit.png
+   :class: large
+
+   The GRASS GIS vector digitizer
 
 We can use the `Vector digitizer` to create a `New vector`, call it
 `T32VNM_20170523T104031_training` and add the following attribute columns:
@@ -77,17 +87,20 @@ We can use the `Vector digitizer` to create a `New vector`, call it
 * `class_i` integer, for classes value
 * `color` varchar with 11 characters, for color 
 
-.. figure:: ../images/units/28/vdigit.png
-   :class: large
-   
-   The GRASS GIS vector digitizer
+To create a new area you have to use the button to create a new area
+
+.. figure:: ../images/units/28/boundary.png
+   :class: small
+
+   The button to create a new area
 
 During the creation of vector you have to fill the attribute info, I suggest you
 to fill only `class` or `class_i` column and after fill the other columns.
 
 .. tip::
 
-   You can use :grasscmd:`db.execute` to fill the others columns
+   You can use :grasscmd:`db.execute` to fill the others columns, this example
+   show how to update the columns `class_i` and `color` since we filled `class` column
    
    .. code-block:: bash
    
@@ -162,3 +175,20 @@ python package.
 
    r.learn.ml trainingmap=T32VNM_20170523T104031_training \
    group=L2A_T32VNM_20170523T104031 output=L2A_T32VNM_20170523T104031_learn
+
+.. figure:: ../images/units/28/classification.png
+   :class: large
+
+   The outputs of different supervised methods. In the left the :grasscmd:`i.maxlik`
+   output, in the center the :grasscmd:`i.smap` output and in the right the
+   :grasscmd:`r.ml.learn` output
+
+.. tip::
+
+   To clean the classification's output you can follow some workflow:
+
+   * use :grasscmd:`r.reclass.area` removing small areas, mask the new
+     value and after gap the holes with :grasscmd:`r.neighbors` or
+     :grasscmd:`r.fillnulls`
+   * convert the output to vector and run :grasscmd:`v.clean` with
+     :param:`tool=rmarea` with the right :param:`threshold`
