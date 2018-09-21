@@ -11,7 +11,8 @@ sudo apt install -y proj-bin \
      libboost-filesystem-dev \
      libboost-program-options-dev \
      p7zip-full \
-     mc
+     mc \
+     python-sphinx
 
 if [ `lsb_release -rs` == '18.04' ] ; then
      sudo apt install -y libboost-iostreams1.65
@@ -55,5 +56,13 @@ sudo apt autoremove
 wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
 cd ~/
 7z e /tmp/data.7z
+
+# materials
+DIR=~/materials
+mkdir $DIR; cd $DIR
+git clone https://github.com/GISMentors/grass-gis-irsae-winter-course-2018.git
+git clone https://github.com/GISMentors/sphinx-template.git
+(cd sphinx-template; git checkout en)
+(cd grass-gis-irsae-winter-course-2018; make html)
 
 exit 0
