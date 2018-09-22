@@ -173,7 +173,10 @@ A customized virtual machine (VM) based on `OSGeoLive
 software dependecies including sample dataset in :file:`geodata`
 directory.
 
-.. todo:: Download link, http://training.gismentors.eu/vm/irsae-norway-2018
+Download tailored virtual machine **including sample dataset** as `7z
+archive
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/osgeolive-12.0-vm-irsae.7z>`__
+(18.6GB). Note that for uncompressed virtual machine 27GB are needed!
           
 Units
 =====
