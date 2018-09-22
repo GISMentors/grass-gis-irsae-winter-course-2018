@@ -78,8 +78,8 @@ the software in any way. The source code is openly shared so that
 people are encouraged to voluntarily improve the design of the
 software. This is in contrast to **proprietary software**, where the
 software is under restrictive copyright and the source code is usually
-hidden from the users. See :wikipedia-en:`Free and open-source
-software` article on Wikipedia for more information.
+hidden from the users. See :wikipedia:`Free and open-source software`
+article on Wikipedia for more information.
 
 FOSS for Geospatial
 -------------------
@@ -173,7 +173,10 @@ A customized virtual machine (VM) based on `OSGeoLive
 software dependecies including sample dataset in :file:`geodata`
 directory.
 
-.. todo:: Download link, http://training.gismentors.eu/vm/irsae-norway-2018
+Download tailored virtual machine **including sample dataset** as `7z
+archive
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/osgeolive-12.0-vm-irsae.7z>`__
+(18.6GB). Note that for uncompressed virtual machine 27GB are needed!
           
 Units
 =====

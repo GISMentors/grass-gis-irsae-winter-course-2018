@@ -33,3 +33,39 @@ hectares.
 .. figure:: ../images/units/14/pygrass-shell-vector.png
 
    PyGRASS vector example in action.
+
+Topology access example
+-----------------------
+
+In the following example is presented how to access vector topological
+primitives directly using PyGRASS. It requires full understanding of
+GRASS topological model, see :ref:`vector-topo-section` section in
+:doc:`03`.
+
+Sample script below prints for each county (vector map :map:`Fylke`
+imported in :doc:`03`) number of its neighbours.
+
+#. Vector map :map:`Fylke` is open on line :lcode:`10` by
+   :pygrass-vector:`VectorTopo` and its method ``open()``.
+#. Features (areas in this case) are sequentially read by ``for`` loop
+   on line :lcode:`12`. Areas are interated by ``viter()`` function.
+#. For each feature (ie. county) its boudaries are looped, see line
+   :lcode:`14`. Each boundary has two neighbours (line :lcode:`15`): on
+   the left and right side (``-1`` for no area).
+
+.. note:: To avoid unicode error when lauching the script from GRASS
+          GUI, few lines are added to a beginnging of the script, see
+          lines :lcode:`3-5`.
+   
+.. literalinclude:: ../_static/scripts/neighbours.py
+   :language: python
+   :linenos:
+   :emphasize-lines: 3-5, 10, 12, 14, 15
+
+Possible output:
+
+::
+
+   Troms,Romsa              : 2
+   Finnmark,Finnmárku       : 1
+   Hordaland                : 4
