@@ -18,7 +18,21 @@ text file too.
 
 .. code-block:: bash
 
-   TODO
+   r.regression.line mapx=dem mapy=modis_avg
+   
+::
+
+   y = a + b*x
+   a (Offset): 4.147879
+   b (Gain): -0.003448
+   R (sumXY - sumX*sumY/N): -0.700142
+   N (Number of elements): 6400
+   F (F-test significance): 6151.998513
+   meanX (Mean of map1): 374.619179
+   sdX (Standard deviation of map1): 31.784166
+   meanY (Mean of map2): 2.856299
+   sdY (Standard deviation of map2): 0.156515
+
 
 :grasscmd:`r.regression.multi` instead calculates a multiple linear regression
 from raster maps, according to the formula `Y = b0 + sum(bi*Xi) + E` it return
@@ -26,7 +40,43 @@ two maps, one for residuals and one for estimates plus all the regression coeffi
 
 .. code-block:: bash
 
-   TODO
+   r.regression.multi mapx=dem,ndvi mapy=modis_avg residuals=resi estimates=esti -g --o
+
+::
+
+	First pass...
+	 100%
+	Second pass...
+	 100%
+	n=6400
+	Rsq=0.579076
+	Rsqadj=0.578944
+	RMSE=0.101545
+	MAE=0.082123
+	F=4400.255533
+	b0=3.866596
+	AIC=-29270.856577
+	AICc=-29270.856577
+	BIC=-29250.564417
+
+	predictor1=dem
+	b1=-0.002589
+	Rsq1=0.205923
+	F1=3129.521382
+	AIC1=-26724.053358
+	AICc1=-26724.053358
+	BIC1=-26719.289305
+
+	predictor2=ndvi
+	b2=-0.186441
+	Rsq2=0.088877
+	F2=1350.704169
+	AIC2=-28046.825007
+	AICc2=-28046.825007
+	BIC2=-28042.060954
+
+
+   TODO: add example
 
 In the GRASS GIS add-ons it is possible to find other modules to run
 regression analysis, the two more used, and probably useful, are 
@@ -37,7 +87,46 @@ raster maps
 
 .. code-block:: bash
 
-   TODO
+   r.gwr mapx=dem,ndvi mapy=modis_avg residuals=resi_gwr estimates=esti_gwr -g
+
+::
+
+	Calculating average...
+	 100%
+	Geographically weighted regression...
+	 100%
+	n=40000
+	Rsq=0.965712
+	Rsqadj=0.96571
+	F=563248
+	bmean0=3.37404
+	bstddev0=3.68787
+	bmin0=-8.16749
+	bmax0=397.246
+	AIC=-283280
+	AICc=-283280
+	BIC=-283255
+	predictor1=dem
+	bmean1=-0.0013368
+	bstddev1=0.00958859
+	bmin1=-1.03849
+	bmax1=0.03125
+	Rsq1=0.000537803
+	F1=627.343
+	AIC1=-282660
+	AICc1=-282660
+	BIC1=-282653
+	predictor2=ndvi
+	bmean2=-0.0172043
+	bstddev2=0.152853
+	bmin2=-4.64422
+	bmax2=4.50812
+	Rsq2=5.02627e-05
+	F2=58.6311
+	AIC2=-283224
+	AICc2=-283224
+	BIC2=-283217
+
 
 :grasscmdaddons:`r.regression.series` calculates linear regression parameters
 between two time series, the module makes each output cell value a function
