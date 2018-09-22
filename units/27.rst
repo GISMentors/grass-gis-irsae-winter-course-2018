@@ -3,12 +3,55 @@ Unit 27 - Regression analysis
 
 .. warning:: Materials under construction!
 
-Geographically Weighted Regression
+GRASS GIS come with different module to do regression analysis. This commands
+work with single images or with time series too. Some of the modules are
+add-ons, in the core modules f GRASS GIS there are only two: :grasscmd:`r.regression.line`
+and :grasscmd:`r.regression.multi`.
 
-Gradient Boosted Regression Trees
+:grasscmd:`r.regression.line` calculates a linear regression from two
+raster maps, according to the formula `y = a + b*x`; it return some the
+regression coefficients: offset/intercept (a) and gain/slope (b), 
+correlation coefficient (R), number of elements (N), means (medX, medY),
+standard deviations (sdX, sdY), and the F test for testing the significance
+of the regression model as a whole (F); this parameters could be saved in
+text file too.
+
+.. code-block:: bash
+
+   TODO
+
+:grasscmd:`r.regression.multi` instead calculates a multiple linear regression
+from raster maps, according to the formula `Y = b0 + sum(bi*Xi) + E` it return
+two maps, one for residuals and one for estimates plus all the regression coefficients
+
+.. code-block:: bash
+
+   TODO
+
+In the GRASS GIS add-ons it is possible to find other modules to run
+regression analysis, the two more used, and probably useful, are 
+:grasscmdaddons:`r.gwr` and :grasscmdaddons:`r.regression.series`.
+
+:grasscmdaddons:`r.gwr` calculates geographically weighted regression from
+raster maps
+
+.. code-block:: bash
+
+   TODO
+
+:grasscmdaddons:`r.regression.series` calculates linear regression parameters
+between two time series, the module makes each output cell value a function
+of the values assigned to the corresponding cells in the two input raster map series.
+Following methods are available:
+
+* offset: Linear regression offset
+* slope: Linear regression slope
+* corcoef: Correlation Coefficent R
+* rsq: Coefficient of determination = R squared
+* adjrsq: Adjusted coefficient of determination
+* f: F statistic
+* t: T statistic 
 
 .. code-block:: bash
                 
-   r.gwr
-   r.ml.learn
-
+   TODO
