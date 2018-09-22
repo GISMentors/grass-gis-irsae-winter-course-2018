@@ -1,5 +1,10 @@
 #!/bin/bash
 
+### Before running this script:
+# mkdir ~/materials ; cd ~/materials
+# git clone https://github.com/GISMentors/grass-gis-irsae-winter-course-2018.git
+# grass-gis-irsae-winter-course-2018/_static/vm/install.sh
+
 sudo apt install -y proj-bin \
      python \
      python-numpy \
@@ -61,10 +66,8 @@ if [ ! -d $DATA_DIR ] ; then
 fi
 
 # materials
-DIR=~/materials
-mkdir $DIR; cd $DIR
-if [ ! -d grass-gis-irsae-winter-course-2018 ] ; then
-    git clone https://github.com/GISMentors/grass-gis-irsae-winter-course-2018.git
+cd ~/materials
+if [ ! -d sphinx-template ] ; then
     git clone https://github.com/GISMentors/sphinx-template.git
     (cd sphinx-template; git checkout en)
 else
@@ -74,11 +77,11 @@ fi
 (cd grass-gis-irsae-winter-course-2018; make html)
 
 if [ ! -d /var/www/html/grass-irsae ] ; then
-    ln -s ~/grass-gis-irsae-winter-course-2018/_build/html /var/www/html/grass-irsae
+    ln -s ~/materials/grass-gis-irsae-winter-course-2018/_build/html /var/www/html/grass-irsae
 fi
 
 # set the workshop material as home page in firefox
-# code from OSGeoLive prject
+# code from OSGeoLive project
 # https://github.com/OSGeo/OSGeoLive/blob/master/bin/install_docs.sh
 
 PREFS_FILE=`find "$HOME/.mozilla/firefox/" | grep -w default/prefs.js | head -n 1`
