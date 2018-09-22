@@ -77,7 +77,7 @@ fi
 (cd grass-gis-irsae-winter-course-2018; make html)
 
 if [ ! -d /var/www/html/grass-irsae ] ; then
-    ln -s ~/materials/grass-gis-irsae-winter-course-2018/_build/html /var/www/html/grass-irsae
+    sudo ln -s ~/materials/grass-gis-irsae-winter-course-2018/_build/html /var/www/html/grass-irsae
 fi
 
 # set the workshop material as home page in firefox
