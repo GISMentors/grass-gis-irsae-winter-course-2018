@@ -67,43 +67,50 @@ Sample script to download: `create-dtm.py <../_static/scripts/create-dtm.py>`__
 DTM comparision
 ---------------
 
-Import all the DTM files downloaded from `hoydedata.no
-<http://www.hoydedata.no/>`__. You can import all TIF files using
-:menuselection:`File --> Import raster data --> Simplified raster
-import with reprojection` checking :item:`Directory` as :item:`Source
-type` and selecting :file:`geodata/lidar/dtm`.
+In this session we are going to calculate the Canopy Height Model (CHM), it is
+the difference between interpolated DSM and imported EUDEM DTM
 
-.. figure:: ../images/units/17/import_dtm.png
-   :class: middle
 
-   Import all DTM TIF files from :file:`geodata/lidar/dtm/` directory.
 
-.. note::
-
-   Select only tiles used for DTM computation.
-
-Once DTM tiles are imported you can patch them using
-:grasscmd:`r.series` and set the color to `elevation` by
-:grasscmd:`r.colors`.
+The CHM is computed using :grasscmd:`r.mapcalc`, executing the difference between
+DSM and DTM
 
 .. code-block:: bash
 
-   r.series input=`g.list type=raster pattern=DTM_* sep=','` output=DTM_patch
-   r.colors map=DTM_patch color=elevation
-
-.. figure:: ../images/units/17/dtm_patched.png
-   :class: middle
-   
-   Patched DTM.
-
-In the last step difference beetween the imported DTM and interpolated
-DTM is computed using :grasscmd:`r.mapcalc`.
-
-.. code-block:: bash
-
-   r.mapcalc expression="chm = DTM_laz - DTM_patch"
+   r.mapcalc expression="chm = DTM_laz - dem"
 
 .. figure:: ../images/units/17/chm.png
    :class: middle
    
-   The CHM map (difference between interpolated and imported DTM).
+   The CHM map.
+
+.. tip::
+
+   To have better CHM it is possible to download DTM files from `hoydedata.no
+   <http://www.hoydedata.no/>`__. You can import all TIF files using
+   :menuselection:`File --> Import raster data --> Simplified raster
+   import with reprojection` checking :item:`Directory` as :item:`Source
+   type` and selecting the directory where the TIF files are.
+
+   .. figure:: ../images/units/17/import_dtm.png
+      :class: middle
+
+      Import all DTM TIF files from for exampe :file:`geodata/lidar/dtm/`
+      directory.
+
+   Once DTM tiles are imported you can patch them using
+   :grasscmd:`r.series` and set the color to `elevation` by
+   :grasscmd:`r.colors`.
+
+   .. code-block:: bash
+
+      r.series input=`g.list type=raster pattern=DTM_* sep=','` output=DTM_patch
+      r.colors map=DTM_patch color=elevation
+
+   .. figure:: ../images/units/17/dtm_patched.png
+      :class: middle
+   
+      Patched DTM.
+
+   Now it is possible to run the previous :grasscmd:`r.mapcalc` command changing `dem`
+   with `DTM_patch`
