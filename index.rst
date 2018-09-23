@@ -155,7 +155,7 @@ description below.
   Open Access Hub <https://scihub.copernicus.eu/>`__)
 
 Download sample dataset as `7z archive
-<http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z>`__ (6.1GB).
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z>`__ (3.4GB, 3.8GB uncompressed).
 
 .. _virtual-machine:
 
