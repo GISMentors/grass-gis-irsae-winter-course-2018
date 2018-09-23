@@ -17,14 +17,15 @@ sudo apt install -y proj-bin \
      libboost-program-options-dev \
      p7zip-full \
      mc \
-     python-sphinx
+     python-sphinx \
+     python-http-parser
 
 if [ `lsb_release -rs` == '18.04' ] ; then
      sudo apt install -y libboost-iostreams1.65
 else
      sudo apt install -y libboost-iostreams1.58
 fi
-sudo pip install pymodis sentinelsat pandas scikit-learn
+sudo pip install pymodis sentinelsat pandas scikit-learn gbif
 
 # laszip 2.0.1 is required by liblas
 wget -c https://github.com/LASzip/LASzip/archive/2.0.1.tar.gz
