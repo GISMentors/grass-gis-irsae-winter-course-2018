@@ -62,14 +62,12 @@ products without phase functions)'.
 Last step is to accept the license (:wikipedia:`Public domain` data).
 
 Once we have downloaded Sentinel and AOD data we need to decompress
-them.
+them (it is possible to find already the AOD file in :file:`~/geodata/sentinel/2018/`).
 
 .. code-block:: bash
 
    cd ~/geodata/sentinel/2018/
    unzip S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.zip
-   cd ~/Downloads/
-   unzip 180501_180531_Birkenes.zip
 
 Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
 
@@ -78,7 +76,7 @@ Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
    i.sentinel.preproc -a -t \
    input_dir=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE \
    elevation=DTM_patch atmospheric_model=Automatic aerosol_model="Continental model" \
-   aeronet_file=~/geodata/sentinel/180501_180731_Birkenes.dubovik suffix=cor \ 
+   aeronet_file=~/geodata/sentinel/2018/180501_180531_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt
    
 The :param:`-a` flag is needed since we use AOD file, :param:`-t` is used
