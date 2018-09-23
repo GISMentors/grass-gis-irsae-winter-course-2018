@@ -186,7 +186,7 @@ produces normal raster map with unique name *MASK*. To disable mask it
 is enough to rename *MASK* map by :grasscmd:`g.rename`, see line
 :lcode:`43`.
 
-.. literalinclude:: ../_static/scripts/sentinel-clouds-mask.py
+.. literalinclude:: ../_static/scripts/sentinel-cloud-mask.py
    :language: python
    :linenos:
    :emphasize-lines: 30, 43
