@@ -1,32 +1,43 @@
 Unit 28 - Classification
 ========================
 
-In GRASS GIS imagery data can be group (e.g. channel-wise) with :grasscmd:`i.group`.
-Group and subgroups are used to enable the user to run analyses on any combination of
-the raster map layers in a group. Some commands ask the user for the imagery group
-and imagery subgroup whose data are to be analyzed.
+Imagery data in GRASS GIS can be grouped (e.g. channel-wise) by
+:grasscmd:`i.group` module (:menuselection:`Imagery --> Develop images
+and groups --> Create/edit group`). Groups and subgroups allows user to
+perform analysis on any combination of the raster maps in a
+group. Group or subgroup is taken as input for most of GRASS imagery
+modules (``i.*``).
 
-.. code-block:: bash
+.. figure:: ../images/units/28/i-group-0.png
+   :class: small
+           
+   Creating imagery group from the GUI.
 
-   i.group group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031 \
-   input=`g.list rast pattern=L2A_T32VNM_20170523T104031_B* sep=comma`
+.. note:: When running command from Bash, the input maps can be
+   defined by :grasscmd:`g.list` output.
+          
+   .. code-block:: bash
+
+      i.group group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031 \
+      input=`g.list rast pattern=L2A_T32VNM_20170523T104031_B* sep=comma`
 
 .. tip::
 
    The first step as pre-analysis for a subsequent classification could be
-   :grasscmd:`r.smooth.seg` to produces a smooth approximation of the data
+   :grasscmdaddons:`r.smooth.seg` to produces a smooth approximation of the data
    and performs discontinuity detection.
 
 .. tip::
 
-    In case of panchromatic maps or limited amount of channels, it is often
-    recommended to generate synthetic channels through texture analysis :grasscmd:`r.texture`
+    In case of panchromatic maps or limited amount of channels, it is
+    often recommended to generate synthetic channels through texture
+    analysis :grasscmd:`r.texture`.
 
 Segmentation
 -------------
 
-GRASS GIS has a command, :grasscmd:`i.segment`, to run the identification of segments
-(objects) from imagery data. 
+Identification of segments (objects) from imagery data can be perform
+by :grasscmd:`i.segment`.
 
 .. code-block:: bash
 
@@ -35,15 +46,7 @@ GRASS GIS has a command, :grasscmd:`i.segment`, to run the identification of seg
 .. figure:: ../images/units/28/segment.png
    :class: large
 
-   In the left the :grasscmd:`i.segment` output, in the right the original
-   RGB bands
-
-We create a new :param:`subgroup` with the segmented output
-
-.. code-block:: bash
-
-   i.group group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031_segment \
-   input=`g.list rast pattern=L2A_T32VNM_20170523T104031_B* sep=comma`,L2A_T32VNM_20170523T104031_seg_04
+   Segmentation output on the left, RGB composition on the right.
 
 Unsupervised classification
 ----------------------------
@@ -58,7 +61,7 @@ used as input for :grasscmd:`i.maxlik`, to generate an unsupervised image classi
 .. code-block:: bash
 
    i.cluster group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031
-   signaturefile=cluster classes=3 reportfile=geodata/classi_cluster.txt
+   signaturefile=cluster classes=3 reportfile=geodata/class_cluster.txt
 
    i.maxlik group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031
    signaturefile=cluster output=L2A_T32VNM_20170523T104031_cluster
@@ -66,41 +69,42 @@ used as input for :grasscmd:`i.maxlik`, to generate an unsupervised image classi
 .. figure:: ../images/units/28/cluster.png
    :class: medium
 
-   The unsupervised classification output
+   Unsupervised classification output.
 
 Supervised classification
 --------------------------
 
-To run supervised classification the first step is to create the training areas.
-You can use :grasscmd:`g.gui.iclass` or the vector digitizer :grasscmd:`g.gui.vdigit`
-to create the vector containing your training areas.
+The first step in supervised classification is to define training
+areas. For this task GRASS GIS offers specialized tool called
+:grasscmd:`g.gui.iclass`. Alternatively also more generic vector
+digitizer :grasscmd:`g.gui.vdigit` can be used as shown below.
 
 .. figure:: ../images/units/28/vdigit.png
    :class: large
 
-   The GRASS GIS vector digitizer
+   Vector digitizer for defining training areas.
 
-We can use the `Vector digitizer` to create a `New vector`, call it
-`T32VNM_20170523T104031_training` and add the following attribute columns:
+By vector digitizer a new vector map `T32VNM_20170523T104031_training`
+can be created with following attribute columns:
 
-* `class` varchar with 5 characters, for classes name
-* `class_i` integer, for classes value
-* `color` varchar with 11 characters, for color 
+* :dbcolumn:`class` varchar with 5 characters, for class name
+* :dbcolumn:`class_i` integer, for class id
+* :dbcolumn:`color` varchar with 11 characters, for color representation
 
-To create a new area you have to use the button to create a new area
+A new area can be created from vector digitizer toolbar
+|grass-polygon-create| :sup:`Digitize new area`.
 
-.. figure:: ../images/units/28/boundary.png
-   :class: small
-
-   The button to create a new area
-
-During the creation of vector you have to fill the attribute info, I suggest you
-to fill only `class` or `class_i` column and after fill the other columns.
+It is enough for each training area to define class id
+:dbcolumn:`class_i`. The rest of attributes (:dbcolumn:`class` and
+:dbcolumn:`color`) can be defined afterwards by Attribute Data
+Manager.
 
 .. tip::
 
-   You can use :grasscmd:`db.execute` to fill the others columns, this example
-   show how to update the columns `class_i` and `color` since we filled `class` column
+   Instead of Attribute Data Manager also :grasscmd:`db.execute` can
+   be used to fill attribute columns. See example below which shows
+   how to update columns :dbcolumn:`class` and :dbcolumn:`color` based
+   on specified :dbcolumn:`class_i` attribute.
    
    .. code-block:: bash
    
@@ -112,13 +116,12 @@ to fill only `class` or `class_i` column and after fill the other columns.
       db.execute sql="UPDATE T32VNM_20170523T104031_training set color='102:102:102' where class='arti'"
       db.execute sql="UPDATE T32VNM_20170523T104031_training set color='65:232:70' where class='vege'"
 
-   .. figure:: ../images/units/28/training_attributes.png
-      :class: small
+.. figure:: ../images/units/28/training_attributes.png
       
-      The attribute table of training vector
+   The attribute table of training vector map.
 
-At this point we should convert the training areas vector to raster, we have
-to use :grasscmd:`v.to.rast`
+At this point vector map with training areas is converted to raster
+format. This operation can be done in GRASS by :grasscmd:`v.to.rast`.
 
 .. code-block:: bash
 
@@ -126,18 +129,20 @@ to use :grasscmd:`v.to.rast`
    type=area use=attr attribute_column=class_i label_column=class rgb_column=color
 
 .. figure:: ../images/units/28/trainings.png
-   :class: medium
+   :class: small
+           
+   The training areas as raster map (RGB composition on background).
 
-   The training areas
+The second step means to run classfier. There are different
+classifiers based on:
 
-Now we have to choose the method to use, there are few methods:
-
-* radiometric 
-* radiometric and geometric
+* radiometric method,
+* radiometric and geometric method, or
 * machine learning
 
-The radiometric method can be performed using :grasscmd:`i.gensig` to
-generate statistics to be used in :grasscmd:`i.maxlik`
+Radiometric method can be performed in GRASS GIS using
+:grasscmd:`i.gensig` to generate statistics to be used by
+:grasscmd:`i.maxlik`, see example below.
 
 .. code-block:: bash
 
@@ -147,9 +152,10 @@ generate statistics to be used in :grasscmd:`i.maxlik`
    i.maxlik group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031 \
    signaturefile=gensig_nosegment output=L2A_T32VNM_20170523T104031_maxlik
 
-The radiometric and geometric method instead is using :grasscmd:`i.gensigset`
-to generate statistics to be used in :grasscmd:`i.smap`, it performs contextual
-image classification using sequential maximum a posteriori (SMAP) estimation.
+In radiometric and geometric method statistics is generated by
+:grasscmd:`i.gensigset` together with :grasscmd:`i.smap` which
+performs contextual image classification using sequential maximum a
+posteriori (SMAP) estimation.
 
 .. code-block:: bash
 
@@ -160,9 +166,9 @@ image classification using sequential maximum a posteriori (SMAP) estimation.
    signaturefile=gensigset_nosegment output=L2A_T32VNM_20170523T104031_smap \
    goodness=L2A_T32VNM_20170523T104031_smap_good
 
-The machine learning method can be calculated using :grasscmdaddons:`r.learn.ml`,
-the module represents a front-end to the `scikit-learn <http://scikit-learn.org>`__
-python package.
+Machine learning approach can be applied for example by
+:grasscmdaddons:`r.learn.ml` which represents a front-end to the
+`scikit-learn <http://scikit-learn.org>`__ python package.
 
 .. note::
 
@@ -179,16 +185,18 @@ python package.
 .. figure:: ../images/units/28/classification.png
    :class: large
 
-   The outputs of different supervised methods. In the left the :grasscmd:`i.maxlik`
-   output, in the center the :grasscmd:`i.smap` output and in the right the
-   :grasscmd:`r.ml.learn` output
+   Different supervised methods. In the left radiometric
+   (:grasscmd:`i.maxlik`) method, in the center radiometric and
+   geometric method (:grasscmd:`i.smap`) and in the right machine
+   learning approach performed by :grasscmd:`r.ml.learn`.
 
 .. tip::
 
-   To clean the classification's output you can follow some workflow:
+   In order to get better classification output some post-processing
+   steps can be performed.
 
-   * use :grasscmd:`r.reclass.area` removing small areas, mask the new
-     value and after gap the holes with :grasscmd:`r.neighbors` or
+   * use :grasscmd:`r.reclass.area` to remove small areas, mask new
+     value and fill gaps with :grasscmd:`r.neighbors` or
      :grasscmd:`r.fillnulls`
-   * convert the output to vector and run :grasscmd:`v.clean` with
-     :param:`tool=rmarea` with the right :param:`threshold`
+   * convert output to vector format and run :grasscmd:`v.clean` with
+     :param:`tool=rmarea` and reasonable :param:`threshold`
