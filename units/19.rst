@@ -18,7 +18,6 @@ replaced by :param:`producttype=S2MSI1C`.
 
    ef0b12ac-9c79-46ec-8223-9655791943ea 2018-05-18T10:40:21Z  0% S2MSI1C
    ...
-   b40c6c72-da2d-427e-ae8f-a9461ca65c33 2018-07-05T10:50:29Z  0% S2MSI1C
    97a5820c-c1c8-4300-a076-174c9e7694fa 2018-05-23T10:40:19Z  0% S2MSI1C
    ...
    d6ab2378-84e8-4e73-8be9-0e9833587a65 2018-06-02T10:40:19Z  9% S2MSI1C
@@ -30,7 +29,7 @@ command to download specified scenes by UUID below.
 .. code-block:: bash
 
    i.sentinel.download settings=sentinel.txt output=geodata/sentinel/l1c \
-   uuid=97a5820c-c1c8-4300-a076-174c9e7694fa,b40c6c72-da2d-427e-ae8f-a9461ca65c33
+   uuid=97a5820c-c1c8-4300-a076-174c9e7694fa
 
 In the next step downloaded data are imported into GRASS GIS using
 another command provided by :grasscmd:`i.sentinel` addons,
@@ -67,11 +66,10 @@ them.
 
 .. code-block:: bash
 
-   cd ~/geodata/sentinel/
+   cd ~/geodata/sentinel/lc1/
    unzip S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.zip
-   unzip S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.zip
    cd ~/Downloads/
-   unzip 180501_180731_Birkenes.zip
+   unzip 180501_180531_Birkenes.zip
 
 Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
 
@@ -83,12 +81,6 @@ Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
    aeronet_file=~/geodata/sentinel/180501_180731_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt
    
-   i.sentinel.preproc -a -t \
-   input_dir=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE \
-   elevation=DTM_patch atmospheric_model=Automatic aerosol_model="Continental model" \
-   aeronet_file=~/geodata/sentinel/180501_180731_Birkenes.dubovik suffix=cor \ 
-   text_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt
-
 The :param:`-a` flag is needed since we use AOD file, :param:`-t` is used
 to write a text file (:param:`text_file`) ready to be used as input for
 the next step, creating cloud mask by :grasscmd:`i.sentinel.mask`.
@@ -111,12 +103,6 @@ refined.
    input_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt \
    mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/MTD_MSIL1C.xml
    
-   i.sentinel.mask -r cloud_mask=T32VNM_20180705T130423_cloud shadow_mask=T32VNM_20180705T130423_shadow \
-   cloud_threshold=25000 shadow_threshold=5000 \
-   input_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/mask.txt \
-   mtd_file=~/geodata/sentinel/S2B_MSIL1C_20180705T105029_N0206_R051_T32VNM_20180705T130423.SAFE/MTD_MSIL1C.xml
-
-
 In the last step topographic correction of reflectance must be
 performed in order to use Sentinel data for analysis. Required sun
 position for a given date is computed by :grasscmd:`r.sunmask`.
