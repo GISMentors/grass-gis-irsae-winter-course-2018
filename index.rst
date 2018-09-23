@@ -176,7 +176,7 @@ directory.
 Download tailored virtual machine **including sample dataset** as `7z
 archive
 <http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/osgeolive-12.0-vm-irsae.7z>`__
-(18.6GB). Note that for uncompressed virtual machine 27GB are needed!
+(18.6GB, 27GB uncompressed).
           
 Units
 =====
