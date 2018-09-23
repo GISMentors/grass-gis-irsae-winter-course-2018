@@ -1,12 +1,12 @@
-Unit 17 - DMT script parallelization
+Unit 17 - DTM script parallelization
 ====================================
 
 This unit is focused on **computing parallelization**. Sample script
-below produces seamless DTM (Digital Surface Model, see :doc:`16`)
+below produces seamless DTM (Digital Terrain Model, see :doc:`16`)
 from bunch of LAS/LAZ files. Computation will be split into tiles and
 performed in parallel.
 
-DMT interpolation in parallel
+DTM interpolation in parallel
 -----------------------------
 
 User interface contains two major parameters, :param:`directory` (line
