@@ -1,8 +1,6 @@
 Unit 14 - PyGRASS Vector Access
 ===============================
 
-.. warning:: Materials under construction!
-
 PyGRASS allows directly accessing native GRASS raster and vector maps
 in the sense of Python objects. This unit shows how to deal with GRASS
 vector data by PyGRASS API, see :doc:`13` for raster data.
