@@ -12,7 +12,7 @@ in both ways you have to install :param:`rgrass7` package inside a R or RStudio 
 In your active GRASS GIS session start R.
 
 .. code-block:: bash
-                
+
    R
 
 Then install and load the :param:`rgrass7` package
@@ -123,8 +123,8 @@ further analysis (e.g. regression) or plotting.
    # Query time series at vector points, transfer result into R
    modis_c_studenterhytta <- execGRASS("t.rast.what", flags=c("n", "i", "overwrite"),
                                        strds="modis_c", nprocs=1,
-									   coordinates='258121.68627886,6662114.92897065',
-									   separator=',', intern=TRUE)
+                                       coordinates='258121.68627886,6662114.92897065',
+                                       separator=',', intern=TRUE)
  
    # Parse the result
    con <- textConnection(modis_c_studenterhytta)
