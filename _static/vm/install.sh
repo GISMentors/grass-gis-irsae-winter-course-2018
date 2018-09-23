@@ -63,6 +63,7 @@ if [ ! -d $DATA_DIR ] ; then
     wget http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/grass-gis-irsae-winter-course-2018-data.7z -O /tmp/data.7z
     cd ~/
     7z x /tmp/data.7z
+    rm /tmp/data.7z
 fi
 
 # materials
