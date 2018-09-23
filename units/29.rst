@@ -1,47 +1,41 @@
 Unit 29 - GRASS and R
 =====================
 
-.. warning:: Materials under construction!
-
 
 You can use R or RStudio in conjunction with GRASS GIS in two different ways: 
 
 * run R within a GRASS GIS session
 * run GRASS GIS within a R session
 
-in both ways you have to install :param:`rgrass7` library inside a R or RStudio session
+in both ways you have to install :param:`rgrass7` package inside a R or RStudio session
 
-.. code-block:: R
-
-   install.packages("rgrass7", dependencies= TRUE)
-
-In our active GRASS GIS session start R and load :param:`rgrass7` library
+In your active GRASS GIS session start R.
 
 .. code-block:: bash
                 
    R
 
-.. code-block:: R
+Then install and load the :param:`rgrass7` package
+
+ 
+ .. code-block:: R
+
+   install.packages("rgrass7", dependencies= TRUE)
 
    library(rgrass7)
 
 If we are running GRASS GIS from within R (or RStudio) we need to use the
 initGRASS() function to define the GRASS GIS settings, first get the full
-path to GRASS GIS installation
+path to GRASS GIS installation and later run the initGRASS() function, 
+with the right parameters
 
-.. code-block:: bash
-                
-   grass74 --config path
-   
-::
-
-   /usr/lib/grass74
-
-and later run the initGRASS() function, with the right parameters
 
 .. code-block:: R
-                
-   initGRASS(gisBase='/usr/lib/grass74', gisDbase='/home/user/grassdata/',
+
+   # Get GRASS library path
+   grasslib <- try(system('grass --config', intern=TRUE))[4]
+
+   initGRASS(gisBase=grasslib, gisDbase='/home/user/grassdata/',
              location='oslo-25832', mapset='PERMANENT', override=TRUE)
 
 At this point you can use GRASS GIS functions inside R, for example
@@ -86,7 +80,7 @@ raster values to be returned as factors
      (Other)               : 187401   Max.   : 16.1    
      NA's                  :3276317   NA's   :2450449  
 
-It is possible to plot a boxplot of Norvegian regions with the 2017 annual
+It is possible to plot a boxplot of Norwegian regions with the 2017 annual
 mean values of MODIS LST
 
 .. code-block:: R
@@ -97,11 +91,66 @@ mean values of MODIS LST
    :class: large
 
 
+A common use case in ecological analysis is to extract raster values at 
+vector points, e.g. to put sampling locations into spatial context. Using GRASS 
+you can read raster values at point locations directly into R for 
+further analysis (e.g. regression) or plotting.
+
+
+.. code-block:: R
+
+   # First, let`s fetch some sample example data. Lets get data on two species 
+   # from GBIF (gbif.org):
+   execGRASS('g.region', vector='oslo', flags = 'p')
+   
+   execGRASS('v.in.pygbif', output='gbif_species', taxa='Rubus chamaemorus,Lotus corniculatus',
+             rank=species)
+
+   # Extract average temperature from MODIS
+   execGRASS('v.what.rast', map='gbif_species', raster='modis_avg', column='modis_c_avg')
+			 
+   # query raster maps at vector points, transfer result into R
+   goutput <- execGRASS('v.db.select', map='gbif_species', columns='g_species,modis_c_avg',
+                        where='modis_c_avg IS NOT NULL', separator='comma')
+ 
+   # Parse results
+   con <- textConnection(goutput)
+   go1 <- read.csv(con, header=TRUE)
+   str(go1)
+ 
+   # From here you can visualize / analysze in R
+
+   # Query time series at vector points, transfer result into R
+   modis_c_studenterhytta <- execGRASS("t.rast.what", flags=c("n", "i", "overwrite"),
+                                       strds="modis_c", nprocs=1,
+									   coordinates='258121.68627886,6662114.92897065',
+									   separator=',', intern=TRUE)
+ 
+   # Parse the result
+   con <- textConnection(modis_c_studenterhytta)
+   go2 <- read.csv(con, header=TRUE)
+   str(go2)
+ 
+
+
+More information and examples can be found at
+
+  * the `GRASS/rgrass7 wiki <https://grasswiki.osgeo.org/wiki/R_statistics/rgrass7>`__ page and
+  * the `rgrass7 package documentation <https://cran.r-project.org/web/packages/rgrass7/index.html>`__
+
 
 R vs. Python
 ============
 
-Python and R are both popular languages for data science. And the question which language to use (and for what purposes) has often been discussed, e.g. at `Data-Driven Science <https://medium.com/@data_driven/python-vs-r-for-data-science-and-the-winner-is-3ebb1a968197>`__ or `Dataquest <https://www.dataquest.io/blog/python-vs-r/>`__ . There, Python and R are often considered as complementing each other with R being stronger on data visualisation and statistics while Python is considered more general purpose programming language with advantages in performance. For more computational demanding processes, Python can have significant advantages, esp. if looping is involved as the following example illustrates:
+Python and R are both popular languages for data science. And the question which 
+language to use (and for what purposes) has often been discussed, e.g. at 
+`Data-Driven Science <https://medium.com/@data_driven/python-vs-r-for-data-science-and-the-winner-is-3ebb1a968197>`__ or 
+`Dataquest <https://www.dataquest.io/blog/python-vs-r/>`__ . There, Python and 
+R are often considered as complementing each other with R being stronger 
+on data visualisation and statistics while Python is considered more general 
+purpose programming language with advantages in performance. For more computational 
+demanding processes, Python can have significant advantages, esp. if looping is 
+involved as the following example illustrates:
 
 .. code-block:: bash
 
@@ -162,12 +211,22 @@ Python and R are both popular languages for data science. And the question which
    sys     0m0.273s\\
 
 
-As you can see, in the case above, R uses ~80 times more memory and takes ~9 times longer to complete the loop-test above.
+As you can see, in the case above, R uses ~80 times more memory and takes 
+~9 times longer to complete the loop-test above.
 
-For people comng from ''R'' the ''Python'' library ''pandas'' is worth exploring. It provides data organisation and methods very similar data frames in ''R''. 
+For people comng from ''R'' the ''Python'' library ''pandas'' is worth 
+exploring. It provides data organisation and methods very similar data 
+frames in ''R''. 
 
-Getting started with ''Python'' and ''pandas'' gets easy with the `Pandas Cheat Sheet <https://github.com/pandas-dev/pandas/blob/master/doc/cheatsheet/Pandas_Cheat_Sheet.pdf>`__ or a more general Python cheat sheet from `DataScience <http://www.datasciencefree.com/cheatsheets.html>`__.
+Getting started with ''Python'' and ''pandas'' gets easy with the 
+`Pandas Cheat Sheet <https://github.com/pandas-dev/pandas/blob/master/doc/cheatsheet/Pandas_Cheat_Sheet.pdf>`__ 
+or a more general Python cheat sheet from 
+`DataScience <http://www.datasciencefree.com/cheatsheets.html>`__.
 
-A nice comparison between R and functions/data management offered by pandas library can be found `here <http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html>`__
+A nice comparison between R and functions/data management offered by 
+pandas library can be found 
+`here <http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html>`__
 
-For getting a basic, hands-on introduction to Python `Codeacademy <https://www.codecademy.com/catalog/language/python>`__ can be recommended as a free learning platform.
+For getting a basic, hands-on introduction to Python 
+`Codeacademy <https://www.codecademy.com/catalog/language/python>`__ 
+can be recommended as a free learning platform.
