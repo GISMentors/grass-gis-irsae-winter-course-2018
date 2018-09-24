@@ -1,6 +1,5 @@
-=======================
- Unit 29 - GRASS and R
-=======================
+Unit 29 - GRASS GIS and R
+=========================
 
 
 R or RStudio can be used in conjunction with GRASS GIS in two
