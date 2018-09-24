@@ -147,7 +147,7 @@ More information and examples can be found at
   * the `rgrass7 package documentation <https://cran.r-project.org/web/packages/rgrass7/index.html>`__
 
 R vs. Python
-============
+------------
 
 Python and R are both popular languages for data science. And the question which 
 language to use (and for what purposes) has often been discussed, e.g. at 
