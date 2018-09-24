@@ -44,8 +44,9 @@ def calculate(inp, dat, out, out_rast, met):
 	        input=inp.get_name(),
 	        method=met,
 	        output=out_rast,
-	        where="start_time >= '{st}' and end_time <= '{se}'".format(st=dat[0].strftime(date_format),
-	                                                                   se=dat[1].strftime(date_format)),
+	        where="start_time >= '{st}' and end_time <= '{se}'".format(
+                        st=dat[0].strftime(date_format),
+	                se=dat[1].strftime(date_format)),
 	        run_ = False
 	    )
 	)

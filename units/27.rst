@@ -1,20 +1,23 @@
 Unit 27 - Regression analysis
 =============================
 
-.. warning:: Materials under construction!
+GRASS GIS comes with different modules performing regression
+analysis. These modules work with single raster map or with time
+series data too. There are two core GRASS modules related to
+regression: :grasscmd:`r.regression.line` and
+:grasscmd:`r.regression.multi`. There are also other interesting
+modules distributed as addons which will be demostrated in this unit.
 
-GRASS GIS come with different module to do regression analysis. This commands
-work with single images or with time series too. Some of the modules are
-add-ons, in the core modules f GRASS GIS there are only two: :grasscmd:`r.regression.line`
-and :grasscmd:`r.regression.multi`.
+r.regression.line
+-----------------
 
 :grasscmd:`r.regression.line` calculates a linear regression from two
-raster maps, according to the formula `y = a + b*x`; it return some the
-regression coefficients: offset/intercept (a) and gain/slope (b), 
-correlation coefficient (R), number of elements (N), means (medX, medY),
-standard deviations (sdX, sdY), and the F test for testing the significance
-of the regression model as a whole (F); this parameters could be saved in
-text file too.
+raster maps, according to the formula `y = a + b*x`. It also returns
+some regression coefficients like offset/intercept (a), gain/slope
+(b), correlation coefficient (R), number of elements (N), means (medX,
+medY), standard deviations (sdX, sdY), and the F test for testing the
+significance of the regression model as a whole (F); these parameters
+could be saved in a text file.
 
 .. code-block:: bash
 
@@ -41,43 +44,44 @@ It is possible to apply the model variable with the predictor
 
 .. figure:: ../images/units/27/estimates_linear.png
 
-   The output of model
+   Model example.
 
 .. tip::
 
-   For linux user it is possible to use :program:`eval` command to get the 
-   output of many GRASS GIS modules as environmental variable use :param:`-g`
-   flag. Let's see the previous example
+   In Linux Bash :program:`eval` command allows to store an output of
+   GRASS GIS modules called with :param:`-g` flag as environmental
+   variables which can be reused afterwards by other GRASS modules,
+   see example below.
    
    .. code-block:: bash
    
       r.regression.line -g mapx=dtm mapy=modis_avg
       r.mapcalc expression="temp_linear = $a + $b * dtm"
 
+r.regression.multi
+------------------
 
-:grasscmd:`r.regression.multi` instead calculates a multiple linear regression
-from raster maps, according to the formula `Y = b0 + sum(bi*Xi) + E` it return
-two maps, one for residuals and one for estimates plus all the regression coefficients
+The :grasscmd:`r.regression.multi` calculates a multiple linear
+regression from raster maps according to the formula `Y = b0 +
+sum(bi*Xi) + E`. Two output maps are returned, one for residuals and
+one for estimates plus all the regression coefficients.
 
-Create a map with maximum NDVI value from the previous time series
+Create a map with maximum NDVI value from spatio-temporal dataset
+created in :doc:`23` by :grasscmd:`t.rast.series`.
 
 .. code-block:: bash
 
-   g.region res=10 -ap
+   g.region vector=oslo align=L2A_T32VNM_20170506T105031_B04_10m                
    t.rast.series input=ndvi_cloud method=maximum output=ndvi_max
 
 And now use the maximum NDVI map as one of the input coefficients. 
 
 .. code-block:: bash
 
-   r.regression.multi mapx=dtm,ndvi_max mapy=modis_avg residuals=resi estimates=esti -g --o
+   r.regression.multi mapx=dtm,ndvi_max mapy=modis_avg residuals=resi estimates=esti -g
 
 ::
 
-   First pass...
-    100%
-   Second pass...
-	100%
    n=4353047
    Rsq=0.749059
    Rsqadj=0.749059
@@ -107,23 +111,25 @@ And now use the maximum NDVI map as one of the input coefficients.
 
 .. figure:: ../images/units/27/estimates_multi.png
 
-   The estimates output from :grasscmd:`r.regression.multi`
+   The estimates output by :grasscmd:`r.regression.multi`.
 
 .. tip::
 
-   It is possible to calculate differences between origina LST data and
-   the output of the models with :grasscmd:`r.mapcalc`.
+   It is possible to calculate differences between original LST data
+   and the output of the models with :grasscmd:`r.mapcalc`.
 
-In the GRASS GIS add-ons it is possible to find other modules to run
-regression analysis, the two more used, and probably useful, are 
+r.gwr
+-----
+
+There two GRASS Addons modules related to regression analysis:
 :grasscmdaddons:`r.gwr` and :grasscmdaddons:`r.regression.series`.
 
-:grasscmdaddons:`r.gwr` calculates geographically weighted regression from
-raster maps, it resolves the formula `Y = b0 + sum(bi*Xi) + E`. The formula
-is applied in a moving and the cells closer to the center of the current
-moving windows get a higher weight. :grasscmdaddons:`r.gwr` is more an analytical 
-tool to test if the predictors are suitable for a global model in
-:grasscmd:`r.regression.multi`
+:grasscmdaddons:`r.gwr` calculates geographically weighted regression
+from raster maps, it resolves a formula `Y = b0 + sum(bi*Xi) + E`. The
+formula is applied in a moving window. Cells closer to the center of
+the moving window get a higher weight. :grasscmdaddons:`r.gwr` is more
+an analytical tool to test if the predictors are suitable for a global
+model applied by :grasscmd:`r.regression.multi`.
 
 .. code-block:: bash
 
@@ -131,10 +137,6 @@ tool to test if the predictors are suitable for a global model in
 
 ::
 
-   Calculating average...
-	100%
-   Geographically weighted regression...
-    100%
    n=4321368
    Rsq=0.997701
    Rsqadj=0.997701
@@ -169,13 +171,16 @@ tool to test if the predictors are suitable for a global model in
 
 .. figure:: ../images/units/27/estimates_gwr.png
 
-   The estimates output from :grasscmdaddons:`r.gwr`
+   The estimates output produced by :grasscmdaddons:`r.gwr`.
 
+r.regression.series
+-------------------
 
-:grasscmdaddons:`r.regression.series` calculates linear regression parameters
-between two time series, the module makes each output cell value a function
-of the values assigned to the corresponding cells in the two input raster map series.
-Following methods are available:
+:grasscmdaddons:`r.regression.series` calculates linear regression
+parameters from two space time raster datasets. The module makes each
+output cell value a function of the values assigned to the
+corresponding cells in the two input raster map series.  Following
+methods are available:
 
 * offset: Linear regression offset
 * slope: Linear regression slope
@@ -185,8 +190,9 @@ Following methods are available:
 * f: F statistic
 * t: T statistic 
 
-Before to run :grasscmdaddons:`r.regression.series`, it is needed to prepare
-the two serie of data to use, one dataset is the `ndvi_cloud` time series
+Before to running :grasscmdaddons:`r.regression.series` two it is
+needed to prepare the two sample space time raster datasets. There is
+dataset `ndvi_cloud` created in :doc:`23` which could be used.
 
 .. code-block:: bash
 
@@ -200,20 +206,25 @@ the two serie of data to use, one dataset is the `ndvi_cloud` time series
    ndvi_cloud_3|PERMANENT|2017-05-26 10:50:31|2017-05-26 10:50:32
    ndvi_cloud_4|PERMANENT|2017-07-05 10:50:31|2017-07-05 10:50:32
 
-The second time serie is the LST one, since there are 4 MODIS data for each
-eight days, it is better to calculate the mean value for each eight days.
-To do this it is possible to use the following script
+Another dataset which could be used is `modis_c` created in
+:doc:`22`. For our purpose it is more reasonable to calculate the mean
+value for each eight days. This calculation can be done by Python
+script below.
 
 .. literalinclude:: ../_static/scripts/lst_average.py
    :language: python
    :linenos:
 
+Sample script to download: `lst_average.py
+<../_static/scripts/lst_average.py>`__
+      
+Example of usage:
+
 .. code-block:: bash
                 
-   python grass-gis-irsae-winter-course-2018/_static/scripts/lst_average.py \
-   input=modis_c output=modis_c_days basename=modis_days
+   lst_average.py input=modis_c output=modis_c_days basename=modis_days
 
-At this point we can select the four maps closer to the NDVI maps
+At this point select four raster maps close to the NDVI maps:
 
 .. code-block:: bash
 
@@ -233,15 +244,15 @@ At this point we can select the four maps closer to the NDVI maps
    modis_days_24|PERMANENT|2017-07-04 00:00:00|2017-07-12 00:00:00
    modis_days_25|PERMANENT|2017-07-12 00:00:00|2017-07-20 00:00:00
 
-Finally it is possible to run :grasscmdaddons:`r.regression.series` using
-several methods and getting several outputs
+Finally it is possible to run :grasscmdaddons:`r.regression.series`
+using several methods to get various outputs.
 
 .. code-block:: bash
 
    r.regression.series xseries=ndvi_cloud_1,ndvi_cloud_2,ndvi_cloud_3,ndvi_cloud_4 \
    yseries=modis_days_16,modis_days_18,modis_days_19,modis_days_24 \
-    method=offset,slope,rsq output=temp_offset,temp_slope,temp_rsq
+   method=offset,slope,rsq output=temp_offset,temp_slope,temp_rsq
 
 .. figure:: ../images/units/27/series.png
 
-   The output rsq value
+   The output RSQ value.
