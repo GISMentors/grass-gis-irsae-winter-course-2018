@@ -212,9 +212,9 @@ Units
    units/25
    units/26
    units/28
-   
+   units/29
+
 * Unit 27 - Regression analysis
-* Unit 29 - GRASS and R
 
 ..
    .. toctree::

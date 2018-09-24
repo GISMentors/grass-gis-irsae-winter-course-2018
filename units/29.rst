@@ -1,33 +1,36 @@
-Unit 29 - GRASS and R
-=====================
+=======================
+ Unit 29 - GRASS and R
+=======================
 
 
-You can use R or RStudio in conjunction with GRASS GIS in two different ways: 
+R or RStudio can be used in conjunction with GRASS GIS in two
+different ways:
 
 * run R within a GRASS GIS session
 * run GRASS GIS within a R session
 
-in both ways you have to install :param:`rgrass7` package inside a R or RStudio session
-
-In your active GRASS GIS session start R.
+In any case a R package called :param:`rgrass7` must be
+installed. Start R within running GRASS session:
 
 .. code-block:: bash
 
    R
 
-Then install and load the :param:`rgrass7` package
+From R session install (including dependencies) and load the
+:param:`rgrass7` package
 
  
- .. code-block:: R
+.. code-block:: R
 
-   install.packages("rgrass7", dependencies= TRUE)
+   install.packages("rgrass7", dependencies=TRUE)
 
    library(rgrass7)
 
-If we are running GRASS GIS from within R (or RStudio) we need to use the
-initGRASS() function to define the GRASS GIS settings, first get the full
-path to GRASS GIS installation and later run the initGRASS() function, 
-with the right parameters
+If GRASS GIS is started from R (or RStudio) session a ``initGRASS()``
+function must be called in order to define GRASS GIS environment
+settings.  First get the full path to GRASS GIS installation and run
+the ``initGRASS()`` function with specified parameters pointing to
+GRASS location and mapset to be used.
 
 
 .. code-block:: R
@@ -36,10 +39,13 @@ with the right parameters
    grasslib <- try(system('grass --config', intern=TRUE))[4]
 
    initGRASS(gisBase=grasslib, gisDbase='/home/user/grassdata/',
-             location='oslo-25832', mapset='PERMANENT', override=TRUE)
+             location='oslo-region', mapset='PERMANENT', override=TRUE)
 
-At this point you can use GRASS GIS functions inside R, for example
-printing the list of vectors and convert Fylke vector to raster
+At this point GRASS GIS modules are available inside R by
+``execGRASS()`` function. In example below are listed available vector
+maps from the current location and mapset using
+:grasscmd:`g.list`. Vector map of administrative regions
+(:map:`Fylke`) is converted to raster format by :grasscmd:`v.to.rast`.
 
 .. code-block:: R
 
@@ -47,8 +53,9 @@ printing the list of vectors and convert Fylke vector to raster
    execGRASS("v.to.rast", parameters = list(input = "Fylke",
              output="fylke", use="cat", label_column="navn"))
 
-We can read rasters into a R object, the cat parameter indicates which
-raster values to be returned as factors
+GRASS raster map can be read as an R object by ``readRAST()``
+function. The `cat` parameter indicates which raster values to be
+returned as factors.
 
 .. code-block:: R
 
@@ -80,21 +87,23 @@ raster values to be returned as factors
      (Other)               : 187401   Max.   : 16.1    
      NA's                  :3276317   NA's   :2450449  
 
-It is possible to plot a boxplot of Norwegian regions with the 2017 annual
-mean values of MODIS LST
+In example below a boxplot of Norwegian regions with the 2017 annual
+mean values of MODIS LST is ploted, see :numref:`boxplot-fig`.
 
 .. code-block:: R
 
    boxplot(ncdata$modis_avg ~ ncdata$fylke, medlwd = 1)
 
+.. _boxplot-fig:
+
 .. figure:: ../images/units/29/boxplot.png 
    :class: large
 
 
-A common use case in ecological analysis is to extract raster values at 
-vector points, e.g. to put sampling locations into spatial context. Using GRASS 
-you can read raster values at point locations directly into R for 
-further analysis (e.g. regression) or plotting.
+A common use case in ecological analysis is to extract raster values
+at vector points, e.g. to put sampling locations into spatial
+context. Using GRASS GIS you can read raster values at point locations
+directly into R for further analysis (e.g. regression) or plotting.
 
 
 .. code-block:: R
@@ -138,7 +147,6 @@ More information and examples can be found at
   * the `GRASS/rgrass7 wiki <https://grasswiki.osgeo.org/wiki/R_statistics/rgrass7>`__ page and
   * the `rgrass7 package documentation <https://cran.r-project.org/web/packages/rgrass7/index.html>`__
 
-
 R vs. Python
 ============
 
@@ -170,51 +178,57 @@ involved as the following example illustrates:
        iN = i[0]' > loop.py
 
 
+Run the R script while tracing memory usage
+
 .. code-block:: bash
 
-   # Run the R script while tracing memory usage
    ./memusg Rscript loop.r
 
 ::
 
-   memusg: peak=436312\\
+   memusg: peak=436312
+
+Run the Python script while tracing memory usage
 
 .. code-block:: bash
 
-   # Run the Python script while tracing memory usage
+
    ./memusg python loop.py
 
 ::
 
-   memusg: peak=5528\\
+   memusg: peak=5528
+
+Run the Python script and measure execution time
 
 .. code-block:: bash
 
-   # Run the Python script and measure execution time
+
    time python loop.py
 
 ::
 
-   real    0m4.516s\\
-   user    0m4.506s\\
-   sys     0m0.004s\\
+   real    0m4.516s
+   user    0m4.506s
+   sys     0m0.004s
 
+Run the R script and measure execution time
+   
 .. code-block:: bash
 
-   # Run the R script and measure execution time
    time Rscript loop.r
 
 ::
 
-   real    0m36.733s\\
-   user    0m36.084s\\
-   sys     0m0.273s\\
+   real    0m36.733s
+   user    0m36.084s
+   sys     0m0.273s
 
 
 As you can see, in the case above, R uses ~80 times more memory and takes 
 ~9 times longer to complete the loop-test above.
 
-For people comng from ''R'' the ''Python'' library ''pandas'' is worth 
+For people coming from ''R'' the ''Python'' library ''pandas'' is worth 
 exploring. It provides data organisation and methods very similar data 
 frames in ''R''. 
 
@@ -225,7 +239,7 @@ or a more general Python cheat sheet from
 
 A nice comparison between R and functions/data management offered by 
 pandas library can be found 
-`here <http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html>`__
+`here <http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html>`__.
 
 For getting a basic, hands-on introduction to Python 
 `Codeacademy <https://www.codecademy.com/catalog/language/python>`__ 
