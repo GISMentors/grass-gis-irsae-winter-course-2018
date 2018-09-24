@@ -18,114 +18,158 @@ text file too.
 
 .. code-block:: bash
 
-   r.regression.line mapx=dem mapy=modis_avg
+   r.regression.line mapx=dtm mapy=modis_avg
    
 ::
 
    y = a + b*x
-   a (Offset): 4.147879
-   b (Gain): -0.003448
-   R (sumXY - sumX*sumY/N): -0.700142
-   N (Number of elements): 6400
-   F (F-test significance): 6151.998513
-   meanX (Mean of map1): 374.619179
-   sdX (Standard deviation of map1): 31.784166
-   meanY (Mean of map2): 2.856299
-   sdY (Standard deviation of map2): 0.156515
+   a (Offset): 6.534392
+   b (Gain): -0.009867
+   R (sumXY - sumX*sumY/N): -0.862133
+   N (Number of elements): 718021
+   F (F-test significance): 2078811.252064
+   meanX (Mean of map1): 269.004369
+   sdX (Standard deviation of map1): 129.487450
+   meanY (Mean of map2): 3.880192
+   sdY (Standard deviation of map2): 1.481930
+
+It is possible to apply the model variable with the predictor
+
+.. code-block:: bash
+
+   r.mapcalc expression="temp_linear = 6.534392 + -0.0096867 * dtm"
+
+.. figure:: ../images/units/27/estimates_linear.png
+
+   The output of model
+
+.. tip::
+
+   For linux user it is possible to use :program:`eval` command to get the 
+   output of many GRASS GIS modules as environmental variable use :param:`-g`
+   flag. Let's see the previous example
+   
+   .. code-block:: bash
+   
+      r.regression.line -g mapx=dtm mapy=modis_avg
+      r.mapcalc expression="temp_linear = $a + $b * dtm"
 
 
 :grasscmd:`r.regression.multi` instead calculates a multiple linear regression
 from raster maps, according to the formula `Y = b0 + sum(bi*Xi) + E` it return
 two maps, one for residuals and one for estimates plus all the regression coefficients
 
+Create a map with maximum NDVI value from the previous time series
+
 .. code-block:: bash
 
-   r.regression.multi mapx=dem,ndvi mapy=modis_avg residuals=resi estimates=esti -g --o
+   g.region res=10 -ap
+   t.rast.series input=ndvi_cloud method=maximum output=ndvi_max
+
+And now use the maximum NDVI map as one of the input coefficients. 
+
+.. code-block:: bash
+
+   r.regression.multi mapx=dtm,ndvi_max mapy=modis_avg residuals=resi estimates=esti -g --o
 
 ::
 
-	First pass...
-	 100%
-	Second pass...
-	 100%
-	n=6400
-	Rsq=0.579076
-	Rsqadj=0.578944
-	RMSE=0.101545
-	MAE=0.082123
-	F=4400.255533
-	b0=3.866596
-	AIC=-29270.856577
-	AICc=-29270.856577
-	BIC=-29250.564417
+   First pass...
+    100%
+   Second pass...
+	100%
+   n=4353047
+   Rsq=0.749059
+   Rsqadj=0.749059
+   RMSE=0.746155
+   MAE=0.593534
+   F=6496914.853654
+   b0=6.792572
+   AIC=-2549329.836898
+   AICc=-2549329.836898
+   BIC=-2549289.977738
 
-	predictor1=dem
-	b1=-0.002589
-	Rsq1=0.205923
-	F1=3129.521382
-	AIC1=-26724.053358
-	AICc1=-26724.053358
-	BIC1=-26719.289305
+   predictor1=dtm
+   b1=-0.009514
+   Rsq1=0.583921
+   F1=10129206.204638
+   AIC1=2683241.367502
+   AICc1=2683241.367502
+   BIC1=2683252.653888
 
-	predictor2=ndvi
-	b2=-0.186441
-	Rsq2=0.088877
-	F2=1350.704169
-	AIC2=-28046.825007
-	AICc2=-28046.825007
-	BIC2=-28042.060954
+   predictor2=ndvi_max
+   b2=-0.497951
+   Rsq2=0.006463
+   F2=112121.300410
+   AIC2=-2438630.088387
+   AICc2=-2438630.088387
+   BIC2=-2438618.802001
 
+.. figure:: ../images/units/27/estimates_multi.png
 
-   TODO: add example
+   The estimates output from :grasscmd:`r.regression.multi`
+
+.. tip::
+
+   It is possible to calculate differences between origina LST data and
+   the output of the models with :grasscmd:`r.mapcalc`.
 
 In the GRASS GIS add-ons it is possible to find other modules to run
 regression analysis, the two more used, and probably useful, are 
 :grasscmdaddons:`r.gwr` and :grasscmdaddons:`r.regression.series`.
 
 :grasscmdaddons:`r.gwr` calculates geographically weighted regression from
-raster maps
+raster maps, it resolves the formula `Y = b0 + sum(bi*Xi) + E`. The formula
+is applied in a moving and the cells closer to the center of the current
+moving windows get a higher weight. :grasscmdaddons:`r.gwr` is more an analytical 
+tool to test if the predictors are suitable for a global model in
+:grasscmd:`r.regression.multi`
 
 .. code-block:: bash
 
-   r.gwr mapx=dem,ndvi mapy=modis_avg residuals=resi_gwr estimates=esti_gwr -g
+   r.gwr mapx=dem,ndvi_max mapy=modis_avg residuals=resi_gwr estimates=esti_gwr -g
 
 ::
 
-	Calculating average...
-	 100%
-	Geographically weighted regression...
-	 100%
-	n=40000
-	Rsq=0.965712
-	Rsqadj=0.96571
-	F=563248
-	bmean0=3.37404
-	bstddev0=3.68787
-	bmin0=-8.16749
-	bmax0=397.246
-	AIC=-283280
-	AICc=-283280
-	BIC=-283255
-	predictor1=dem
-	bmean1=-0.0013368
-	bstddev1=0.00958859
-	bmin1=-1.03849
-	bmax1=0.03125
-	Rsq1=0.000537803
-	F1=627.343
-	AIC1=-282660
-	AICc1=-282660
-	BIC1=-282653
-	predictor2=ndvi
-	bmean2=-0.0172043
-	bstddev2=0.152853
-	bmin2=-4.64422
-	bmax2=4.50812
-	Rsq2=5.02627e-05
-	F2=58.6311
-	AIC2=-283224
-	AICc2=-283224
-	BIC2=-283217
+   Calculating average...
+	100%
+   Geographically weighted regression...
+    100%
+   n=4321368
+   Rsq=0.997701
+   Rsqadj=0.997701
+   F=9.37847e+08
+   bmean0=-4.35557
+   bstddev0=2863.45
+   bmin0=-3.58167e+06
+   bmax0=495224
+   AIC=-2.27972e+07
+   AICc=-2.27972e+07
+   BIC=-2.27972e+07
+   predictor1=dtm
+   bmean1=0.0330626
+   bstddev1=12.7136
+   bmin1=-2005.55
+   bmax1=14986.4
+   Rsq1=4.38811e-05
+   F1=82497.2
+   AIC1=-2.27155e+07
+   AICc1=-2.27155e+07
+   BIC1=-2.27155e+07
+   predictor2=ndvi_max
+   bmean2=-0.0112723
+   bstddev2=0.773451
+   bmin2=-123.338
+   bmax2=43.0038
+   Rsq2=1.02995e-05
+   F2=19363.3
+   AIC2=-2.27779e+07
+   AICc2=-2.27779e+07
+   BIC2=-2.27779e+07
+
+.. figure:: ../images/units/27/estimates_gwr.png
+
+   The estimates output from :grasscmdaddons:`r.gwr`
 
 
 :grasscmdaddons:`r.regression.series` calculates linear regression parameters
@@ -141,6 +185,63 @@ Following methods are available:
 * f: F statistic
 * t: T statistic 
 
+Before to run :grasscmdaddons:`r.regression.series`, it is needed to prepare
+the two serie of data to use, one dataset is the `ndvi_cloud` time series
+
+.. code-block:: bash
+
+   t.rast.list ndvi_cloud
+   
+::
+
+   name|mapset|start_time|end_time
+   ndvi_cloud_1|PERMANENT|2017-05-06 10:50:31|2017-05-06 10:50:32
+   ndvi_cloud_2|PERMANENT|2017-05-23 10:40:31|2017-05-23 10:40:32
+   ndvi_cloud_3|PERMANENT|2017-05-26 10:50:31|2017-05-26 10:50:32
+   ndvi_cloud_4|PERMANENT|2017-07-05 10:50:31|2017-07-05 10:50:32
+
+The second time serie is the LST one, since there are 4 MODIS data for each
+eight days, it is better to calculate the mean value for each eight days.
+To do this it is possible to use the following script
+
+.. literalinclude:: ../_static/scripts/lst_average.py
+   :language: python
+   :linenos:
+
 .. code-block:: bash
                 
-   TODO
+   python grass-gis-irsae-winter-course-2018/_static/scripts/lst_average.py \
+   input=modis_c output=modis_c_days basename=modis_days
+
+At this point we can select the four maps closer to the NDVI maps
+
+.. code-block:: bash
+
+   t.rast.list modis_c_days where="start_time >= '2017-05-01 00:00:00' and end_time <= '2017-07-20 00:00:00'"
+
+::
+
+   name|mapset|start_time|end_time
+   modis_days_16|PERMANENT|2017-05-01 00:00:00|2017-05-09 00:00:00
+   modis_days_17|PERMANENT|2017-05-09 00:00:00|2017-05-17 00:00:00
+   modis_days_18|PERMANENT|2017-05-17 00:00:00|2017-05-25 00:00:00
+   modis_days_19|PERMANENT|2017-05-25 00:00:00|2017-06-02 00:00:00
+   modis_days_20|PERMANENT|2017-06-02 00:00:00|2017-06-10 00:00:00
+   modis_days_21|PERMANENT|2017-06-10 00:00:00|2017-06-18 00:00:00
+   modis_days_22|PERMANENT|2017-06-18 00:00:00|2017-06-26 00:00:00
+   modis_days_23|PERMANENT|2017-06-26 00:00:00|2017-07-04 00:00:00
+   modis_days_24|PERMANENT|2017-07-04 00:00:00|2017-07-12 00:00:00
+   modis_days_25|PERMANENT|2017-07-12 00:00:00|2017-07-20 00:00:00
+
+Finally it is possible to run :grasscmdaddons:`r.regression.series` using
+several methods and getting several outputs
+
+.. code-block:: bash
+
+   r.regression.series xseries=ndvi_cloud_1,ndvi_cloud_2,ndvi_cloud_3,ndvi_cloud_4 \
+   yseries=modis_days_16,modis_days_18,modis_days_19,modis_days_24 \
+    method=offset,slope,rsq output=temp_offset,temp_slope,temp_rsq
+
+.. figure:: ../images/units/27/series.png
+
+   The output rsq value
