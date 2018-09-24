@@ -215,8 +215,6 @@ Units
    units/28
    units/29
 
-* Unit 27 - Regression analysis
-
 ..
    .. toctree::
    :maxdepth: 2
