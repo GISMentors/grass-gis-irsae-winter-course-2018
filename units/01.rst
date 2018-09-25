@@ -95,3 +95,16 @@ Choose 64bit version if you don't care.
    <https://qgis.org/en/site/forusers/download.html>`__. So if QGIS is
    already installed on your machine, you don't have to install GRASS
    GIS separately.
+
+Useful links
+-------------
+
+* `GRASS GIS homepage <https://grass.osgeo.org>`__
+* `GRASS GIS wiki <https://grasswiki.osgeo.org>`__: a lot information, with examples
+  and tutorials
+* `GRASS user mailing list <http://lists.osgeo.org/mailman/listinfo/grass-user>`__:
+  the simpler and most used way to ask support
+* `GRASS on stackexchange <https://gis.stackexchange.com/questions/tagged/grass>`__:
+  another way to ask support
+* `GRASS GIS tutorials <https://grass.osgeo.org/documentation/tutorials/>`__:
+  an incomplete list of tutorials related to GRASS GIS 
