@@ -138,15 +138,20 @@ model from the elevation map, and finally correct the bands. Pay attention that
 we need to convert the maps. To convert all the maps is possible to run a
 `for loop` in Bash with the following code
 
-.. code-block:: bash
+.. code-block:: python
 
+   from subprocess import PIPE
+   from grass.pygrass.modules import Module
+   # get list of sentinel band
+   glist = Module("g.list", type="raster", patt="T32VNM_20180523T104019_B*_cor",
+                  separator="comma", stdout_=PIPE)
+   rasterlist = glist.outputs.stdout.split(',')
    # make a for loop for each Sentinel band
-   for m in `g.list type=raster patt=T32VNM_20180523T104019_B*_cor`; do 
+   for m in rasterlist 
        # set the right region 
-       g.region raster=$m
+       Module("g.region", raster=m)
        # convert the data
-       r.mapcalc expr="${m}_d=double(${m})"
-   done
+       Module("r.mapcalc", expression="{ma}_d=double({ma})".format(ma=m))
 
 .. code-block:: bash
 
