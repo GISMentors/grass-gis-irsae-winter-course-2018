@@ -111,7 +111,7 @@ by
                           
       Module("v.clean",
              ...
-             type = ["point","line","boundary","centroid","area","face","kernel",
+             type = ["point","line","boundary","centroid","area","face","kernel"],
              ...
 
 In the next step the script will be improved by printing NDVI value
