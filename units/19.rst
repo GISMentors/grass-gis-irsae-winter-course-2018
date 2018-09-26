@@ -172,10 +172,12 @@ code below can be used.
 .. figure:: ../images/units/19/mapswipe.png
    :class: large
 
-   In the left the original RGB data improved using :grasscmd:`i.color.enhance`,
-   in the right the RGB of topographic corrected bands
+   In the left the original RGB data enhanced by
+   :grasscmd:`i.color.enhance`, in the right the RGB of
+   topographically corrected bands.
 
 .. tip::
    
-   To visualize RGB images read the note at :ref:`Unit 03 <rgb_bands>`.
-   To create the previous RGB rast maps, :grasscmd:`r.composite` was used.
+   To visualize RGB images read the note at :ref:`Unit 03
+   <rgb_bands>`. To create RGB raster maps, :grasscmd:`r.composite`
+   can be used.
