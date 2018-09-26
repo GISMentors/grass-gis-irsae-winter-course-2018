@@ -144,6 +144,14 @@ where data should be saved.
 
       i.sentinel.import -p input=geodata/sentinel/2017 pattern="20170523T104031_B0(2|3|4|8)_10m"
 
+   or
+
+   .. code-block:: bash
+
+      i.sentinel.import -p \
+      input=geodata/sentinel/2017/S2A_MSIL2A_20170523T104031_N0205_R008_T32VNM_20170523T104025.SAFE \
+      pattern="B0(2|3|4|8)_10m"
+
    ::
 
       .../L2A_T32VNM_20170523T104031_B02_10m.jp2 1 (EPSG: 32632)
