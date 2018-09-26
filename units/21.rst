@@ -19,13 +19,13 @@ time series data:
 Spatio-temporal MODIS data
 --------------------------
 
-The first step to work with the spatio-temporal framework is to
-connect a space-time database by :grasscmd:`t.connect`. Default
-settings is forced by :param:`-d` flag.
+..
+  The first step to work with the spatio-temporal framework is to
+  connect a space-time database by :grasscmd:`t.connect`. Default
+  settings is forced by :param:`-d` flag.
+  .. code-block:: bash
 
-.. code-block:: bash
-
-   t.connect -d
+  t.connect -d
 
 A new space time raster datasets is created by :grasscmd:`t.create`.
 
