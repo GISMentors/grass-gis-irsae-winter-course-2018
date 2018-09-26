@@ -32,7 +32,7 @@ def main():
             dd = d + timedelta(seconds=1)
 
             vect = '{}_{}_MSK_CLOUDS'.format(items[1], items[2])
-            mask_vect = '{}_{}'.format(vect, options['map'])
+            mask_vect = '{}_{}'.format(vect, options['map'].split('@')[0])
             if Vector(vect).exist():
                 Module('v.overlay', ainput=options['map'], binput=vect, operator='not',
                        output=mask_vect)
