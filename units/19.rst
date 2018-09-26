@@ -88,7 +88,8 @@ The :param:`-a` flag is needed since we use AOD file, :param:`-t` is used
 to write a text file (:param:`text_file`) ready to be used as input for
 the next step, creating cloud mask by :grasscmd:`i.sentinel.mask`.
 
-Set the region based on `DTM_patched` and resolution 10 meter
+Set the region based on `DTM_patched` and resolution 10 meters (in the
+case of EU-DEM set 25 meters).
 
 .. code-block:: bash
 
