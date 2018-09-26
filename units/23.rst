@@ -151,7 +151,7 @@ parallel (:param:`nproc`).
 
 .. code-block:: bash
 
-   t.rast.mapcalc input=b4,b8 output=ndvi expression="ndvi = float(b8 - b4) / ( b8 + b4 )" \
+   t.rast.mapcalc input=b4,b8 output=ndvi expression="float(b8 - b4) / ( b8 + b4 )" \
    basename=ndvi nproc=3
 
 When computation is finished *ndvi* color table can be by
@@ -211,7 +211,7 @@ And apply modified expression for map algebra.
 .. code-block:: bash
 
    t.rast.mapcalc input=b4,b8,cloud output=ndvi_cloud \
-   expression="ndvi = if(isnull(cloud), null(), float(b8 - b4) / ( b8 + b4 ))" \
+   expression="if(isnull(cloud), null(), float(b8 - b4) / ( b8 + b4 ))" \
    basename=ndvi_cloud nproc=3
 
    t.rast.colors input=ndvi_cloud color=ndvi
