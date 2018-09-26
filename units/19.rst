@@ -78,7 +78,12 @@ Now we are ready to import the data with :grasscmd:`i.sentinel.preproc`.
    elevation=DTM_patch atmospheric_model=Automatic aerosol_model="Continental model" \
    aeronet_file=~/geodata/sentinel/2018/180501_180531_Birkenes.dubovik suffix=cor \ 
    text_file=~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt
-   
+
+.. note:: In our case DTM from :ref:`Unit 17 <dtm-patch-section>` or
+   EU-DEM from :doc:`15` can be used. In both cases the data needs to
+   be reprojected into *sentinel* mapset, see :ref:`How-to reproject data
+   <data-reproject-fig>` section for details.
+
 The :param:`-a` flag is needed since we use AOD file, :param:`-t` is used
 to write a text file (:param:`text_file`) ready to be used as input for
 the next step, creating cloud mask by :grasscmd:`i.sentinel.mask`.
