@@ -131,7 +131,7 @@ The :grasscmd:`r.sunmask` output is returning the sun angle above the horizont
 
    z = 90 - h
 
-In our example the zenith value is 39.99 
+In our example the zenith value is 39.99.
 
 .. figure:: ../images/units/19/i_topo_corr_angles.png
 
