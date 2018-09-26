@@ -51,7 +51,7 @@ products (both Aqua and Terra satellites).
 
    i.modis.download settings=modis.txt folder=geodata/modis/h18v02_03 \
    tiles=h18v02,h18v03 product=lst_aqua_eight_1000,lst_terra_eight_1000 \
-   startday=2017-01-01 endday=2017-12-31
+   startday=2017-01-01 endday=2018-01-01
 
 .. note:: Output folder (:file:`geodata/modis` in this case) must exists,
    otherwise the module will fail.
