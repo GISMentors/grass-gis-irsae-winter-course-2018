@@ -174,7 +174,9 @@ Imported Sentinel bands can be vizualized as a RGB composition. Select
 
    Add RGB map layer.
    
-The result appears really dark.
+The result appears really dark, see :numref:`rgb-dark-fig`.
+
+.. _rgb-dark-fig:
 
 .. figure:: ../images/units/18/rgb_dark.png
    :class: large
