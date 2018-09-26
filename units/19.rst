@@ -164,11 +164,11 @@ code below can be used.
 
 .. code-block:: bash
 
-   i.topo.corr -i base=DTM_patch zenith=39.99 azimuth=167.292191 output=dtm_illu
+   i.topo.corr -i basemap=DTM_patch zenith=39.99 azimuth=167.292191 output=dtm_illu
    
 .. code-block:: bash
 
-   i.topo.corr base=dtm_illu input=T32VNM_20180523T104019_B08_cor_d,\
+   i.topo.corr basemap=dtm_illu input=T32VNM_20180523T104019_B08_cor_d,\
    T32VNM_20180523T104019_B02_cor_d,T32VNM_20180523T104019_B03_cor_d,T32VNM_20180523T104019_B04_cor_d \
    output=tcor zenith=39.99 method=c-factor
 
