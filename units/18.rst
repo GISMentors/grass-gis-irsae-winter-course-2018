@@ -132,7 +132,7 @@ where data should be saved.
 .. note:: Pre-downloaded Sentinel scene is available in sample
    dataset:
    
-   :file:`geodata/sentinel/2017/S2A_MSIL2A_20170523T104031_N0205_R008_T32VNM_20170523T104025.zip`.
+   :file:`geodata/sentinel/2017/S2A_MSIL2A_20170523T104031_N0205_R008_T32VNM_20170523T104025.SAFE`.
    
 .. tip:: Before importing or linking try to print list of filtered
    raster files including projection match (second column 1 for match
