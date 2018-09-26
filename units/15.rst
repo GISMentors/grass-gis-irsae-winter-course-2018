@@ -116,4 +116,7 @@ below.
 		
    r.proj location=oslo-eu-dem mapset=PERMANENT input=dem method=bilinear resolution=25
 
-.. todo:: Create 3D view example screenshot
+.. figure:: ../images/units/15/dtm-3d.png
+   :class: middle
+           
+   DTM in 3D view.
