@@ -147,7 +147,7 @@ we need to convert the maps. To convert all the maps is possible to run a
                   separator="comma", stdout_=PIPE)
    rasterlist = glist.outputs.stdout.split(',')
    # make a for loop for each Sentinel band
-   for m in rasterlist 
+   for m in rasterlist:
        # set the right region 
        Module("g.region", raster=m)
        # convert the data
