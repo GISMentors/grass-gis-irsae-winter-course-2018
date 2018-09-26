@@ -161,7 +161,7 @@ flag.
 
 .. code-block:: bash
 
-   i.sentinel.import -l -c input=geodata/sentinel pattern="20170523T104031_B0(2|3|4|8)_10m"
+   i.sentinel.import -l -c input=geodata/sentinel/2017 pattern="20170523T104031_B0(2|3|4|8)_10m"
 
 RGB composition
 ---------------
