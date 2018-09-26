@@ -45,9 +45,9 @@ be installed.
 	<https://pip.pypa.io/en/stable/installing/>`__.
 
 First we are going to create a new mapset (:menuselection:`Settings
-
-*oslo-region* location created in :doc:`02` to store all the Sentinel
-data and start to work in it.
+--> GRASS working environment --> Create new mapset`) in *oslo-region*
+location from :doc:`02` to store all the Sentinel data and start to
+work in it.
 
 .. figure:: ../images/units/18/sentinel_mapset.png
 	:class: small
