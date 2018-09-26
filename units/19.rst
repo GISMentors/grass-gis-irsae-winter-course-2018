@@ -153,7 +153,7 @@ code below can be used.
    mapset.current()
 
    # make a for loop for each Sentinel band
-   for rast in mapset.glist("raster", pattern="T32VNM_20180523T104019_B*_cor")
+   for rast in mapset.glist("raster", pattern="T32VNM_20180523T104019_B*_cor"):
        # set compupational region region 
        Module("g.region", raster=rast)
        # convert the data
