@@ -113,7 +113,7 @@ position for a given date is computed by :grasscmd:`r.sunmask`.
 
 .. code-block:: bash
 
-   r.sunmask -gs dtm_oslo year=2018 month=5 day=23 hour=10 minute=40 timezone=0
+   r.sunmask -gs DTM_patch year=2018 month=5 day=23 hour=10 minute=40 timezone=0
    
 ::
 
