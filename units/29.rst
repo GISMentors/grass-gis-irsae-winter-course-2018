@@ -133,7 +133,7 @@ directly into R for further analysis (e.g. regression) or plotting.
    # Query time series at vector points, transfer result into R
    modis_c_studenterhytta <- execGRASS("t.rast.what", flags=c("n", "i", "overwrite"),
                                        strds="modis_c", nprocs=1,
-                                       coordinates='258121.68627886,6662114.92897065',
+                                       coordinates=c(592409.49, 6655332.75),
                                        separator=',', intern=TRUE)
  
    # Parse the result
