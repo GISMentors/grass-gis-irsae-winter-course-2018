@@ -114,7 +114,7 @@ directly into R for further analysis (e.g. regression) or plotting.
    execGRASS('g.region', vector='oslo', flags = 'p')
    
    execGRASS('v.in.pygbif', output='gbif_species', taxa='Rubus chamaemorus,Lotus corniculatus',
-             rank=species)
+             rank='species')
 
    # Extract average temperature from MODIS
    execGRASS('v.what.rast', map='gbif_species', raster='modis_avg@modis', column='modis_c_avg')
