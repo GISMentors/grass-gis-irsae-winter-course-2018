@@ -55,7 +55,7 @@ It is possible to apply the model variable with the predictor
    
    .. code-block:: bash
    
-      r.regression.line -g mapx=dtm mapy=modis_avg
+      eval `r.regression.line -g mapx=dtm mapy=modis_avg`
       r.mapcalc expression="temp_linear = $a + $b * dtm"
 
 r.regression.multi
