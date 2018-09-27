@@ -134,7 +134,7 @@ directly into R for further analysis (e.g. regression) or plotting.
    modis_c_studenterhytta <- execGRASS("t.rast.what", flags=c("n", "i", "overwrite"),
                                        strds="modis_c", nprocs=1,
                                        coordinates=c(592409.49, 6655332.75),
-                                       separator=',', intern=TRUE)
+                                       separator='comma', intern=TRUE)
  
    # Parse the result
    con <- textConnection(modis_c_studenterhytta)
