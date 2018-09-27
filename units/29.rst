@@ -121,7 +121,7 @@ directly into R for further analysis (e.g. regression) or plotting.
 			 
    # query raster maps at vector points, transfer result into R
    goutput <- execGRASS('v.db.select', map='gbif_species', columns='g_species,modis_c_avg',
-                        where='modis_c_avg IS NOT NULL', separator='comma')
+                        where='modis_c_avg IS NOT NULL', separator='comma', intern=TRUE)
  
    # Parse results
    con <- textConnection(goutput)
