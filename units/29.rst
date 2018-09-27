@@ -25,20 +25,21 @@ From R session install (including dependencies) and load the
 
    library(rgrass7)
 
-If GRASS GIS is started from R (or RStudio) session a ``initGRASS()``
-function must be called in order to define GRASS GIS environment
-settings.  First get the full path to GRASS GIS installation and run
-the ``initGRASS()`` function with specified parameters pointing to
-GRASS location and mapset to be used.
+.. note::
+   
+   If GRASS GIS is started from R (or RStudio) session a ``initGRASS()``
+   function must be called in order to define GRASS GIS environment
+   settings.  First get the full path to GRASS GIS installation and run
+   the ``initGRASS()`` function with specified parameters pointing to
+   GRASS location and mapset to be used.
 
+   .. code-block:: R
 
-.. code-block:: R
+      # Get GRASS library path
+      grasslib <- try(system('grass --config', intern=TRUE))[4]
 
-   # Get GRASS library path
-   grasslib <- try(system('grass --config', intern=TRUE))[4]
-
-   initGRASS(gisBase=grasslib, gisDbase='/home/user/grassdata/',
-             location='oslo-region', mapset='PERMANENT', override=TRUE)
+      initGRASS(gisBase=grasslib, gisDbase='/home/user/grassdata/',
+                location='oslo-region', mapset='PERMANENT', override=TRUE)
 
 At this point GRASS GIS modules are available inside R by
 ``execGRASS()`` function. In example below are listed available vector
@@ -49,6 +50,7 @@ maps from the current location and mapset using
 .. code-block:: R
 
    execGRASS("g.list", parameters = list(type = "vector"))
+   execGRASS("g.region", parameters = list(vector="Fylke", align="modis_avg@modis"))
    execGRASS("v.to.rast", parameters = list(input = "Fylke",
              output="fylke", use="cat", label_column="navn"))
 
@@ -58,7 +60,7 @@ returned as factors.
 
 .. code-block:: R
 
-   ncdata <- readRAST(c("fylke", "modis_avg"), cat=c(TRUE, FALSE))
+   ncdata <- readRAST(c("fylke", "modis_avg@modis"), cat=c(TRUE, FALSE))
    summary(ncdata)
 
 ::
@@ -115,7 +117,7 @@ directly into R for further analysis (e.g. regression) or plotting.
              rank=species)
 
    # Extract average temperature from MODIS
-   execGRASS('v.what.rast', map='gbif_species', raster='modis_avg', column='modis_c_avg')
+   execGRASS('v.what.rast', map='gbif_species', raster='modis_avg@modis', column='modis_c_avg')
 			 
    # query raster maps at vector points, transfer result into R
    goutput <- execGRASS('v.db.select', map='gbif_species', columns='g_species,modis_c_avg',
