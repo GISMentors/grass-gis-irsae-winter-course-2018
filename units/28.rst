@@ -60,10 +60,10 @@ used as input for :grasscmd:`i.maxlik`, to generate an unsupervised image classi
 
 .. code-block:: bash
 
-   i.cluster group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031
+   i.cluster group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031 \
    signaturefile=cluster classes=3 reportfile=geodata/class_cluster.txt
 
-   i.maxlik group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031
+   i.maxlik group=L2A_T32VNM_20170523T104031 subgroup=L2A_T32VNM_20170523T104031 \
    signaturefile=cluster output=L2A_T32VNM_20170523T104031_cluster
 
 .. figure:: ../images/units/28/cluster.png
