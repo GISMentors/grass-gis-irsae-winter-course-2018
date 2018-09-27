@@ -44,7 +44,7 @@ It is possible to apply the model variable with the predictor
 
 .. figure:: ../images/units/27/estimates_linear.png
 
-   Model example.
+   Model variable with predictor example.
 
 .. tip::
 
