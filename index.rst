@@ -26,10 +26,10 @@ projects and networking with the others.
 
 Topic of the course is **Advanced Geospatial Analysis with an emphasis
 on handling of Earth Observation and Time Series data** using Free and
-Open Source Software.  Based on a set of 29 course units (see below),
-final content for the 3 days event was tailored according to
-participants interest as well as prior knowledge and experience (it
-would take ~5 days to cover all course units).
+Open Source Software.  Based on a set of 29 course units (see
+:ref:`below <units>`), final content for the 3 days event was tailored
+according to participants interest as well as prior knowledge and
+experience (it would take ~5 days to cover all course units).
 
 The course is kindly supported by `IRSAE <http://www.irsae.no>`__. 
 
@@ -157,7 +157,9 @@ for details.
    archive
    <http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/osgeolive-12.0-vm-irsae.7z>`__
    (18.6GB, 27GB uncompressed).
-          
+
+.. _units:
+
 Units
 =====
 
