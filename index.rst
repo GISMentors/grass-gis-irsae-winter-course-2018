@@ -15,46 +15,25 @@
 Time, place, fee and registration
 =================================
 
-`IRSAE <http://www.irsae.no>`__ members `NINA <http://www.nina.no>`__ 
-and `FEM <https://www.fmach.it/>`__ offer a **3-days intense workshop on 
-GIS in Applied Ecology from 24.09.2018 to 27.09.2018** at the cosy 
-`Studenterhytta <http://www.studenterhytta.no>`__ in **Oslo**. 
-With full board provided and no other distraction than beautiful nature around, 
-participants can fully focus on learning new techniques, applying them to their ongoing 
+This **3-days intense workshop on GIS in Applied Ecology from
+24.09.2018 to 27.09.2018** at the cosy `Studenterhytta
+<http://www.studenterhytta.no>`__ in **Oslo** has been offered by
+`IRSAE <http://www.irsae.no>`__ members `NINA <http://www.nina.no>`__
+and `FEM <https://www.fmach.it/>`__. With full board provided and no
+other distraction than beautiful nature around, participants could
+fully focus on learning new techniques, applying them to their ongoing
 projects and networking with the others.
 
-Topic of the course will be **Advanced Geospatial Analysis with an emphasis on handling 
-of Earth Observation and Time Series data** using Free and Open Source Software.  
-Based on a set of 28 course units (see below), final content for the 3 days event will be 
-tailored according to participants interest as well as prior knowledge and experience 
-(it would take ~5 days to cover all course units).
+Topic of the course is **Advanced Geospatial Analysis with an emphasis
+on handling of Earth Observation and Time Series data** using Free and
+Open Source Software.  Based on a set of 29 course units (see below),
+final content for the 3 days event was tailored according to
+participants interest as well as prior knowledge and experience (it
+would take ~5 days to cover all course units).
 
-The course is kindly supported by `IRSAE <http://www.irsae.no>`__. Thus, IRSAE 
-students and staff will get a reduced course fee as well as **priority access 
-until 31.08.2018**. 
+The course is kindly supported by `IRSAE <http://www.irsae.no>`__. 
 
-
-Course fees - that cover full board (3 nights at Studenterhytta with lunch to lunch food) - are
-
-* 3900 NOK (~ 410 €) for participants from IRSAE institutions
-* 4900 NOK (~ 515 €) for participants from non-IRSAE institution.
-
-
-**Please register** `here <https://goo.gl/forms/yUyIEbUUoab4B04l1>`__.
-
-
-Participants are exected to bring their own device / laptop, so the course can have as 
-much as possible take home effect. An OSGeo-Live USB medium will be handed out with all 
-relevant software and sample data installed.
-
-IRSAE cannot give **ECTS** directly. Following earlier praxis in IRSAE courses, participants will be 
-provided with a certificate upon completion of the course, stating that the course is worth 1 ECTS 
-credit (as 1 ECTS should roughly correspond to 20 to 25 hours of student's time). It is then up to the 
-University where the students are affiliated to validate the credits (or not).
-
-For questions regarding registration and organisation please contact:
-`Stefan Blumentrath <https://www.nina.no/Kontakt/Ansatte/Ansattinformasjon.aspx?AnsattID=14230>`__
-
+See :doc:`gallery` for more photos.
 
 Free and Open Source Software (FOSS)
 ====================================
@@ -215,40 +194,6 @@ Units
    units/28
    units/29
 
-..
-   .. toctree::
-   :maxdepth: 2
-
-   units/01
-   units/02
-   units/03
-   units/04
-   units/05
-   units/06
-   units/07
-   units/08
-   units/09
-   units/10
-   units/11
-   units/12
-   units/13
-   units/14
-   units/15
-   units/16
-   units/17
-   units/18
-   units/19
-   units/20
-   units/21
-   units/22
-   units/23
-   units/24
-   units/25
-   units/26
-   units/27
-   units/28
-   units/29
-   
 Lecturers
 =========
 
@@ -259,6 +204,11 @@ Lecturers
 
 Materials proudly provided by `GISMentors
 <http://www.gismentors.eu>`__ training and mentoring group.
+
+.. toctree::
+   :maxdepth: 2
+
+   gallery
 
 License
 =======
