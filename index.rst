@@ -150,16 +150,15 @@ The simplest way how to follow this training. `VirtualBox
 <https://live.osgeo.org/en/quickstart/virtualization_quickstart.html>`__
 for details.
 
-..
-   A customized virtual machine (VM) based on `OSGeoLive
-   <http://live.osgeo.org>`__ is available at ... This VM contains all
-   software dependecies including sample dataset in :file:`geodata`
-   directory.
 
-   Download tailored virtual machine **including sample dataset** as `7z
-   archive
-   <http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/osgeolive-12.0-vm-irsae.7z>`__
-   (18.6GB, 27GB uncompressed).
+A customized virtual machine (VM) below is based on `OSGeoLive
+<http://live.osgeo.org>`__. This VM contains all software dependecies
+including sample dataset in :file:`geodata` directory.
+
+Download tailored virtual machine **including sample dataset** as `7z
+archive
+<http://geo102.fsv.cvut.cz/geoforall/grass-gis-irsae-winter-course-2018/osgeo-live-11.0-vm-irsae.7z>`__
+(10.2GB, 19GB uncompressed).
 
 .. _units:
 
