@@ -33,6 +33,9 @@ experience (it would take ~5 days to cover all course units).
 
 The course is kindly supported by `IRSAE <http://www.irsae.no>`__. 
 
+.. figure:: ./images/gallery/DSC_0040.JPG
+   :class: middle
+
 See :doc:`gallery` for more photos.
 
 Free and Open Source Software (FOSS)
