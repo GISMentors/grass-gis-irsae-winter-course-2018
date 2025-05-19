@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 03 - Data Management &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 04 - Modules, Region" href="04.html" />
+    <link rel="prev" title="Unit 02 - First steps" href="02.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="02.html" title="Unit 02 - First steps"
+             accesskey="P">previous</a> |
+          <a href="04.html" title="Unit 04 - Modules, Region"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-03-data-management">
+<h1>Unit 03 - Data Management<a class="headerlink" href="#unit-03-data-management" title="Permalink to this heading">¶</a></h1>
+<p>Data can be imported simply from toolbar by tools dedicated for
+<a class="reference external" href="https://en.wikipedia.org/wiki/GIS_file_formats#Raster">raster</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/GIS_file_formats#Vector">vector</a> GIS data formats <a class="reference internal" href="../_images/layer-import.png"><img alt="grass-layer-import" src="../_images/layer-import.png" style="width: 1.5em;" /></a>. Basic
+knowledge of commonly used <a class="reference external" href="https://en.wikipedia.org/wiki/GIS file formats">GIS file formats</a> is required.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>GRASS terminology differs from commonly used GIS
+packages. To avoid confusion let’s focus on the most
+important terms. Commonly used term “a layer” is called in
+GRASS “a map”. GRASS layer is subset of features with one
+“map”. So “GRASS raster map” can be treated as “a raster
+layer” in other GIS packages.</p>
+</div>
+<section id="import-gis-data">
+<h2>Import GIS data<a class="headerlink" href="#import-gis-data" title="Permalink to this heading">¶</a></h2>
+<section id="raster-data">
+<span id="import-raster-section"></span><h3>Raster data<a class="headerlink" href="#raster-data" title="Permalink to this heading">¶</a></h3>
+<p>Let’s start with data file used for creating our project location in
+<a class="reference internal" href="02.html"><span class="doc">Unit 02 - First steps</span></a>. <code class="file docutils literal notranslate"><span class="pre">L2A_T32VNM_20170705T105031_B04_10m.jp2</span></code> is a
+<a class="reference external" href="https://en.wikipedia.org/wiki/JPEG2000">JPEG2000</a> file, which is nowadays commonly used GIS
+<em>raster</em> format for imagery data.</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/import-raster-toolbar.png" src="../_images/import-raster-toolbar.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Import raster data from the main toolbar.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Dialog for importing raster data is also accessible from
+menu <span class="menuselection">File ‣ Import raster data ‣ Simplified
+raster import with reprojection</span> or from command line by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.import.html">r.import</a> module.</p>
+</div>
+<p>Import dialog allows importing single vector file (<span class="item">File</span>) or
+multiple files from directory (<span class="item">Directory</span>). In our case single
+file is planned to be imported, we keep default data source
+(<span class="item">File</span>).</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/import-raster-dialog.svg" src="../_images/import-raster-dialog.svg" /><figcaption>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">Dialog for importing raster file(s).</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If a spatial reference system (SRS) of raster file
+differs from GRASS location (<span class="item">Project match</span>) input raster
+data are automatically reprojected into SRS of current GRASS
+location. Note that GRASS simply does not support on the fly
+transformation from several reasons.</p>
+</div>
+<div class="admonition note" id="import-no-srs">
+<p class="admonition-title">Note</p>
+<p>In some cases SRS of imported file can be missing or
+invalid. GRASS reports this issue as <em>In case of no
+significant differences in the projection definitions, use
+the -o flag to ignore them and use current location
+definition.  Consider generating a new location from the
+input dataset using the ‘location’ parameter.</em></p>
+<p>GRASS allows importing such file by overriding project check
+(if you are really sure that SRS of input file is the same
+as GRASS location).</p>
+<figure class="align-center" id="id3">
+<img alt="../_images/override-projection-check.svg" src="../_images/override-projection-check.svg" /><figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Override projection check to force import.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div>
+<p>After successful operation imported data layer should be automatically
+displayed in Map Window.</p>
+<figure class="align-center" id="id4">
+<img alt="../_images/sentinel.png" class="large" src="../_images/sentinel.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">Imported Sentinel band displayed in Map Window.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note" id="rgb-bands">
+<p class="admonition-title">Note</p>
+<p>GRASS imports/links RGB image as separate bands. Color
+composition can be displayed using <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/d.rgb.html">d.rgb</a>. By
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.composite.html">r.composite</a> it is possible to create color composite as
+a new raster map.</p>
+</div>
+</section>
+<section id="vector-data">
+<span id="import-vector-section"></span><h3>Vector data<a class="headerlink" href="#vector-data" title="Permalink to this heading">¶</a></h3>
+<p>Norway administrative regions are stored in
+<code class="file docutils literal notranslate"><span class="pre">~/geodata/counties/Basisdata_0000_Norge_25833_Fylker_GML.gml</span></code>
+<a class="reference external" href="https://en.wikipedia.org/wiki/GML">GML</a> file, which is a commonly used GIS exchange <em>vector</em>
+format.</p>
+<figure class="align-center" id="id5">
+<img alt="../_images/import-vector-toolbar.png" src="../_images/import-vector-toolbar.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Import vector data from the main toolbar.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Dialog for importing vector data is also accessible from
+menu <span class="menuselection">File ‣ Import vector data ‣ Simplified
+vector import with reprojection</span> or from command line by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.import.html">v.import</a> module.</p>
+</div>
+<figure class="align-center" id="id6">
+<span id="import-vector"></span><img alt="../_images/import-vector-dialog.svg" src="../_images/import-vector-dialog.svg" /><figcaption>
+<p><span class="caption-number">Fig. 16 </span><span class="caption-text">Dialog for importing vector file(s). Input file
+<code class="file docutils literal notranslate"><span class="pre">Basisdata_0000_Norge_25833_Fylker_GML.gml</span></code> contains several
+layers, we choose “Fylke” (administrative regions) to import.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In this case appearently SRS of input data layer and current GRASS
+location differs (see <span class="item">Project match: No</span> on
+<a class="reference internal" href="#import-vector"><span class="std std-numref">Fig. 16</span></a>), reprojection of input data will be
+requested.</p>
+<figure class="align-center" id="id7">
+<img alt="../_images/import-vector-reproject.png" class="small" src="../_images/import-vector-reproject.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Reprojection needs to be confirmed by a user by <span class="item">Import &amp;
+reproject</span>.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>After successful operation imported data layer should be automatically
+displayed in map window.</p>
+<figure class="align-center" id="id8">
+<img alt="../_images/fylke.png" class="large" src="../_images/fylke.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Imported Norway administrative regions.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="vector-topology">
+<span id="vector-topo-section"></span><h3>Vector topology<a class="headerlink" href="#vector-topology" title="Permalink to this heading">¶</a></h3>
+<p>Let’s take a closer look at vector metadata of imported administrative
+regions. Instead of “polygons” there are “areas” and other kind of
+primitites (points, lines, boundaries, centroids, isles), see
+<a class="reference internal" href="#vector-metadata"><span class="std std-numref">Fig. 19</span></a>.</p>
+<figure class="align-center" id="id9">
+<span id="vector-metadata"></span><img alt="../_images/vector-metadata-features.png" src="../_images/vector-metadata-features.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Vector metadata of imported file.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>GRASS GIS is a <strong>topological GIS</strong>. Importing vector data into GRASS also
+means converting features from simple feature model (points,
+linestrings, polygons, …) into GRASS topological model.</p>
+<figure class="align-center" id="id10">
+<img alt="../_images/grass7-topo.png" class="middle" src="../_images/grass7-topo.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">GRASS topological model with primitives (nodes, lines,
+boundaries, centroids, areas, and isles).</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Topological errors are checked and repaired by GRASS GIS when
+importing data, be awere of <span class="param">snap</span> option of
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.import.html">v.import</a> module. Topological errors which is not possible
+repair automatically without user specification can fixed using
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.clean.html">v.clean</a> module.</p>
+</section>
+</section>
+<section id="work-organization">
+<span id="work-organization-section"></span><h2>Work organization<a class="headerlink" href="#work-organization" title="Permalink to this heading">¶</a></h2>
+<p>GRASS GIS allows organizing work within one project (GRASS location) by
+creating different <strong>mapsets</strong>, see <a class="reference internal" href="02.html#location-mapset-section"><span class="std std-ref">Unit 02</span></a>. In the next units various analysis will be
+performed in “Oslo” region. Let’s create a new mapset called “oslo”
+for upcoming work.</p>
+<section id="create-a-new-mapset">
+<h3>Create a new mapset<a class="headerlink" href="#create-a-new-mapset" title="Permalink to this heading">¶</a></h3>
+<p>A new mapset can be created by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.mapset.html">g.mapset</a> or from menu
+<span class="menuselection">Settings ‣ GRASS working environment ‣ Create new
+mapset</span>.</p>
+<figure class="align-center" id="id11">
+<img alt="../_images/create-mapset.png" class="small" src="../_images/create-mapset.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Create a new mapset.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A new mapset can be created from command line by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.mapset.html">g.mapset</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g.mapset<span class="w"> </span>-c<span class="w"> </span><span class="nv">mapset</span><span class="o">=</span>oslo
+</pre></div>
+</div>
+</div>
+</section>
+<section id="switch-to-existing-mapset">
+<h3>Switch to existing mapset<a class="headerlink" href="#switch-to-existing-mapset" title="Permalink to this heading">¶</a></h3>
+<p>Current mapset can be changed from menu <span class="menuselection">Settings ‣
+GRASS working environment ‣ Change mapset</span> or from command line by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.mapset.html">g.mapset</a>.</p>
+</section>
+</section>
+<section id="querying-data">
+<h2>Querying data<a class="headerlink" href="#querying-data" title="Permalink to this heading">¶</a></h2>
+<p>Imported raster or vector data layers can be iteractively queried by
+<a class="reference internal" href="../_images/info.png"><img alt="grass-info" src="../_images/info.png" style="width: 1.5em;" /></a> from Map Window toolbar.</p>
+<figure class="align-center" id="id12">
+<img alt="../_images/query-map-window.png" src="../_images/query-map-window.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 22 </span><span class="caption-text">Query interactively Norway administrative regions.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Vector data layers (GRASS vector maps) can be queried also by
+attribute filters using Attribute Table Manager <a class="reference internal" href="../_images/table.png"><img alt="grass-table" src="../_images/table.png" style="width: 1.5em;" /></a>.</p>
+<figure class="align-center" id="id13">
+<img alt="../_images/show-attrb-data-menu.png" src="../_images/show-attrb-data-menu.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 23 </span><span class="caption-text">Open Attribute Table Manager from layer menu.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Vector features can be queried by simple SQL queries by WHERE
+statement.</p>
+<figure class="align-center" id="id14">
+<img alt="../_images/simple-query.png" src="../_images/simple-query.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 24 </span><span class="caption-text">Simple attribute querying.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>GRASS offers also interactive tool for attribute querying
+similarly to other GIS packages. The tool accessible from
+<span class="item">Builder</span> tab as <span class="item">SQL Builder</span>.</p>
+<figure class="align-center" id="id15">
+<img alt="../_images/advanced-query.svg" src="../_images/advanced-query.svg" /><figcaption>
+<p><span class="caption-number">Fig. 25 </span><span class="caption-text">Open SQL Builder.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id16">
+<img alt="../_images/sql-builder.png" class="small" src="../_images/sql-builder.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 26 </span><span class="caption-text">SQL Builder in action.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div>
+<p>Selected vector objects (commonly refered as “features” in GIS
+terminology) can be saved into new layer (GRASS vector map) from menu
+by <span class="menuselection">Extract selected features</span>.</p>
+<figure class="align-center" id="id17">
+<img alt="../_images/extract-menu.png" class="large" src="../_images/extract-menu.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 27 </span><span class="caption-text">Extract selected features into a new vector map.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Created vector map is automatically added into Layer Tree. Switch
+visibility of map layers by checkboxes and zoom to currently selected
+map (<span class="map">oslo</span>) by <a class="reference internal" href="../_images/zoom-extent.png"><img alt="grass-zoom-extent" src="../_images/zoom-extent.png" style="width: 1.5em;" /></a> as shown on <a class="reference internal" href="#oslo-region"><span class="std std-numref">Fig. 28</span></a>.</p>
+<figure class="align-center" id="id18">
+<span id="oslo-region"></span><img alt="../_images/oslo-region.svg" class="large" src="../_images/oslo-region.svg" /><figcaption>
+<p><span class="caption-number">Fig. 28 </span><span class="caption-text">Oslo region and Sentinel band displayed in Map Window.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Let’s change symbology of Oslo polygon vector map.</p>
+<figure class="align-center" id="id19">
+<img alt="../_images/layer-props.png" src="../_images/layer-props.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 29 </span><span class="caption-text">Open map layer properties from menu. Properties dialog can be open
+also simply by double-clicking on map layer item.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Feature outline and fill color can be changed in <span class="item">Colors</span> tab.</p>
+<figure class="align-center" id="id20">
+<img alt="../_images/d-vect.png" src="../_images/d-vect.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 30 </span><span class="caption-text">Change polygon outline color. Fill color set to transparent. Line
+width can be changed in <span class="item">Lines</span> tab.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id21">
+<img alt="../_images/oslo-sentinel.png" class="large" src="../_images/oslo-sentinel.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of vizualization of map layers composition.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 03 - Data Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#import-gis-data">Import GIS data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#work-organization">Work organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-data">Querying data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="02.html" title="Unit 02 - First steps"
+              >previous</a> |
+            <a href="04.html" title="Unit 04 - Modules, Region"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

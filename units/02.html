@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 02 - First steps &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 03 - Data Management" href="03.html" />
+    <link rel="prev" title="Unit 01 - About GRASS GIS" href="01.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="01.html" title="Unit 01 - About GRASS GIS"
+             accesskey="P">previous</a> |
+          <a href="03.html" title="Unit 03 - Data Management"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-02-first-steps">
+<h1>Unit 02 - First steps<a class="headerlink" href="#unit-02-first-steps" title="Permalink to this heading">¶</a></h1>
+<section id="startup">
+<h2>Startup<a class="headerlink" href="#startup" title="Permalink to this heading">¶</a></h2>
+<p>Starting a GRASS session requires basic knowledge about software
+itself. It is an obstacle especially for newcomers. In other words
+GRASS forces organizing your data from early beginning.</p>
+<p>Before entering GRASS a startup screen appears, the user must define
+working project in which GRASS session will operate. Without this step
+you cannot enter GRASS. Such approach is not so common. Applications
+like Esri ArcGIS or QGIS just starts. The user loads different data
+from various data sources in different projections, and starts working
+on his/her project. GRASS is different, which makes this software
+harder to enter for newcomers. <em>But don’t worry, we will enter our
+first GRASS sessions in few steps.</em></p>
+<p id="location-mapset-section">The GRASS GIS startup screen requires to set up three items:</p>
+<ol class="arabic simple">
+<li><p><strong>Database directory.</strong> A directory on local or network disc which
+contains all data accessed by GRASS. It’s usually directory called
+<code class="file docutils literal notranslate"><span class="pre">grassdata</span></code> located in a user’s home directory. <em>This item is
+set up on Windows automatically, so usually you don’t need to
+care about it.</em></p></li>
+<li><p><strong>Location</strong>. Plays a role of “a project”. All geodata stored
+within one location must have the same spatial coordinate system
+(GRASS doesn’t support on-the-fly projection from several reasons).</p></li>
+<li><p><strong>Mapset</strong> Contains task-related data within one project. Helps
+organizing data into logical groups or to separate parallel work of
+more users on the same project.</p></li>
+</ol>
+<figure class="align-center" id="id1">
+<span id="startup0"></span><img alt="../_images/startup-0.svg" src="../_images/startup-0.svg" /><figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">GRASS GIS startup screen.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>At first define database directory (<span class="fignote">1.</span>) if not already set
+up. Then a new location can be created (<span class="fignote">2a.</span>) or official
+GRASS sample location(s) downloaded (<span class="fignote">2b.</span>). We will create
+our own location, a project related to <em>Oslo region</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Download sample location functionality is available only in
+GRASS 7.4+.</p>
+</div>
+</section>
+<section id="create-a-new-location">
+<span id="create-location"></span><h2>Create a new location<a class="headerlink" href="#create-a-new-location" title="Permalink to this heading">¶</a></h2>
+<p>A new GRASS location can be easily created by EPSG code or available
+geodata. After pressing <span class="item">New</span> button, see <a class="reference internal" href="#startup0"><span class="std std-numref">Fig. 3</span></a>
+(<span class="fignote">2a.</span>), the Location Wizard shows up.</p>
+<p>In the first page of a wizard, a location name is defined, optionally
+also short description can be added.</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/create-location-0.png" src="../_images/create-location-0.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Define a name for new GRASS location.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Then a method for creating new location is chosen. Usually a location
+is created using given EPSG code (<em>Select EPSG code of spatial
+reference system</em>) or from existing data (<em>Read projection and datum
+terms from a georeferenced data file</em>). In our case a new location
+will be created based on sample Sentinel data (eg.
+<code class="file docutils literal notranslate"><span class="pre">L2A_T32VNM_20170705T105031_B04_10m.jp2</span></code> file located in
+<code class="file docutils literal notranslate"><span class="pre">sentinel/sample</span></code> directory of sample dataset).</p>
+<figure class="align-center" id="id3">
+<img alt="../_images/create-location-1.png" src="../_images/create-location-1.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Choose method for creating a new GRASS location.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In the next page define an input file.</p>
+<figure class="align-center" id="id4">
+<img alt="../_images/create-location-2.png" src="../_images/create-location-2.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Define an input file.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Spatial reference system of created location is chosen based on input
+file (here WGS84 / UTM zone 32N <a class="reference external" href="https://epsg.io/32632">EPSG:32632</a>).</p>
+<figure class="align-center" id="id5">
+<img alt="../_images/create-location-3.png" src="../_images/create-location-3.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Check the summary.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>After creating a new location (<span class="item">Finish</span> button) the user can
+optionally import input data. We will skip this operation at this
+moment since we are going to import input data later by more advanced
+GRASS importer.</p>
+<figure class="align-center" id="id6">
+<img alt="../_images/create-location-4.svg" class="small" src="../_images/create-location-4.svg" /><figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Skip importing input data.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Now we can <em>finally</em> start a GRASS session by entering our first GRASS
+location.</p>
+<figure class="align-center" id="id7">
+<img alt="../_images/startup-1.svg" src="../_images/startup-1.svg" /><figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Entering a GRASS session.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default GRASS creates in a new location a PERMANENT
+mapset. Let’s keep it simple at this moment and enter PERMANENT
+mapset. Later we will try organizing our work into more mapsets.</p>
+</div>
+</section>
+<section id="gui">
+<h2>GUI<a class="headerlink" href="#gui" title="Permalink to this heading">¶</a></h2>
+<p>GRASS GUI is designed as an <em>simple</em> user interface. Basically it is
+just a GUI front-end calling GRASS commands (see <a class="reference internal" href="04.html#grass-modules"><span class="std std-ref">Accessing GRASS modules</span></a>)
+in the background. After startup, the GUI appears. It consists of two
+main windows: <em>Layer Manager</em> and <em>Map Display</em>, see
+<a class="reference internal" href="#gui-windows"><span class="std std-numref">Fig. 10</span></a>.</p>
+<figure class="align-center" id="id8">
+<span id="gui-windows"></span><img alt="../_images/gui-windows.svg" class="large" src="../_images/gui-windows.svg" /><figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Main GUI components: Layer Manager and Map Display.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If GUI crashes, it can be started again by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.gui.html">g.gui</a>
+command from underlaying terminal (command prompt).</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 02 - First steps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#startup">Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-location">Create a new location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gui">GUI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="01.html" title="Unit 01 - About GRASS GIS"
+              >previous</a> |
+            <a href="03.html" title="Unit 03 - Data Management"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

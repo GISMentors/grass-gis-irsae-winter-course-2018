@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 08 - Modeler &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 09 - Model tuning" href="09.html" />
+    <link rel="prev" title="Unit 07 - QGIS loves GRASS" href="07.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="07.html" title="Unit 07 - QGIS loves GRASS"
+             accesskey="P">previous</a> |
+          <a href="09.html" title="Unit 09 - Model tuning"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-08-modeler">
+<h1>Unit 08 - Modeler<a class="headerlink" href="#unit-08-modeler" title="Permalink to this heading">¶</a></h1>
+<p><strong>Graphical Modeler</strong> allows creating, editing, and managing complex
+models in easy-to-use graphical user interface. Using Graphical
+Modeler a chain of processes (ie. GRASS modules) can be wrapped
+into one process (a model). A model can be executed repeatedly with
+slightly different inputs or parameters.</p>
+<p>Our first model will be based on <a class="reference internal" href="05.html"><span class="doc">Unit 05 - Simple computation</span></a>. Actually the model will
+perform two operations:</p>
+<ol class="arabic simple">
+<li><p>set mask based on vector cloud mask file (<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.mask.html">r.mask</a>) and</p></li>
+<li><p>compute NDVI (<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.vi.html">i.vi</a>)</p></li>
+</ol>
+<p>Graphical Modeler can be launched from menu <span class="menuselection">File ‣
+Graphical modeler</span> or by <a class="reference internal" href="../_images/modeler-main.png"><img alt="grass-modeler-main" src="../_images/modeler-main.png" style="width: 1.5em;" /></a> <sup>Graphical Modeler</sup>
+from main toolbar (or alternatively as <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.gui.gmodeler.html">g.gui.gmodeler</a>
+module from console).</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/gmodeler.png" src="../_images/gmodeler.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 59 </span><span class="caption-text">Graphical Modeler.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>GRASS modules can be added to the model from menu
+<span class="menuselection">Model ‣ Add command</span> or by <a class="reference internal" href="../_images/module-add.png"><img alt="grass-module-add" src="../_images/module-add.png" style="width: 1.5em;" /></a>
+<sup>Add command (GRASS module) to the model</sup> from main toolbar.</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/add-module.png" class="small" src="../_images/add-module.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 60 </span><span class="caption-text">Add commands (GRASS modules) to the model, in this case <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.mask.html">r.mask</a>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>After adding <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.mask.html">r.mask</a> module to the model let’s open its
+properties dialog by double-click and enter vector map to be used as a
+mask. Don’t forget to enable inverse mask by <span class="param">-i</span> flag.</p>
+<figure class="align-center" id="id3">
+<img alt="../_images/module-props.png" class="middle" src="../_images/module-props.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 61 </span><span class="caption-text">Define parameters for <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.mask.html">r.mask</a>, a vector map used for
+creating a mask.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In similar way will be added to the model the second command
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.vi.html">i.vi</a> (properties dialog for this command is open
+automatically because there are required options which must be set).</p>
+<figure class="align-center" id="id4">
+<img alt="../_images/model-v1.png" src="../_images/model-v1.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 62 </span><span class="caption-text">NDVI model version 1.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>It’s good idea to set metadata for the model and enable overwriting
+data produced by model (<span class="menuselection">Model ‣ Model properties</span>).</p>
+<figure class="align-center" id="id5">
+<img alt="../_images/model-v1-props.svg" class="small" src="../_images/model-v1-props.svg" /><figcaption>
+<p><span class="caption-number">Fig. 63 </span><span class="caption-text">Define model properties and enable overwriting data produced by
+model.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Such model can be run repeatedly using different computation
+regions.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Current computation region can be changed quickly by <em>Set
+computation region extent interactively</em> from <a class="reference internal" href="../_images/zoom-more.png"><img alt="grass-zoom-more" src="../_images/zoom-more.png" style="width: 1.5em;" /></a>
+<sup>Various zoom options</sup> in Map Display.</p>
+<figure class="align-center" id="id6">
+<img alt="../_images/model-v1-region.png" src="../_images/model-v1-region.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 64 </span><span class="caption-text">Change computation region before running the model.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Before changing the region it’s good idea to remove
+mask if exists from <span class="menuselection">Raster ‣ Mask</span> (by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.mask.html">r.mask</a> module).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.mask<span class="w"> </span>-r
+</pre></div>
+</div>
+</div>
+<p>Now let’s run our model by <a class="reference internal" href="../_images/execute.png"><img alt="grass-execute" src="../_images/execute.png" style="width: 1.5em;" /></a> <sup>Run model</sup>. Progress
+is printed into <span class="item">Command output</span>.</p>
+<figure class="align-center" id="id7">
+<img alt="../_images/model-v1-output.png" src="../_images/model-v1-output.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 65 </span><span class="caption-text">Model computation progress.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>After redrawing map display <a class="reference internal" href="../_images/layer-redraw.png"><img alt="grass-layer-redraw" src="../_images/layer-redraw.png" style="width: 1.5em;" /></a> <sup>Render map</sup> (assuming
+that we have already displayed raster map of NDVI in map display), we
+should see a difference.</p>
+<figure class="align-center" id="id8">
+<img alt="../_images/model-v1-display.png" class="middle" src="../_images/model-v1-display.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 66 </span><span class="caption-text">New NDVI raster map computed by the model.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Sample model to download: <a class="reference external" href="../_static/models/ndvi-v1.gxm">ndvi-v1.gxm</a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="07.html" title="Unit 07 - QGIS loves GRASS"
+              >previous</a> |
+            <a href="09.html" title="Unit 09 - Model tuning"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

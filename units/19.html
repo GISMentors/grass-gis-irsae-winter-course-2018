@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 19 - Sentinel preprocessing &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 20 - MODIS LST" href="20.html" />
+    <link rel="prev" title="Unit 18 - Sentinel downloader" href="18.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="18.html" title="Unit 18 - Sentinel downloader"
+             accesskey="P">previous</a> |
+          <a href="20.html" title="Unit 20 - MODIS LST"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-19-sentinel-preprocessing">
+<h1>Unit 19 - Sentinel preprocessing<a class="headerlink" href="#unit-19-sentinel-preprocessing" title="Permalink to this heading">¶</a></h1>
+<p>In this unit Sentinel-2 L1C (see Sentinel <a class="reference external" href="https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/product-types">Product Types</a>
+description) data will be preprocessed to be used in GRASS GIS.</p>
+<p>In the first step few Sentinal scenes will be downloaded similarly as
+shown in <a class="reference internal" href="18.html"><span class="doc">Unit 18 - Sentinel downloader</span></a>. In this case <span class="param">producttype=S2MSI2Ap</span> will be
+replaced by <span class="param">producttype=S2MSI1C</span>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.sentinel.download<span class="w"> </span>-l<span class="w"> </span><span class="nv">map</span><span class="o">=</span>oslo<span class="w"> </span><span class="nv">producttype</span><span class="o">=</span>S2MSI1C<span class="w"> </span><span class="nv">settings</span><span class="o">=</span>sentinel.txt<span class="w"> </span><span class="se">\</span>
+<span class="nv">start</span><span class="o">=</span><span class="m">2018</span>-04-01<span class="w"> </span><span class="nv">end</span><span class="o">=</span><span class="m">2018</span>-10-01<span class="w"> </span><span class="nv">area_relation</span><span class="o">=</span>Contains<span class="w"> </span><span class="nv">clouds</span><span class="o">=</span><span class="m">10</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ef0b12ac</span><span class="o">-</span><span class="mi">9</span><span class="n">c79</span><span class="o">-</span><span class="mi">46</span><span class="n">ec</span><span class="o">-</span><span class="mi">8223</span><span class="o">-</span><span class="mi">9655791943</span><span class="n">ea</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">18</span><span class="n">T10</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">21</span><span class="n">Z</span>  <span class="mi">0</span><span class="o">%</span> <span class="n">S2MSI1C</span>
+<span class="o">...</span>
+<span class="mi">97</span><span class="n">a5820c</span><span class="o">-</span><span class="n">c1c8</span><span class="o">-</span><span class="mi">4300</span><span class="o">-</span><span class="n">a076</span><span class="o">-</span><span class="mi">174</span><span class="n">c9e7694fa</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span><span class="n">T10</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">19</span><span class="n">Z</span>  <span class="mi">0</span><span class="o">%</span> <span class="n">S2MSI1C</span>
+<span class="o">...</span>
+<span class="n">d6ab2378</span><span class="o">-</span><span class="mf">84e8</span><span class="o">-</span><span class="mf">4e73</span><span class="o">-</span><span class="mi">8</span><span class="n">be9</span><span class="o">-</span><span class="mf">0e9833587</span><span class="n">a65</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">02</span><span class="n">T10</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">19</span><span class="n">Z</span>  <span class="mi">9</span><span class="o">%</span> <span class="n">S2MSI1C</span>
+</pre></div>
+</div>
+<p>Since we already have the Sentinel scene for 23rd May (<a class="reference internal" href="18.html"><span class="doc">Unit 18 - Sentinel downloader</span></a>) and
+5th July 2017 (<a class="reference internal" href="05.html"><span class="doc">Unit 05 - Simple computation</span></a>) the same dates of 2018 can be downloaded. A
+command to download specified scenes by UUID below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.sentinel.download<span class="w"> </span><span class="nv">settings</span><span class="o">=</span>sentinel.txt<span class="w"> </span><span class="nv">output</span><span class="o">=</span>geodata/sentinel/2018<span class="w"> </span><span class="se">\</span>
+<span class="nv">uuid</span><span class="o">=</span>97a5820c-c1c8-4300-a076-174c9e7694fa
+</pre></div>
+</div>
+<p>In the next step downloaded data are imported into GRASS GIS using
+another command provided by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.sentinel.html">i.sentinel</a> addons,
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.sentinel.preproc.html">i.sentinel.preproc</a>.  This module requires some inputs used
+to perform the atmospheric correction of Sentinel-2 images.</p>
+<p>As elevetion model DMT imported in <a class="reference internal" href="17.html#dmt-comparision"><span class="std std-ref">Unit 17</span></a>
+can be used. What we need to obtain yet is a visibility map or an
+Aerosol Optical Depth (AOD) value, the second one is possible to
+get from <a class="reference external" href="http://aeronet.gsfc.nasa.gov/cgi-bin/webtool_opera_v2_inv">http://aeronet.gsfc.nasa.gov</a>.</p>
+<p>First you have to select a station close to your Sentinel-2 scene
+area. In our case Birkenes, click on download, see
+<a class="reference internal" href="#aeronet-station-fig"><span class="std std-numref">Fig. 110</span></a>.</p>
+<figure class="align-center" id="id1">
+<span id="aeronet-station-fig"></span><img alt="../_images/aeronet_station.png" src="../_images/aeronet_station.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 110 </span><span class="caption-text">Download Aeronet station data.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Now tick the box near the bottom labelled as ‘Combined file (all
+products without phase functions)’.</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/aeronet_download.png" src="../_images/aeronet_download.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 111 </span><span class="caption-text">Combined file requested.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Last step is to accept the license (<a class="reference external" href="https://en.wikipedia.org/wiki/Public domain">Public domain</a> data).</p>
+<p>Once we have downloaded Sentinel and AOD data we need to decompress
+them (it is possible to find already the AOD file in <code class="file docutils literal notranslate"><span class="pre">~/geodata/sentinel/2018/</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/geodata/sentinel/2018/
+unzip<span class="w"> </span>S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.zip
+</pre></div>
+</div>
+<p>Now we are ready to import the data with <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.sentinel.preproc.html">i.sentinel.preproc</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.sentinel.preproc<span class="w"> </span>-a<span class="w"> </span>-t<span class="w"> </span><span class="se">\</span>
+<span class="nv">input_dir</span><span class="o">=</span>~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE<span class="w"> </span><span class="se">\</span>
+<span class="nv">elevation</span><span class="o">=</span>DTM_patch<span class="w"> </span><span class="nv">atmospheric_model</span><span class="o">=</span>Automatic<span class="w"> </span><span class="nv">aerosol_model</span><span class="o">=</span><span class="s2">&quot;Continental model&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">aeronet_file</span><span class="o">=</span>~/geodata/sentinel/2018/180501_180531_Birkenes.dubovik<span class="w"> </span><span class="nv">suffix</span><span class="o">=</span>cor<span class="w"> </span><span class="se">\</span>
+<span class="nv">text_file</span><span class="o">=</span>~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In our case DTM from <a class="reference internal" href="17.html#dtm-patch-section"><span class="std std-ref">Unit 17</span></a> or
+EU-DEM from <a class="reference internal" href="15.html"><span class="doc">Unit 15 - DMT reprojection</span></a> can be used. In both cases the data needs to
+be reprojected into <em>sentinel</em> mapset, see <a class="reference internal" href="15.html#data-reproject-fig"><span class="std std-ref">How-to reproject data</span></a> section for details.</p>
+</div>
+<p>The <span class="param">-a</span> flag is needed since we use AOD file, <span class="param">-t</span> is used
+to write a text file (<span class="param">text_file</span>) ready to be used as input for
+the next step, creating cloud mask by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.sentinel.mask.html">i.sentinel.mask</a>.</p>
+<p>Set the region based on <cite>DTM_patched</cite> and resolution 10 meters (in the
+case of EU-DEM set 25 meters).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g.region<span class="w"> </span><span class="nv">raster</span><span class="o">=</span>DTM_patch<span class="w"> </span><span class="nv">res</span><span class="o">=</span><span class="m">10</span><span class="w"> </span>-ap
+</pre></div>
+</div>
+<p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.sentinel.mask.html">i.sentinel.mask</a> creates clouds and cloud shadows masks for
+Sentinel-2 images, the algorithm has been developed starting from
+rules found in literature (Parmes et. al 2017) and conveniently
+refined.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.sentinel.mask<span class="w"> </span>-r<span class="w"> </span><span class="nv">cloud_mask</span><span class="o">=</span>T32VNM_20180523T104019_cloud<span class="w"> </span><span class="nv">shadow_mask</span><span class="o">=</span>T32VNM_20180523T104019_shadow<span class="w"> </span><span class="se">\</span>
+<span class="nv">cloud_threshold</span><span class="o">=</span><span class="m">25000</span><span class="w"> </span><span class="nv">shadow_threshold</span><span class="o">=</span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">input_file</span><span class="o">=</span>~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/mask.txt<span class="w"> </span><span class="se">\</span>
+<span class="nv">mtd_file</span><span class="o">=</span>~/geodata/sentinel/S2B_MSIL1C_20180523T104019_N0206_R008_T32VNM_20180523T142657.SAFE/MTD_MSIL1C.xml
+</pre></div>
+</div>
+<p>In the last step topographic correction of reflectance must be
+performed in order to use Sentinel data for analysis. Required sun
+position for a given date is computed by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.sunmask.html">r.sunmask</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.sunmask<span class="w"> </span>-gs<span class="w"> </span>DTM_patch<span class="w"> </span><span class="nv">year</span><span class="o">=</span><span class="m">2018</span><span class="w"> </span><span class="nv">month</span><span class="o">=</span><span class="m">5</span><span class="w"> </span><span class="nv">day</span><span class="o">=</span><span class="m">23</span><span class="w"> </span><span class="nv">hour</span><span class="o">=</span><span class="m">10</span><span class="w"> </span><span class="nv">minute</span><span class="o">=</span><span class="m">40</span><span class="w"> </span><span class="nv">timezone</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Using</span> <span class="nb">map</span> <span class="n">center</span> <span class="n">coordinates</span><span class="p">:</span> <span class="mf">250000.000000</span> <span class="mf">6675000.000000</span>
+<span class="o">...</span>
+<span class="n">sunazimuth</span><span class="o">=</span><span class="mf">167.292191</span>
+<span class="n">sunangleabovehorizon</span><span class="o">=</span><span class="mf">50.010803</span>
+<span class="n">sunrise</span><span class="o">=</span><span class="mi">02</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">19</span>
+<span class="n">sunset</span><span class="o">=</span><span class="mi">19</span><span class="p">:</span><span class="mi">58</span><span class="p">:</span><span class="mi">34</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.sunmask.html">r.sunmask</a> output is returning the sun angle above the horizont
+(h), instead we need the zenith (z). So we need to do a simple substraction</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>z = 90 - h
+</pre></div>
+</div>
+<p>In our example the zenith value is 39.99.</p>
+<figure class="align-center" id="id3">
+<img alt="../_images/i_topo_corr_angles.png" src="../_images/i_topo_corr_angles.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 112 </span><span class="caption-text">Figure showing terrain and solar angles.
+Derived from Neteler &amp; Mitasova, 2008.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Now we have to run <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.topo.corr.html">i.topo.corr</a> to calculate an
+illumination model from the elevation map, and finally correct the
+bands. Pay attention that <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.topo.corr.html">i.topo.corr</a> requires DCELL
+(double) raster type so before running <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.topo.corr.html">i.topo.corr</a> raster
+type conversion is required. To convert all the maps a sample Python
+code below can be used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">grass.pygrass.gis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">grass.pygrass.modules</span><span class="w"> </span><span class="kn">import</span> <span class="n">Module</span>
+
+<span class="n">mapset</span> <span class="o">=</span> <span class="n">Mapset</span><span class="p">()</span>
+<span class="n">mapset</span><span class="o">.</span><span class="n">current</span><span class="p">()</span>
+
+<span class="c1"># make a for loop for each Sentinel band</span>
+<span class="k">for</span> <span class="n">rast</span> <span class="ow">in</span> <span class="n">mapset</span><span class="o">.</span><span class="n">glist</span><span class="p">(</span><span class="s2">&quot;raster&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;T32VNM_20180523T104019_B*_cor&quot;</span><span class="p">):</span>
+    <span class="c1"># set compupational region region</span>
+    <span class="n">Module</span><span class="p">(</span><span class="s2">&quot;g.region&quot;</span><span class="p">,</span> <span class="n">raster</span><span class="o">=</span><span class="n">rast</span><span class="p">)</span>
+    <span class="c1"># convert the data</span>
+    <span class="n">Module</span><span class="p">(</span><span class="s2">&quot;r.mapcalc&quot;</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{r}</span><span class="s2">_d=double(</span><span class="si">{r}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">rast</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.topo.corr<span class="w"> </span>-i<span class="w"> </span><span class="nv">basemap</span><span class="o">=</span>DTM_patch<span class="w"> </span><span class="nv">zenith</span><span class="o">=</span><span class="m">39</span>.99<span class="w"> </span><span class="nv">azimuth</span><span class="o">=</span><span class="m">167</span>.292191<span class="w"> </span><span class="nv">output</span><span class="o">=</span>dtm_illu
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.topo.corr<span class="w"> </span><span class="nv">basemap</span><span class="o">=</span>dtm_illu<span class="w"> </span><span class="nv">input</span><span class="o">=</span>T32VNM_20180523T104019_B08_cor_d,<span class="se">\</span>
+T32VNM_20180523T104019_B02_cor_d,T32VNM_20180523T104019_B03_cor_d,T32VNM_20180523T104019_B04_cor_d<span class="w"> </span><span class="se">\</span>
+<span class="nv">output</span><span class="o">=</span>tcor<span class="w"> </span><span class="nv">zenith</span><span class="o">=</span><span class="m">39</span>.99<span class="w"> </span><span class="nv">method</span><span class="o">=</span>c-factor
+</pre></div>
+</div>
+<figure class="align-center" id="id4">
+<img alt="../_images/mapswipe.png" class="large" src="../_images/mapswipe.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 113 </span><span class="caption-text">In the left the original RGB data enhanced by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.color.enhance.html">i.color.enhance</a>, in the right the RGB of
+topographically corrected bands.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To visualize RGB images read the note at <a class="reference internal" href="03.html#rgb-bands"><span class="std std-ref">Unit 03</span></a>. To create RGB raster maps, <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.composite.html">r.composite</a>
+can be used.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="18.html" title="Unit 18 - Sentinel downloader"
+              >previous</a> |
+            <a href="20.html" title="Unit 20 - MODIS LST"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

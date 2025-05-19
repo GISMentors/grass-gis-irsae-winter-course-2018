@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 21 - Spatio-temporal intro &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 22 - Spatio-temporal basic analysis" href="22.html" />
+    <link rel="prev" title="Unit 20 - MODIS LST" href="20.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="20.html" title="Unit 20 - MODIS LST"
+             accesskey="P">previous</a> |
+          <a href="22.html" title="Unit 22 - Spatio-temporal basic analysis"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-21-spatio-temporal-intro">
+<h1>Unit 21 - Spatio-temporal intro<a class="headerlink" href="#unit-21-spatio-temporal-intro" title="Permalink to this heading">¶</a></h1>
+<p>GRASS GIS 7 comes with high quality and flexibility tools for
+spatio-temporal data processing, see <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/temporalintro.html">GRASS documentation</a> for details. All GRASS modules from spatio-temporal
+framework start with <code class="docutils literal notranslate"><span class="pre">t.*</span></code> prefix.</p>
+<p>GRASS introduces three special datatypes that are designed to handle
+time series data:</p>
+<ul class="simple">
+<li><p><em>Space time raster datasets</em> (<code class="docutils literal notranslate"><span class="pre">strds</span></code>) for managing raster map
+time series.</p></li>
+<li><p><em>Space time 3D raster datasets</em> (<code class="docutils literal notranslate"><span class="pre">str3ds</span></code>) for managing 3D raster
+map time series.</p></li>
+<li><p><em>Space time vector datasets</em> (<code class="docutils literal notranslate"><span class="pre">stvds</span></code>) for managing vector map time
+series.</p></li>
+</ul>
+<section id="spatio-temporal-modis-data">
+<h2>Spatio-temporal MODIS data<a class="headerlink" href="#spatio-temporal-modis-data" title="Permalink to this heading">¶</a></h2>
+<p>A new space time raster datasets is created by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.create.html">t.create</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.create<span class="w"> </span><span class="nv">output</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">title</span><span class="o">=</span><span class="s2">&quot;MODIS 2017&quot;</span><span class="w"> </span><span class="nv">desc</span><span class="o">=</span><span class="s2">&quot;MODIS data for Norway&quot;</span>
+</pre></div>
+</div>
+<p>In the next step register to the dataset imported MODIS data from
+<a class="reference internal" href="20.html#modis-import"><span class="std std-ref">Unit 20</span></a> by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.register.html">t.register</a>. Note that
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/i.modis.import.html">i.modis.import</a> in <a class="reference internal" href="20.html"><span class="doc">Unit 20 - MODIS LST</span></a> was called with
+<span class="param">-w</span> flag and <span class="param">outfile</span> parameter to generate special
+file which can be later used for creating space-time raster dataset
+(strds). The command needs to be run twice, once for Aqua data than
+for Terra data.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.register<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">file</span><span class="o">=</span>geodata/modis/tlist-mod.txt
+t.register<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">file</span><span class="o">=</span>geodata/modis/tlist-myd.txt
+</pre></div>
+</div>
+<p>Let’s check basic metedata about created dataset by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.info.html">t.info</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.info<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">|</span> <span class="n">Start</span> <span class="n">time</span><span class="p">:</span><span class="o">.................</span> <span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">|</span> <span class="n">End</span> <span class="n">time</span><span class="p">:</span><span class="o">...................</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">|</span> <span class="n">Granularity</span><span class="p">:</span><span class="o">................</span> <span class="mi">8</span> <span class="n">days</span>
+<span class="o">|</span> <span class="n">Temporal</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">maps</span><span class="p">:</span><span class="o">......</span> <span class="n">interval</span>
+<span class="o">...</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">registered</span> <span class="n">maps</span><span class="p">:</span><span class="o">..</span> <span class="mi">184</span>
+</pre></div>
+</div>
+<div class="admonition note" id="t-register-file">
+<p class="admonition-title">Note</p>
+<p>See granularity. In this case a composed product from the
+daily 1-kilometer LST product (MOD11A1/MYD11A1) stored on a 1-km
+Sinusoidal grid as the average values of clear-sky LSTs during an
+8-day period is used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017297_mosaic_LST_Day_1km</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">24</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">01</span>
+</pre></div>
+</div>
+</div>
+<p>Time topology information can be obtained by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.topology.html">t.topology</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.topology<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">+--------------------</span> <span class="n">Temporal</span> <span class="n">topology</span> <span class="o">-------------------------------------+</span>
+<span class="o">|</span> <span class="n">Is</span> <span class="n">subset</span> <span class="n">of</span> <span class="n">dataset</span><span class="p">:</span> <span class="o">......</span> <span class="kc">False</span>
+<span class="o">|</span> <span class="n">Temporal</span> <span class="n">topology</span> <span class="ow">is</span><span class="p">:</span> <span class="o">......</span> <span class="n">invalid</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">intervals</span><span class="p">:</span> <span class="o">.......</span> <span class="mi">184</span>
+<span class="o">|</span> <span class="n">Invalid</span> <span class="n">time</span> <span class="n">stamps</span><span class="p">:</span> <span class="o">.......</span> <span class="mi">0</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">points</span><span class="p">:</span> <span class="o">..........</span> <span class="mi">0</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">gaps</span><span class="p">:</span> <span class="o">............</span> <span class="mi">0</span>
+<span class="o">|</span> <span class="n">Granularity</span><span class="p">:</span> <span class="o">...............</span> <span class="mi">8</span> <span class="n">days</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p id="g-gui-timeline">It is possible to see our spatio-temporal dataset also graphically
+using <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.gui.timeline.html">g.gui.timeline</a> (<span class="menuselection">Temporal ‣ GUI
+tools ‣ Timeline tool</span>).</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/timeline.png" class="large" src="../_images/timeline.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 117 </span><span class="caption-text">Download MODIS data presented by Timeline tool.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="data-querying">
+<h2>Data querying<a class="headerlink" href="#data-querying" title="Permalink to this heading">¶</a></h2>
+<p>List of registered raster maps in spatio-temporal dataset can be
+printed by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.rast.list.html">t.rast.list</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.list<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">order</span><span class="o">=</span>start_time
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">|</span><span class="n">mapset</span><span class="o">|</span><span class="n">start_time</span><span class="o">|</span><span class="n">end_time</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017001_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017001_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017001_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017001_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">...</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017361_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017361_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017361_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017361_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<p>Printed maps can be filtered by various parameters. In the example
+below are printed raster maps with data covering March 2017 only.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.list<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">order</span><span class="o">=</span>start_time<span class="w"> </span><span class="se">\</span>
+<span class="nv">where</span><span class="o">=</span><span class="s2">&quot;start_time &gt; &#39;2017-03-01&#39; and start_time &lt; &#39;2017-04-01&#39;&quot;</span>
+<span class="c1"># or</span>
+t.rast.list<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">order</span><span class="o">=</span>start_time<span class="w"> </span><span class="se">\</span>
+<span class="nv">where</span><span class="o">=</span><span class="s2">&quot;strftime(&#39;%m&#39;, start_time)=&#39;03&#39;&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">|</span><span class="n">mapset</span><span class="o">|</span><span class="n">start_time</span><span class="o">|</span><span class="n">end_time</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">...</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017089_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">07</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017089_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">07</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017089_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">07</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017089_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">07</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<p>In the next example only raster maps coming from Aqua satellite are
+printed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.list<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">order</span><span class="o">=</span>start_time<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;name LIKE &#39;MYD%&#39;&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">|</span><span class="n">mapset</span><span class="o">|</span><span class="n">start_time</span><span class="o">|</span><span class="n">end_time</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017001_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017001_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017009_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">17</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017009_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">17</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">...</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017353_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">19</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017353_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">19</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017361_mosaic_LST_Day_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017361_mosaic_LST_Night_1km</span><span class="o">|</span><span class="n">modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">27</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<p>Univariate statistics can be calculated by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.rast.univar.html">t.rast.univar</a>.
+In example below statistics only for March 2017 is calculated.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.univar<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;start_time &gt; &#39;2017-03-01&#39; and start_time &lt; &#39;2017-04-01&#39;&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">id</span><span class="o">|</span><span class="n">start</span><span class="o">|</span><span class="n">end</span><span class="o">|</span><span class="n">mean</span><span class="o">|</span><span class="nb">min</span><span class="o">|</span><span class="nb">max</span><span class="o">|</span><span class="n">mean_of_abs</span><span class="o">|</span><span class="n">stddev</span><span class="o">|</span><span class="n">variance</span><span class="o">|</span><span class="n">coeff_var</span><span class="o">|</span><span class="nb">sum</span><span class="o">|</span><span class="n">null_cells</span><span class="o">|</span><span class="n">cells</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Day_1km</span><span class="nd">@modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|...</span>
+<span class="n">MOD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Night_1km</span><span class="nd">@modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|...</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Day_1km</span><span class="nd">@modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|...</span>
+<span class="n">MYD11A2</span><span class="o">.</span><span class="n">A2017065_mosaic_LST_Night_1km</span><span class="nd">@modis</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">06</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|...</span>
+</pre></div>
+</div>
+</section>
+<section id="data-extracting">
+<h2>Data extracting<a class="headerlink" href="#data-extracting" title="Permalink to this heading">¶</a></h2>
+<p>Raster spatio-temporal data can be extracted into new dataset using
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.rast.extract.html">t.rast.extract</a>. In the example below are created four new
+datasets containing data of different satellite and datetime.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.extract<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;name LIKE &#39;MOD%LST_Day_1km&#39;&quot;</span><span class="w"> </span><span class="nv">output</span><span class="o">=</span>modis_terra_day
+t.rast.extract<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;name LIKE &#39;MOD%LST_Night_1km&#39;&quot;</span><span class="w"> </span><span class="nv">output</span><span class="o">=</span>modis_terra_night
+t.rast.extract<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;name LIKE &#39;MYD%LST_Day_1km&#39;&quot;</span><span class="w"> </span><span class="nv">output</span><span class="o">=</span>modis_aqua_day
+t.rast.extract<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;name LIKE &#39;MYD%LST_Night_1km&#39;&quot;</span><span class="w"> </span><span class="nv">output</span><span class="o">=</span>modis_aqua_night
+</pre></div>
+</div>
+<p>At this point we can check the basic information</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.info<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis_terra_day
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">|</span> <span class="n">Start</span> <span class="n">time</span><span class="p">:</span><span class="o">.................</span> <span class="mi">2017</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">|</span> <span class="n">End</span> <span class="n">time</span><span class="p">:</span><span class="o">...................</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="o">|</span> <span class="n">Granularity</span><span class="p">:</span><span class="o">................</span> <span class="mi">8</span> <span class="n">days</span>
+<span class="o">|</span> <span class="n">Temporal</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">maps</span><span class="p">:</span><span class="o">......</span> <span class="n">interval</span>
+<span class="o">...</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">registered</span> <span class="n">maps</span><span class="p">:</span><span class="o">..</span> <span class="mi">46</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>and later time topology which should be valid compared to original
+dataset.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.topology<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis_terra_day
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">|</span> <span class="n">Temporal</span> <span class="n">topology</span> <span class="ow">is</span><span class="p">:</span> <span class="o">......</span> <span class="n">valid</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">intervals</span><span class="p">:</span> <span class="o">.......</span> <span class="mi">46</span>
+<span class="o">|</span> <span class="n">Invalid</span> <span class="n">time</span> <span class="n">stamps</span><span class="p">:</span> <span class="o">.......</span> <span class="mi">0</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">points</span><span class="p">:</span> <span class="o">..........</span> <span class="mi">0</span>
+<span class="o">|</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">gaps</span><span class="p">:</span> <span class="o">............</span> <span class="mi">0</span>
+<span class="o">|</span> <span class="n">Granularity</span><span class="p">:</span> <span class="o">...............</span> <span class="mi">8</span> <span class="n">days</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 21 - Spatio-temporal intro</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spatio-temporal-modis-data">Spatio-temporal MODIS data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-querying">Data querying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-extracting">Data extracting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="20.html" title="Unit 20 - MODIS LST"
+              >previous</a> |
+            <a href="22.html" title="Unit 22 - Spatio-temporal basic analysis"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

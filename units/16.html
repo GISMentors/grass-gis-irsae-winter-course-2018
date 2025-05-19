@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 16 - Lidar, DTM interpolation &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 17 - DTM script parallelization" href="17.html" />
+    <link rel="prev" title="Unit 15 - DMT reprojection" href="15.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="15.html" title="Unit 15 - DMT reprojection"
+             accesskey="P">previous</a> |
+          <a href="17.html" title="Unit 17 - DTM script parallelization"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-16-lidar-dtm-interpolation">
+<h1>Unit 16 - Lidar, DTM interpolation<a class="headerlink" href="#unit-16-lidar-dtm-interpolation" title="Permalink to this heading">¶</a></h1>
+<p>There is open LiDAR data for Norway available at
+<a class="reference external" href="http://www.hoydedata.no/">hoydedata.no</a>. Go to <a class="reference external" href="http://www.hoydedata.no/">Download</a>, choose region in map viewer and request data for download.</p>
+<p>LiDAR data used in this unit can be found in sample dataset, in
+<code class="file docutils literal notranslate"><span class="pre">geodata/lidar/laz</span></code> folder. Data is stored in LAZ format
+(compressed LAS format).</p>
+<section id="data-import">
+<h2>Data import<a class="headerlink" href="#data-import" title="Permalink to this heading">¶</a></h2>
+<p>For importing LAS/LAZ data there are available two GRASS modules:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.in.lidar.html">r.in.lidar</a> for importing point cloud data as raster map</p></li>
+<li><p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.in.lidar.html">v.in.lidar</a> for importing point cloud data as vector point map</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>GRASS requires <a class="reference external" href="http://www.liblas.org">libLAS</a> library for
+reading LAS data. For compressed LAS (LAZ) there is another
+dependency, a <a class="reference external" href="https://www.laszip.org/">laszip</a> library.</p>
+<p>Basic metadata can be obtained by command line utility <code class="docutils literal notranslate"><span class="pre">lasinfo</span></code>
+which is part of libLAS library.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lasinfo<span class="w"> </span>geodata/lidar/laz/32-1-514-136-15.laz
+
+...
+Min<span class="w"> </span>X<span class="w"> </span>Y<span class="w"> </span>Z:<span class="w">                   </span><span class="m">590400</span>.00<span class="w"> </span><span class="m">6655800</span>.00<span class="w"> </span><span class="m">283</span>.31
+Max<span class="w"> </span>X<span class="w"> </span>Y<span class="w"> </span>Z:<span class="w">                   </span><span class="m">591199</span>.99<span class="w"> </span><span class="m">6656399</span>.99<span class="w"> </span><span class="m">499</span>.04
+...
+</pre></div>
+</div>
+</div>
+<section id="vector-import">
+<h3>Vector import<a class="headerlink" href="#vector-import" title="Permalink to this heading">¶</a></h3>
+<p>Create a new mapset called <cite>lidar</cite> to save all the LiDAR data.</p>
+<p>Let’s try to import selected tile into vector point map first. Flag
+<span class="param">-t</span> skips creation of attribute table. The import process will
+be significantly faster. Another flag which will speed up the import
+process is <span class="param">-b</span>. It skips building <a class="reference internal" href="03.html#vector-topo-section"><span class="std std-ref">topology</span></a> (which is not needed for point features
+anyway). Information about data SRS can be missing, projection check
+can be skipped by <span class="param">-o</span> flag.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>v.in.lidar<span class="w"> </span>-otb<span class="w"> </span><span class="nv">input</span><span class="o">=</span>geodata/lidar/laz/32-1-514-136-34.laz<span class="w"> </span><span class="nv">output</span><span class="o">=</span>las_32_1_514_136_34
+</pre></div>
+</div>
+<p>Note that computational region is ignored when importing data using
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.in.lidar.html">v.in.lidar</a>.</p>
+<p>Overall point density can be checked by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.outlier.html">v.outlier</a>. Note
+that <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.outlier.html">v.outlier</a> is working in the current computation
+region(!). Computational region must be set based on imported
+data. Since building topology was skipped by <span class="param">-b</span> flag, the map
+extent must be computed by scanning all points in input vector
+map. That is reason why <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.region.html">g.region</a> can run for a while.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g.region<span class="w"> </span><span class="nv">vector</span><span class="o">=</span>las_32_1_514_136_34
+v.outlier<span class="w"> </span>-e<span class="w"> </span><span class="nv">input</span><span class="o">=</span>las_32_1_514_136_34
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Estimated</span> <span class="n">point</span> <span class="n">density</span><span class="p">:</span> <span class="mf">9.827</span>
+<span class="n">Estimated</span> <span class="n">mean</span> <span class="n">distance</span> <span class="n">between</span> <span class="n">points</span><span class="p">:</span> <span class="mf">0.319</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Point density is calculated for map (square) unit.</p>
+</div>
+<p>Basic metadata can be printed by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.info.html">v.info</a> (since no topology
+is built, the module must scan all features in the map):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>v.info<span class="w"> </span><span class="nv">map</span><span class="o">=</span>las_32_1_514_136_34
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">|</span>   <span class="n">Number</span> <span class="n">of</span> <span class="n">points</span><span class="p">:</span>       <span class="mi">4716789</span>         <span class="n">Number</span> <span class="n">of</span> <span class="n">centroids</span><span class="p">:</span>  <span class="mi">0</span>          <span class="o">|</span>
+<span class="o">...</span>
+<span class="o">|</span>   <span class="n">Map</span> <span class="ow">is</span> <span class="mi">3</span><span class="n">D</span><span class="p">:</span>              <span class="n">Yes</span>                                              <span class="o">|</span>
+<span class="o">...</span>
+<span class="o">|</span>   <span class="n">Projection</span><span class="p">:</span> <span class="n">UTM</span> <span class="p">(</span><span class="n">zone</span> <span class="mi">32</span><span class="p">)</span>                                                <span class="o">|</span>
+<span class="o">|</span>                                                                            <span class="o">|</span>
+<span class="o">|</span>               <span class="n">N</span><span class="p">:</span>        <span class="mf">6655799.99</span>    <span class="n">S</span><span class="p">:</span>           <span class="mi">6655200</span>                 <span class="o">|</span>
+<span class="o">|</span>               <span class="n">E</span><span class="p">:</span>         <span class="mf">592799.99</span>    <span class="n">W</span><span class="p">:</span>            <span class="mi">592000</span>                 <span class="o">|</span>
+<span class="o">|</span>               <span class="n">B</span><span class="p">:</span>            <span class="mf">315.87</span>    <span class="n">T</span><span class="p">:</span>            <span class="mf">431.17</span>                 <span class="o">|</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="raster-import">
+<h3>Raster import<a class="headerlink" href="#raster-import" title="Permalink to this heading">¶</a></h3>
+<p>Input point cloud can be imported by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.in.lidar.html">r.in.lidar</a> into
+raster map. Flag <span class="param">-e</span> extends current computational region to
+cover all imported points. Otherwise user needs to set up
+computational region by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.region.html">g.region</a>. Spatial resolution for
+output raster map is defined by <span class="param">resolution</span> option. By
+default, for cells with more points involved, the value is computed by
+mean value, see <span class="param">method</span> option. Cells covered by no points
+will get NULL values assigned.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.in.lidar<span class="w"> </span>-oe<span class="w"> </span><span class="nv">input</span><span class="o">=</span>geodata/lidar/laz/32-1-514-136-34.laz<span class="w"> </span><span class="nv">output</span><span class="o">=</span>las_32_1_514_136_34<span class="w"> </span><span class="nv">resolution</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>Basic metadata about created raster map can be obtained by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.info.html">r.info</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.info<span class="w"> </span><span class="nv">map</span><span class="o">=</span>las_32_1_514_136_34
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">|</span>            <span class="n">N</span><span class="p">:</span>    <span class="mi">6655800</span>    <span class="n">S</span><span class="p">:</span>    <span class="mi">6655200</span>   <span class="n">Res</span><span class="p">:</span>     <span class="mi">1</span>                     <span class="o">|</span>
+<span class="o">|</span>            <span class="n">E</span><span class="p">:</span>     <span class="mi">592800</span>    <span class="n">W</span><span class="p">:</span>     <span class="mi">592000</span>   <span class="n">Res</span><span class="p">:</span>     <span class="mi">1</span>                     <span class="o">|</span>
+<span class="o">|</span>   <span class="n">Range</span> <span class="n">of</span> <span class="n">data</span><span class="p">:</span>    <span class="nb">min</span> <span class="o">=</span> <span class="mf">315.92</span>  <span class="nb">max</span> <span class="o">=</span> <span class="mf">429.5867</span>                           <span class="o">|</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id1">
+<img alt="../_images/import-rast-vect.png" src="../_images/import-rast-vect.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 97 </span><span class="caption-text">Imported data as vector points. Raster map with 1m resolution in the
+background.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="filling-gaps">
+<h2>Filling gaps<a class="headerlink" href="#filling-gaps" title="Permalink to this heading">¶</a></h2>
+<p>There are several GRASS modules for filling gaps in raster maps like
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.fillnulls.html">r.fillnulls</a> or <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.fill.stats.html">r.fill.stats</a>. The first module
+is based on spline interpolation, the second fills gaps with
+interpolated values using IDW. We will use the second module which
+fill nulls rapidly compared to <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.fillnulls.html">r.fillnulls</a>. By
+<code class="xref std std-option docutils literal notranslate"><span class="pre">-k</span></code> flag we ensure that original values will be kept. Only
+cells with no-data value will be modified.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.fill.stats<span class="w"> </span>-k<span class="w"> </span><span class="nv">input</span><span class="o">=</span>las_32_1_514_136_34<span class="w"> </span><span class="nv">output</span><span class="o">=</span>las_32_1_514_136_34_no_gaps
+</pre></div>
+</div>
+<figure class="align-center" id="id2">
+<img alt="../_images/rast-gaps-fill.png" src="../_images/rast-gaps-fill.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 98 </span><span class="caption-text">Raster map filled by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.fill.stats.html">r.fill.stats</a>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that only cells in given distance (8 pixels by default, see
+<code class="xref std std-option docutils literal notranslate"><span class="pre">cells</span></code> option) are processed.</p>
+</div>
+</section>
+<section id="high-resolution-dtm">
+<span id="edge-detection"></span><h2>High resolution DTM<a class="headerlink" href="#high-resolution-dtm" title="Permalink to this heading">¶</a></h2>
+<p>Digital Surface Model (DTM) is interpolated by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.surf.rst.html">v.surf.rst</a>
+using regularized spline with tension approximation. Output resolution
+set to 0.5 meter. The computation can be really slow. You can turn
+computation time to be more reasonable by running it in parallel, see
+<code class="xref std std-option docutils literal notranslate"><span class="pre">nprocs</span></code> option (GRASS 7.4+ only).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g.region<span class="w"> </span><span class="nv">vector</span><span class="o">=</span>las_32_1_514_136_34<span class="w"> </span><span class="nv">res</span><span class="o">=</span><span class="m">0</span>.5<span class="w"> </span>-pa
+v.surf.rst<span class="w"> </span><span class="nv">input</span><span class="o">=</span>las_32_1_514_136_34<span class="w"> </span><span class="nv">elevation</span><span class="o">=</span>dtm_32_1_514_136_34<span class="w"> </span><span class="nv">npmin</span><span class="o">=</span><span class="m">80</span><span class="w"> </span><span class="nv">tension</span><span class="o">=</span><span class="m">20</span><span class="w"> </span><span class="nv">smooth</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">nprocs</span><span class="o">=</span><span class="m">5</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Try also to set higher npmin to reduce artifacts.</p>
+</div>
+<figure class="align-center" id="id3">
+<img alt="../_images/dsm.png" class="middle" src="../_images/dsm.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 99 </span><span class="caption-text">Resultant DTM.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Similarly can build Digital Terrain Model (DTM) from
+filtered terrain only points by <em>edge detection</em>.</p>
+<p>The filter aims to recognize and extract attached and detached object
+(such as buildings, bridges, power lines, trees, etc.) in order to
+create a Digital Terrain Model. (source:
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.lidar.edgedetection.html">v.lidar.edgedetection</a> manual page) Example of simple
+workflow based on <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.lidar.growing.html">v.lidar.growing</a> and <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.lidar.correction.html">v.lidar.correction</a>
+below. Note that edge detection is usually a time and RAM consuming task,
+and the result is not perfect.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>v.lidar.edgedetection<span class="w"> </span><span class="nv">input</span><span class="o">=</span>las_32_1_514_136_34<span class="w"> </span><span class="nv">output</span><span class="o">=</span>edge_32_1_514_136_34<span class="w"> </span><span class="nv">ew_step</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">ns_step</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">lambda_g</span><span class="o">=</span><span class="m">0</span>.5
+v.in.lidar<span class="w"> </span>-otb<span class="w"> </span><span class="nv">input</span><span class="o">=</span>geodata/lidar/laz/32-1-514-136-34.laz<span class="w"> </span><span class="nv">output</span><span class="o">=</span>las_32_1_514_136_34_first<span class="w"> </span><span class="nv">return_filter</span><span class="o">=</span>first
+v.lidar.growing<span class="w"> </span><span class="nv">input</span><span class="o">=</span>edge_32_1_514_136_34<span class="w"> </span><span class="nv">output</span><span class="o">=</span>grow_32_1_514_136_34<span class="w"> </span><span class="nv">first</span><span class="o">=</span>las_32_1_514_136_34_first
+v.lidar.correction<span class="w"> </span><span class="nv">input</span><span class="o">=</span>grow_32_1_514_136_34<span class="w"> </span><span class="nv">output</span><span class="o">=</span>corr_32_1_514_136_34<span class="w"> </span><span class="nv">terrain</span><span class="o">=</span>terr_32_1_514_136_34
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 16 - Lidar, DTM interpolation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-import">Data import</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filling-gaps">Filling gaps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#high-resolution-dtm">High resolution DTM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="15.html" title="Unit 15 - DMT reprojection"
+              >previous</a> |
+            <a href="17.html" title="Unit 17 - DTM script parallelization"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

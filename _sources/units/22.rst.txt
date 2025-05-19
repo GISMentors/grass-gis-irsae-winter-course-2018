@@ -1,0 +1,129 @@
+Unit 22 - Spatio-temporal basic analysis
+========================================
+
+Map algebra
+------------
+
+Digital numbers (DN) need to be converted into Celsius scale
+similarly as done in :ref:`Unit 24 <modis-dn-c>`. Instead of running
+:grasscmd:`r.mapcalc` repeatedly there is a specialized temporal
+command :grasscmd:`t.rast.mapcalc` which applies map algebra to all
+the maps registered in input space time dataset.
+
+.. tip::
+
+   Many temporal data processing modules (``t.*``) support
+   parallelization (see :param:`nproc` option).
+   
+.. code-block:: bash
+
+   t.rast.mapcalc input=modis output=modis_c nproc=3 basename=modis_celsius \
+   expression="if(modis != 0, modis * 0.02 - 273.15, null())"
+
+.. note::
+
+   Compared to expression used in :ref:`Unit 24 <modis-dn-c>`, raster
+   map name is replaced by spatio-temporal dataset name.
+
+   Alternatively :grasscmd:`t.rast.algebra` could be used to perform
+   the DN transformation, see command below.
+
+   .. code-block:: bash
+                   
+      t.rast.algebra basename=modis_celsius expression="modis_c = modis * 0.02 - 273.15"
+
+Color table for all the maps in a spatio-temporal raster dataset can
+be easily set by :grasscmd:`t.rast.colors` similarly as
+:grasscmd:`r.colors` does for a single raster map.
+
+.. code-block:: bash
+
+   t.rast.colors input=modis_c color=celsius 
+
+Data aggregation
+----------------
+
+The temporal framework enables the user to perform data aggregation in
+a really simple way. The command to be used is
+:grasscmd:`t.rast.aggregate`. Based on specified :param:`granularity`
+a new temporal dataset with aggregated data is created.
+
+.. code-block:: bash
+                          
+   t.rast.aggregate input=modis_c output=modis_cm basename=cm granularity="1 months" nproc=3
+
+Statistics can be computed by :grasscmd:`t.rast.univar`.
+
+.. code-block:: bash
+                
+   t.rast.univar modis_cm
+
+::
+
+   id|start|end|mean|min|max|...
+   cm_2017_01@modis|2017-01-01 00:00:00|2017-02-01 00:00:00|-9.44159183015945|-24.37|5.09000000000003|...
+   cm_2017_02@modis|2017-02-01 00:00:00|2017-03-01 00:00:00|-9.53477082170954|-21.0066666666666|5.41000000000003|...
+
+Another aggregation method is based on :grasscmd:`t.rast.series`, it
+allows to aggregate spatio-temporal raster dataset or part of it by
+various methods. The module returns a single raster map as output and
+not a temporal dataset as by :grasscmd:`t.rast.aggregate`. In example
+below annual average temperature is computed.
+
+.. code-block:: bash
+                
+   t.rast.series input=modis_c output=modis_avg method=average
+
+Univariate statistics of created raster map with average temperature
+values can be calculated by :grasscmd:`r.univar`.
+   
+.. code-block:: bash
+
+   r.univar modis_avg
+
+::
+
+   minimum: -10.8297
+   maximum: 15.9633
+   range: 26.7931
+   mean: -0.876881
+
+.. figure:: ../images/units/22/annual_avg.png
+
+   Average temperature in Norway for 2017.
+
+Data visualization
+------------------
+
+In addition to :grasscmd:`g.gui.timeline` introduced in :ref:`Unit 21
+<g-gui-timeline>` there are other two GRASS tools for temporal data
+visualization: :grasscmd:`g.gui.animation` (:menuselection:`Temporal
+--> GUI tools --> Animation tool`) and :grasscmd:`g.gui.tplot`
+(:menuselection:`Temporal --> GUI tools --> Temporal plot tool`).
+
+Tool :grasscmd:`g.gui.animation` allows creating animations in
+different formats, the example below showing the monthly average
+values.
+
+.. code-block:: bash
+
+   g.gui.animation strds=modis_cm
+
+.. figure:: ../images/units/22/modis_animation.gif
+   :class: middle
+           
+   Monthly average dataset animation with celsius color table applied.
+
+The second tool, :grasscmd:`g.gui.tplot`, allows plotting the time
+series of defined variable of interest for a specific point or area of
+a study region. In example below coordinates of Studenterhytta venue
+are used.
+
+.. code-block:: bash
+
+   g.gui.tplot strds=modis_c coordinates=258121.68627886,6662114.92897065
+   
+.. figure:: ../images/units/22/tplot_modis.png
+   :class: middle
+
+   The plot of MODIS monthly average temperature @ Studenterhytta

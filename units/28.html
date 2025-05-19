@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 28 - Classification &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 29 - GRASS GIS and R" href="29.html" />
+    <link rel="prev" title="Unit 27 - Regression analysis" href="27.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="27.html" title="Unit 27 - Regression analysis"
+             accesskey="P">previous</a> |
+          <a href="29.html" title="Unit 29 - GRASS GIS and R"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-28-classification">
+<h1>Unit 28 - Classification<a class="headerlink" href="#unit-28-classification" title="Permalink to this heading">¶</a></h1>
+<p>Imagery data in GRASS GIS can be grouped (e.g. channel-wise) by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.group.html">i.group</a> module (<span class="menuselection">Imagery ‣ Develop images
+and groups ‣ Create/edit group</span>). Groups and subgroups allows user to
+perform analysis on any combination of the raster maps in a
+group. Group or subgroup is taken as input for most of GRASS imagery
+modules (<code class="docutils literal notranslate"><span class="pre">i.*</span></code>).</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/i-group-0.png" class="small" src="../_images/i-group-0.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 128 </span><span class="caption-text">Creating imagery group from the GUI.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When running command from Bash, the input maps can be
+defined by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.list.html">g.list</a> output.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.group<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">input</span><span class="o">=</span><span class="sb">`</span>g.list<span class="w"> </span>rast<span class="w"> </span><span class="nv">pattern</span><span class="o">=</span>L2A_T32VNM_20170523T104031_B*<span class="w"> </span><span class="nv">sep</span><span class="o">=</span>comma<span class="sb">`</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The first step as pre-analysis for a subsequent classification could be
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.smooth.seg.html">r.smooth.seg</a> to produces a smooth approximation of the data
+and performs discontinuity detection.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In case of panchromatic maps or limited amount of channels, it is
+often recommended to generate synthetic channels through texture
+analysis <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.texture.html">r.texture</a>.</p>
+</div>
+<section id="segmentation">
+<h2>Segmentation<a class="headerlink" href="#segmentation" title="Permalink to this heading">¶</a></h2>
+<p>Identification of segments (objects) from imagery data can be perform
+by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.segment.html">i.segment</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.segment<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">output</span><span class="o">=</span>L2A_T32VNM_20170523T104031_seg_04<span class="w"> </span><span class="nv">threshold</span><span class="o">=</span><span class="m">0</span>.4<span class="w"> </span><span class="nv">memory</span><span class="o">=</span><span class="m">1000</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id2">
+<img alt="../_images/segment.png" class="large" src="../_images/segment.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 129 </span><span class="caption-text">Segmentation output on the left, RGB composition on the right.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="unsupervised-classification">
+<h2>Unsupervised classification<a class="headerlink" href="#unsupervised-classification" title="Permalink to this heading">¶</a></h2>
+<p>Unsupervised classification can be done using two GRASS GIS modules,
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.cluster.html">i.cluster</a> and <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.maxlik.html">i.maxlik</a>.</p>
+<p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.cluster.html">i.cluster</a> generates spectral signatures for land cover types
+in an image using a clustering algorithm. The resulting signature file is
+used as input for <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.maxlik.html">i.maxlik</a>, to generate an unsupervised image classification.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.cluster<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">signaturefile</span><span class="o">=</span>cluster<span class="w"> </span><span class="nv">classes</span><span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="nv">reportfile</span><span class="o">=</span>geodata/class_cluster.txt
+
+i.maxlik<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">signaturefile</span><span class="o">=</span>cluster<span class="w"> </span><span class="nv">output</span><span class="o">=</span>L2A_T32VNM_20170523T104031_cluster
+</pre></div>
+</div>
+<figure class="align-center" id="id3">
+<img alt="../_images/cluster.png" class="medium" src="../_images/cluster.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 130 </span><span class="caption-text">Unsupervised classification output.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="supervised-classification">
+<h2>Supervised classification<a class="headerlink" href="#supervised-classification" title="Permalink to this heading">¶</a></h2>
+<p>The first step in supervised classification is to define training
+areas. For this task GRASS GIS offers specialized tool called
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.gui.iclass.html">g.gui.iclass</a>. Alternatively also more generic vector
+digitizer <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.gui.vdigit.html">g.gui.vdigit</a> can be used as shown below.</p>
+<figure class="align-center" id="id4">
+<img alt="../_images/vdigit.png" class="large" src="../_images/vdigit.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 131 </span><span class="caption-text">Vector digitizer for defining training areas.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>By vector digitizer a new vector map <cite>T32VNM_20170523T104031_training</cite>
+can be created with following attribute columns:</p>
+<ul class="simple">
+<li><p><span class="dbcolumn">class</span> varchar with 5 characters, for class name</p></li>
+<li><p><span class="dbcolumn">class_i</span> integer, for class id</p></li>
+<li><p><span class="dbcolumn">color</span> varchar with 11 characters, for color representation</p></li>
+</ul>
+<p>A new area can be created from vector digitizer toolbar
+<a class="reference internal" href="../_images/polygon-create.png"><img alt="grass-polygon-create" src="../_images/polygon-create.png" style="width: 1.5em;" /></a> <sup>Digitize new area</sup>.</p>
+<p>It is enough for each training area to define class id
+<span class="dbcolumn">class_i</span>. The rest of attributes (<span class="dbcolumn">class</span> and
+<span class="dbcolumn">color</span>) can be defined afterwards by Attribute Data
+Manager.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Instead of Attribute Data Manager also <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/db.execute.html">db.execute</a> can
+be used to fill attribute columns. See example below which shows
+how to update columns <span class="dbcolumn">class</span> and <span class="dbcolumn">color</span> based
+on specified <span class="dbcolumn">class_i</span> attribute.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>db.execute<span class="w"> </span><span class="nv">sql</span><span class="o">=</span><span class="s2">&quot;UPDATE T32VNM_20170523T104031_training set class_i=1 where class=&#39;water&#39;&quot;</span>
+db.execute<span class="w"> </span><span class="nv">sql</span><span class="o">=</span><span class="s2">&quot;UPDATE T32VNM_20170523T104031_training set class_i=2 where class=&#39;arti&#39;&quot;</span>
+db.execute<span class="w"> </span><span class="nv">sql</span><span class="o">=</span><span class="s2">&quot;UPDATE T32VNM_20170523T104031_training set class_i=3 where class=&#39;vege&#39;&quot;</span>
+
+db.execute<span class="w"> </span><span class="nv">sql</span><span class="o">=</span><span class="s2">&quot;UPDATE T32VNM_20170523T104031_training set color=&#39;35:167:234&#39; where class=&#39;water&#39;&quot;</span>
+db.execute<span class="w"> </span><span class="nv">sql</span><span class="o">=</span><span class="s2">&quot;UPDATE T32VNM_20170523T104031_training set color=&#39;102:102:102&#39; where class=&#39;arti&#39;&quot;</span>
+db.execute<span class="w"> </span><span class="nv">sql</span><span class="o">=</span><span class="s2">&quot;UPDATE T32VNM_20170523T104031_training set color=&#39;65:232:70&#39; where class=&#39;vege&#39;&quot;</span>
+</pre></div>
+</div>
+</div>
+<figure class="align-center" id="id5">
+<img alt="../_images/training_attributes.png" src="../_images/training_attributes.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 132 </span><span class="caption-text">The attribute table of training vector map.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>At this point vector map with training areas is converted to raster
+format. This operation can be done in GRASS by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.to.rast.html">v.to.rast</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>v.to.rast<span class="w"> </span><span class="nv">input</span><span class="o">=</span>T32VNM_20170523T104031_training<span class="w"> </span><span class="nv">output</span><span class="o">=</span>T32VNM_20170523T104031_training<span class="w"> </span><span class="se">\</span>
+<span class="nv">type</span><span class="o">=</span>area<span class="w"> </span><span class="nv">use</span><span class="o">=</span>attr<span class="w"> </span><span class="nv">attribute_column</span><span class="o">=</span>class_i<span class="w"> </span><span class="nv">label_column</span><span class="o">=</span>class<span class="w"> </span><span class="nv">rgb_column</span><span class="o">=</span>color
+</pre></div>
+</div>
+<figure class="align-center" id="id6">
+<img alt="../_images/trainings.png" class="small" src="../_images/trainings.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 133 </span><span class="caption-text">The training areas as raster map (RGB composition on background).</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The second step means to run classfier. There are different
+classifiers based on:</p>
+<ul class="simple">
+<li><p>radiometric method,</p></li>
+<li><p>radiometric and geometric method, or</p></li>
+<li><p>machine learning</p></li>
+</ul>
+<p>Radiometric method can be performed in GRASS GIS using
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.gensig.html">i.gensig</a> to generate statistics to be used by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.maxlik.html">i.maxlik</a>, see example below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.gensig<span class="w"> </span><span class="nv">training</span><span class="o">=</span>T32VNM_20170523T104031_training<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">signaturefile</span><span class="o">=</span>gensig_nosegment
+
+i.maxlik<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">signaturefile</span><span class="o">=</span>gensig_nosegment<span class="w"> </span><span class="nv">output</span><span class="o">=</span>L2A_T32VNM_20170523T104031_maxlik
+</pre></div>
+</div>
+<p>In radiometric and geometric method statistics is generated by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.gensigset.html">i.gensigset</a> together with <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.smap.html">i.smap</a> which
+performs contextual image classification using sequential maximum a
+posteriori (SMAP) estimation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>i.gensigset<span class="w"> </span><span class="nv">training</span><span class="o">=</span>T32VNM_20170523T104031_training<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">signaturefile</span><span class="o">=</span>gensigset_nosegment
+
+i.smap<span class="w"> </span><span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">subgroup</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="se">\</span>
+<span class="nv">signaturefile</span><span class="o">=</span>gensigset_nosegment<span class="w"> </span><span class="nv">output</span><span class="o">=</span>L2A_T32VNM_20170523T104031_smap<span class="w"> </span><span class="se">\</span>
+<span class="nv">goodness</span><span class="o">=</span>L2A_T32VNM_20170523T104031_smap_good
+</pre></div>
+</div>
+<p>Machine learning approach can be applied for example by
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.learn.ml.html">r.learn.ml</a> which represents a front-end to the
+<a class="reference external" href="http://scikit-learn.org">scikit-learn</a> python package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.learn.ml.html">r.learn.ml</a> is an add-on so you have to install it
+through <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/g.extension.html">g.extension</a>. Note that
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.learn.ml.html">r.learn.ml</a> including dependecies is already
+installed on tailored <a class="reference internal" href="../index.html#virtual-machine"><span class="std std-ref">virtual machine</span></a>.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.learn.ml<span class="w"> </span><span class="nv">trainingmap</span><span class="o">=</span>T32VNM_20170523T104031_training<span class="w"> </span><span class="se">\</span>
+<span class="nv">group</span><span class="o">=</span>L2A_T32VNM_20170523T104031<span class="w"> </span><span class="nv">output</span><span class="o">=</span>L2A_T32VNM_20170523T104031_learn
+</pre></div>
+</div>
+<figure class="align-center" id="id7">
+<img alt="../_images/classification.png" class="large" src="../_images/classification.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 134 </span><span class="caption-text">Different supervised methods. In the left radiometric
+(<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.maxlik.html">i.maxlik</a>) method, in the center radiometric and
+geometric method (<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/i.smap.html">i.smap</a>) and in the right machine
+learning approach performed by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.ml.learn.html">r.ml.learn</a>.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In order to get better classification output some post-processing
+steps can be performed.</p>
+<ul class="simple">
+<li><p>use <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.reclass.area.html">r.reclass.area</a> to remove small areas, mask new
+value and fill gaps with <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.neighbors.html">r.neighbors</a> or
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.fillnulls.html">r.fillnulls</a></p></li>
+<li><p>convert output to vector format and run <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.clean.html">v.clean</a> with
+<span class="param">tool=rmarea</span> and reasonable <span class="param">threshold</span></p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 28 - Classification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#segmentation">Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unsupervised-classification">Unsupervised classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supervised-classification">Supervised classification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="27.html" title="Unit 27 - Regression analysis"
+              >previous</a> |
+            <a href="29.html" title="Unit 29 - GRASS GIS and R"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

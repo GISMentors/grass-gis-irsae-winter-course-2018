@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 15 - DMT reprojection &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 16 - Lidar, DTM interpolation" href="16.html" />
+    <link rel="prev" title="Unit 14 - PyGRASS Vector Access" href="14.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="14.html" title="Unit 14 - PyGRASS Vector Access"
+             accesskey="P">previous</a> |
+          <a href="16.html" title="Unit 16 - Lidar, DTM interpolation"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-15-dmt-reprojection">
+<h1>Unit 15 - DMT reprojection<a class="headerlink" href="#unit-15-dmt-reprojection" title="Permalink to this heading">¶</a></h1>
+<p>In our example EU-DEM global dataset provided by <a class="reference external" href="https://www.eea.europa.eu/data-and-maps/data/copernicus-land-monitoring-service-eu-dem#tab-gis-data">Copernicus programme</a>
+will be used. Oslo region is covered by tile E40N40. Be aware that
+EU-DEM tiles covers large regions (4GB per tile).</p>
+<p>Normally <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.import.html">r.import</a> could be used to import and
+automatically reproject data into target location. In this case there
+is no need to import into GRASS a whole big DEM tile. By using <code class="docutils literal notranslate"><span class="pre">-r</span></code>
+flag of <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.in.gdal.html">r.in.gdal</a> GRASS module only a subregion covering
+AOI could be imported. Unfortunately <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.import.html">r.import</a> do not offer
+such flag. In this unit manual reprojection will be presented. A new
+location for imported data (<a class="reference external" href="https://epsg.io/4258">EPSG:4258</a>) must be created and data
+reprojected into target <em>oslo</em> (<a class="reference external" href="https://epsg.io/32632">EPSG:32632</a>) location manually.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To save space the original EU-DEM tile was clipped by larger
+region than Oslo AOI. Modified tile is available from
+<code class="file docutils literal notranslate"><span class="pre">eu-dem</span></code> directory.</p>
+</div>
+<section id="create-location-for-data-import">
+<h2>Create location for data import<a class="headerlink" href="#create-location-for-data-import" title="Permalink to this heading">¶</a></h2>
+<p>EU-DEM dataset is provided in ETRS-89 (<a class="reference external" href="https://epsg.io/4258">EPSG:4258</a>). Start a new
+GRASS session and create a new location <em>oslo-eu-dem</em> based on input
+<code class="file docutils literal notranslate"><span class="pre">eu-dem-sample.tif</span></code> data (similarly as done in <a class="reference internal" href="02.html#create-location"><span class="std std-ref">Unit 02</span></a>). Skip data import provided by location wizard
+since only subregion defined by Oslo region is planned to be imported.</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/create-location-01.png" src="../_images/create-location-01.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 88 </span><span class="caption-text">Define name for new location.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Location will be created based on input sample DEM file (<em>Read
+projection and datum terms from a georeferenced data file</em>).</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/create-location-11.png" src="../_images/create-location-11.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 89 </span><span class="caption-text">Create new location based on sample DEM file.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id3">
+<img alt="../_images/create-location-2.svg" class="small" src="../_images/create-location-2.svg" /><figcaption>
+<p><span class="caption-number">Fig. 90 </span><span class="caption-text">Don’t import input data from Location Wizard.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Enter new location (PERMANENT mapset) and reproject Oslo region vector
+map by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/v.proj.html">v.proj</a> (<span class="menuselection">Vector ‣ Develop vector
+map ‣ Reproject vector map from different GRASS location</span>) or simply
+from <span class="item">Data</span> tab in Layer Manager just by copying and pasting the
+maps, see <a class="reference internal" href="#data-reproject-fig"><span class="std std-numref">Fig. 91</span></a>.</p>
+<figure class="align-center" id="id4">
+<span id="data-reproject-fig"></span><img alt="../_images/data-reproject.png" src="../_images/data-reproject.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 91 </span><span class="caption-text">Easy and quick way to reproject (copy-and-paste) raster or vector
+maps across locations from <span class="item">Data</span> tab in Layer Manager.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>v.proj<span class="w"> </span><span class="nv">location</span><span class="o">=</span>oslo<span class="w"> </span><span class="nv">mapset</span><span class="o">=</span>PERMANENT<span class="w"> </span><span class="nv">input</span><span class="o">=</span>oslo
+</pre></div>
+</div>
+<p>Before importing DEM set computation region extent based on
+reprojected Oslo region.</p>
+<figure class="align-center" id="id5">
+<img alt="../_images/region-extent.png" class="large" src="../_images/region-extent.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 92 </span><span class="caption-text">Set computational region extent based on Oslo region.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Launch <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.in.gdal.html">r.in.gdal</a> (<span class="menuselection">File ‣ Import raster
+data ‣ Import of common raster formats</span>) to import DEM tile, don’t
+forget to enable <code class="xref std std-option docutils literal notranslate"><span class="pre">-r</span></code> flag.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.in.gdal<span class="w"> </span>-r<span class="w"> </span><span class="nv">input</span><span class="o">=</span>/path/to/eu_dem_sample.tif<span class="w"> </span><span class="nv">output</span><span class="o">=</span>dem
+</pre></div>
+</div>
+<figure class="align-center" id="id6">
+<img alt="../_images/dem-imported.png" class="large" src="../_images/dem-imported.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 93 </span><span class="caption-text">Imported DEM limited to current region extent. Displayed with
+<code class="docutils literal notranslate"><span class="pre">elevation</span></code> color table.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="reproject-dem-into-target-location">
+<h2>Reproject DEM into target location<a class="headerlink" href="#reproject-dem-into-target-location" title="Permalink to this heading">¶</a></h2>
+<p>Now switch back to our <em>oslo-region</em> location and create within this
+location a new mapset for <em>eu-dem</em> <span class="menuselection">Settings ‣ GRASS
+working environment ‣ Change location and mapset</span>.</p>
+<figure class="align-center" id="id7">
+<img alt="../_images/switch-location.png" class="small" src="../_images/switch-location.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 94 </span><span class="caption-text">Switch GRASS to oslo location and PERMANENT mapset.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Reproject DEM from <em>oslo-eu-dem</em> location by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.proj.html">r.proj</a>
+(<span class="menuselection">Raster ‣ Develop raster map ‣ Reproject raster
+map from different GRASS location</span>) or directly from <span class="item">Data</span> tab
+in Layer Manager. Set desired resolution (25m) and choose appropriate
+resampling method (in our case <em>bilinear</em>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a mask is enabled, it’s good idea to remove it before
+importing.</p>
+</div>
+<figure class="align-center" id="id8">
+<img alt="../_images/data-reproject-raster.png" class="small" src="../_images/data-reproject-raster.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 95 </span><span class="caption-text">Reproject raster data in Layer Manager.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Example of reprojecting raster data using <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.proj.html">r.proj</a> command
+below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.proj<span class="w"> </span><span class="nv">location</span><span class="o">=</span>oslo-eu-dem<span class="w"> </span><span class="nv">mapset</span><span class="o">=</span>PERMANENT<span class="w"> </span><span class="nv">input</span><span class="o">=</span>dem<span class="w"> </span><span class="nv">method</span><span class="o">=</span>bilinear<span class="w"> </span><span class="nv">resolution</span><span class="o">=</span><span class="m">25</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id9">
+<img alt="../_images/dtm-3d.png" class="middle" src="../_images/dtm-3d.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 96 </span><span class="caption-text">DTM in 3D view.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 15 - DMT reprojection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-location-for-data-import">Create location for data import</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reproject-dem-into-target-location">Reproject DEM into target location</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="27.html">Unit 27 - Regression analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="14.html" title="Unit 14 - PyGRASS Vector Access"
+              >previous</a> |
+            <a href="16.html" title="Unit 16 - Lidar, DTM interpolation"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

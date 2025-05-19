@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Unit 27 - Regression analysis &#8212; GRASS GIS IRSAE Winter Course 2018</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gismentors.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit 28 - Classification" href="28.html" />
+    <link rel="prev" title="Unit 26 - Spatio-temporal LST script" href="26.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">GRASS GIS IRSAE Winter Course 2018</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="26.html" title="Unit 26 - Spatio-temporal LST script"
+             accesskey="P">previous</a> |
+          <a href="28.html" title="Unit 28 - Classification"
+             accesskey="N">next</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="unit-27-regression-analysis">
+<h1>Unit 27 - Regression analysis<a class="headerlink" href="#unit-27-regression-analysis" title="Permalink to this heading">¶</a></h1>
+<p>GRASS GIS comes with different modules performing regression
+analysis. These modules work with single raster map or with time
+series data too. There are two core GRASS modules related to
+regression: <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.regression.line.html">r.regression.line</a> and
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.regression.multi.html">r.regression.multi</a>. There are also other interesting
+modules distributed as addons which will be demostrated in this unit.</p>
+<section id="r-regression-line">
+<h2>r.regression.line<a class="headerlink" href="#r-regression-line" title="Permalink to this heading">¶</a></h2>
+<p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.regression.line.html">r.regression.line</a> calculates a linear regression from two
+raster maps, according to the formula <cite>y = a + b*x</cite>. It also returns
+some regression coefficients like offset/intercept (a), gain/slope
+(b), correlation coefficient (R), number of elements (N), means (medX,
+medY), standard deviations (sdX, sdY), and the F test for testing the
+significance of the regression model as a whole (F); these parameters
+could be saved in a text file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.regression.line<span class="w"> </span><span class="nv">mapx</span><span class="o">=</span>dtm<span class="w"> </span><span class="nv">mapy</span><span class="o">=</span>modis_avg
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">x</span>
+<span class="n">a</span> <span class="p">(</span><span class="n">Offset</span><span class="p">):</span> <span class="mf">6.534392</span>
+<span class="n">b</span> <span class="p">(</span><span class="n">Gain</span><span class="p">):</span> <span class="o">-</span><span class="mf">0.009867</span>
+<span class="n">R</span> <span class="p">(</span><span class="n">sumXY</span> <span class="o">-</span> <span class="n">sumX</span><span class="o">*</span><span class="n">sumY</span><span class="o">/</span><span class="n">N</span><span class="p">):</span> <span class="o">-</span><span class="mf">0.862133</span>
+<span class="n">N</span> <span class="p">(</span><span class="n">Number</span> <span class="n">of</span> <span class="n">elements</span><span class="p">):</span> <span class="mi">718021</span>
+<span class="n">F</span> <span class="p">(</span><span class="n">F</span><span class="o">-</span><span class="n">test</span> <span class="n">significance</span><span class="p">):</span> <span class="mf">2078811.252064</span>
+<span class="n">meanX</span> <span class="p">(</span><span class="n">Mean</span> <span class="n">of</span> <span class="n">map1</span><span class="p">):</span> <span class="mf">269.004369</span>
+<span class="n">sdX</span> <span class="p">(</span><span class="n">Standard</span> <span class="n">deviation</span> <span class="n">of</span> <span class="n">map1</span><span class="p">):</span> <span class="mf">129.487450</span>
+<span class="n">meanY</span> <span class="p">(</span><span class="n">Mean</span> <span class="n">of</span> <span class="n">map2</span><span class="p">):</span> <span class="mf">3.880192</span>
+<span class="n">sdY</span> <span class="p">(</span><span class="n">Standard</span> <span class="n">deviation</span> <span class="n">of</span> <span class="n">map2</span><span class="p">):</span> <span class="mf">1.481930</span>
+</pre></div>
+</div>
+<p>It is possible to apply the model variable with the predictor</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.mapcalc<span class="w"> </span><span class="nv">expression</span><span class="o">=</span><span class="s2">&quot;temp_linear = 6.534392 + -0.0096867 * dtm&quot;</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id1">
+<img alt="../_images/estimates_linear.png" src="../_images/estimates_linear.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 124 </span><span class="caption-text">Model variable with predictor example.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In Linux Bash <strong class="program">eval</strong> command allows to store an output of
+GRASS GIS modules called with <span class="param">-g</span> flag as environmental
+variables which can be reused afterwards by other GRASS modules,
+see example below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">eval</span><span class="w"> </span><span class="sb">`</span>r.regression.line<span class="w"> </span>-g<span class="w"> </span><span class="nv">mapx</span><span class="o">=</span>dtm<span class="w"> </span><span class="nv">mapy</span><span class="o">=</span>modis_avg<span class="sb">`</span>
+r.mapcalc<span class="w"> </span><span class="nv">expression</span><span class="o">=</span><span class="s2">&quot;temp_linear = </span><span class="nv">$a</span><span class="s2"> + </span><span class="nv">$b</span><span class="s2"> * dtm&quot;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="r-regression-multi">
+<h2>r.regression.multi<a class="headerlink" href="#r-regression-multi" title="Permalink to this heading">¶</a></h2>
+<p>The <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.regression.multi.html">r.regression.multi</a> calculates a multiple linear
+regression from raster maps according to the formula <cite>Y = b0 +
+sum(bi*Xi) + E</cite>. Two output maps are returned, one for residuals and
+one for estimates plus all the regression coefficients.</p>
+<p>Create a map with maximum NDVI value from spatio-temporal dataset
+created in <a class="reference internal" href="23.html"><span class="doc">Unit 23 - Spatio-temporal NDVI</span></a> by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/t.rast.series.html">t.rast.series</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g.region<span class="w"> </span><span class="nv">vector</span><span class="o">=</span>oslo<span class="w"> </span><span class="nv">align</span><span class="o">=</span>L2A_T32VNM_20170506T105031_B04_10m
+t.rast.series<span class="w"> </span><span class="nv">input</span><span class="o">=</span>ndvi_cloud<span class="w"> </span><span class="nv">method</span><span class="o">=</span>maximum<span class="w"> </span><span class="nv">output</span><span class="o">=</span>ndvi_max
+</pre></div>
+</div>
+<p>And now use the maximum NDVI map as one of the input coefficients.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.regression.multi<span class="w"> </span><span class="nv">mapx</span><span class="o">=</span>dtm,ndvi_max<span class="w"> </span><span class="nv">mapy</span><span class="o">=</span>modis_avg<span class="w"> </span><span class="nv">residuals</span><span class="o">=</span>resi<span class="w"> </span><span class="nv">estimates</span><span class="o">=</span>esti<span class="w"> </span>-g
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">4353047</span>
+<span class="n">Rsq</span><span class="o">=</span><span class="mf">0.749059</span>
+<span class="n">Rsqadj</span><span class="o">=</span><span class="mf">0.749059</span>
+<span class="n">RMSE</span><span class="o">=</span><span class="mf">0.746155</span>
+<span class="n">MAE</span><span class="o">=</span><span class="mf">0.593534</span>
+<span class="n">F</span><span class="o">=</span><span class="mf">6496914.853654</span>
+<span class="n">b0</span><span class="o">=</span><span class="mf">6.792572</span>
+<span class="n">AIC</span><span class="o">=-</span><span class="mf">2549329.836898</span>
+<span class="n">AICc</span><span class="o">=-</span><span class="mf">2549329.836898</span>
+<span class="n">BIC</span><span class="o">=-</span><span class="mf">2549289.977738</span>
+
+<span class="n">predictor1</span><span class="o">=</span><span class="n">dtm</span>
+<span class="n">b1</span><span class="o">=-</span><span class="mf">0.009514</span>
+<span class="n">Rsq1</span><span class="o">=</span><span class="mf">0.583921</span>
+<span class="n">F1</span><span class="o">=</span><span class="mf">10129206.204638</span>
+<span class="n">AIC1</span><span class="o">=</span><span class="mf">2683241.367502</span>
+<span class="n">AICc1</span><span class="o">=</span><span class="mf">2683241.367502</span>
+<span class="n">BIC1</span><span class="o">=</span><span class="mf">2683252.653888</span>
+
+<span class="n">predictor2</span><span class="o">=</span><span class="n">ndvi_max</span>
+<span class="n">b2</span><span class="o">=-</span><span class="mf">0.497951</span>
+<span class="n">Rsq2</span><span class="o">=</span><span class="mf">0.006463</span>
+<span class="n">F2</span><span class="o">=</span><span class="mf">112121.300410</span>
+<span class="n">AIC2</span><span class="o">=-</span><span class="mf">2438630.088387</span>
+<span class="n">AICc2</span><span class="o">=-</span><span class="mf">2438630.088387</span>
+<span class="n">BIC2</span><span class="o">=-</span><span class="mf">2438618.802001</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id2">
+<img alt="../_images/estimates_multi.png" src="../_images/estimates_multi.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 125 </span><span class="caption-text">The estimates output by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.regression.multi.html">r.regression.multi</a>.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is possible to calculate differences between original LST data
+and the output of the models with <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.mapcalc.html">r.mapcalc</a>.</p>
+</div>
+</section>
+<section id="r-gwr">
+<h2>r.gwr<a class="headerlink" href="#r-gwr" title="Permalink to this heading">¶</a></h2>
+<p>There two GRASS Addons modules related to regression analysis:
+<a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.gwr.html">r.gwr</a> and <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.regression.series.html">r.regression.series</a>.</p>
+<p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.gwr.html">r.gwr</a> calculates geographically weighted regression
+from raster maps, it resolves a formula <cite>Y = b0 + sum(bi*Xi) + E</cite>. The
+formula is applied in a moving window. Cells closer to the center of
+the moving window get a higher weight. <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.gwr.html">r.gwr</a> is more
+an analytical tool to test if the predictors are suitable for a global
+model applied by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/r.regression.multi.html">r.regression.multi</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.gwr<span class="w"> </span><span class="nv">mapx</span><span class="o">=</span>dem,ndvi_max<span class="w"> </span><span class="nv">mapy</span><span class="o">=</span>modis_avg<span class="w"> </span><span class="nv">residuals</span><span class="o">=</span>resi_gwr<span class="w"> </span><span class="nv">estimates</span><span class="o">=</span>esti_gwr<span class="w"> </span>-g
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">4321368</span>
+<span class="n">Rsq</span><span class="o">=</span><span class="mf">0.997701</span>
+<span class="n">Rsqadj</span><span class="o">=</span><span class="mf">0.997701</span>
+<span class="n">F</span><span class="o">=</span><span class="mf">9.37847e+08</span>
+<span class="n">bmean0</span><span class="o">=-</span><span class="mf">4.35557</span>
+<span class="n">bstddev0</span><span class="o">=</span><span class="mf">2863.45</span>
+<span class="n">bmin0</span><span class="o">=-</span><span class="mf">3.58167e+06</span>
+<span class="n">bmax0</span><span class="o">=</span><span class="mi">495224</span>
+<span class="n">AIC</span><span class="o">=-</span><span class="mf">2.27972e+07</span>
+<span class="n">AICc</span><span class="o">=-</span><span class="mf">2.27972e+07</span>
+<span class="n">BIC</span><span class="o">=-</span><span class="mf">2.27972e+07</span>
+<span class="n">predictor1</span><span class="o">=</span><span class="n">dtm</span>
+<span class="n">bmean1</span><span class="o">=</span><span class="mf">0.0330626</span>
+<span class="n">bstddev1</span><span class="o">=</span><span class="mf">12.7136</span>
+<span class="n">bmin1</span><span class="o">=-</span><span class="mf">2005.55</span>
+<span class="n">bmax1</span><span class="o">=</span><span class="mf">14986.4</span>
+<span class="n">Rsq1</span><span class="o">=</span><span class="mf">4.38811e-05</span>
+<span class="n">F1</span><span class="o">=</span><span class="mf">82497.2</span>
+<span class="n">AIC1</span><span class="o">=-</span><span class="mf">2.27155e+07</span>
+<span class="n">AICc1</span><span class="o">=-</span><span class="mf">2.27155e+07</span>
+<span class="n">BIC1</span><span class="o">=-</span><span class="mf">2.27155e+07</span>
+<span class="n">predictor2</span><span class="o">=</span><span class="n">ndvi_max</span>
+<span class="n">bmean2</span><span class="o">=-</span><span class="mf">0.0112723</span>
+<span class="n">bstddev2</span><span class="o">=</span><span class="mf">0.773451</span>
+<span class="n">bmin2</span><span class="o">=-</span><span class="mf">123.338</span>
+<span class="n">bmax2</span><span class="o">=</span><span class="mf">43.0038</span>
+<span class="n">Rsq2</span><span class="o">=</span><span class="mf">1.02995e-05</span>
+<span class="n">F2</span><span class="o">=</span><span class="mf">19363.3</span>
+<span class="n">AIC2</span><span class="o">=-</span><span class="mf">2.27779e+07</span>
+<span class="n">AICc2</span><span class="o">=-</span><span class="mf">2.27779e+07</span>
+<span class="n">BIC2</span><span class="o">=-</span><span class="mf">2.27779e+07</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id3">
+<img alt="../_images/estimates_gwr.png" src="../_images/estimates_gwr.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 126 </span><span class="caption-text">The estimates output produced by <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.gwr.html">r.gwr</a>.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="r-regression-series">
+<h2>r.regression.series<a class="headerlink" href="#r-regression-series" title="Permalink to this heading">¶</a></h2>
+<p><a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.regression.series.html">r.regression.series</a> calculates linear regression
+parameters from two space time raster datasets. The module makes each
+output cell value a function of the values assigned to the
+corresponding cells in the two input raster map series.  Following
+methods are available:</p>
+<ul class="simple">
+<li><p>offset: Linear regression offset</p></li>
+<li><p>slope: Linear regression slope</p></li>
+<li><p>corcoef: Correlation Coefficent R</p></li>
+<li><p>rsq: Coefficient of determination = R squared</p></li>
+<li><p>adjrsq: Adjusted coefficient of determination</p></li>
+<li><p>f: F statistic</p></li>
+<li><p>t: T statistic</p></li>
+</ul>
+<p>Before to running <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.regression.series.html">r.regression.series</a> two it is
+needed to prepare the two sample space time raster datasets. There is
+dataset <cite>ndvi_cloud</cite> created in <a class="reference internal" href="23.html"><span class="doc">Unit 23 - Spatio-temporal NDVI</span></a> which could be used.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.list<span class="w"> </span>ndvi_cloud
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">|</span><span class="n">mapset</span><span class="o">|</span><span class="n">start_time</span><span class="o">|</span><span class="n">end_time</span>
+<span class="n">ndvi_cloud_1</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">06</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">31</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">06</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">32</span>
+<span class="n">ndvi_cloud_2</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span> <span class="mi">10</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">31</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span> <span class="mi">10</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">32</span>
+<span class="n">ndvi_cloud_3</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">26</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">31</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">26</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">32</span>
+<span class="n">ndvi_cloud_4</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">05</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">31</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">05</span> <span class="mi">10</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">32</span>
+</pre></div>
+</div>
+<p>Another dataset which could be used is <cite>modis_c</cite> created in
+<a class="reference internal" href="22.html"><span class="doc">Unit 22 - Spatio-temporal basic analysis</span></a>. For our purpose it is more reasonable to calculate the mean
+value for each eight days. This calculation can be done by Python
+script below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/usr/bin/env python</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="c1">#%module</span>
+<span class="linenos"> 4</span><span class="c1">#% description: Computes aggregation for maps </span>
+<span class="linenos"> 5</span><span class="c1">#%end</span>
+<span class="linenos"> 6</span><span class="c1">#%option G_OPT_STRDS_INPUT</span>
+<span class="linenos"> 7</span><span class="c1">#%end</span>
+<span class="linenos"> 8</span><span class="c1">#%option G_OPT_STRDS_OUTPUT</span>
+<span class="linenos"> 9</span><span class="c1">#%end</span>
+<span class="linenos">10</span><span class="c1">#%option</span>
+<span class="linenos">11</span><span class="c1">#% key: basename</span>
+<span class="linenos">12</span><span class="c1">#% description: Basename for output raster maps</span>
+<span class="linenos">13</span><span class="c1">#% required: yes</span>
+<span class="linenos">14</span><span class="c1">#%end</span>
+<span class="linenos">15</span><span class="c1">#%option</span>
+<span class="linenos">16</span><span class="c1">#% key: method</span>
+<span class="linenos">17</span><span class="c1">#% description: Aggregate operation to be performed on the raster maps</span>
+<span class="linenos">18</span><span class="c1">#</span>
+<span class="linenos">19</span><span class="c1">#% required: yes</span>
+<span class="linenos">20</span><span class="c1">#% multiple: no</span>
+<span class="linenos">21</span><span class="c1">#% answer: average</span>
+<span class="linenos">22</span><span class="c1">#% type: string</span>
+<span class="linenos">23</span><span class="c1">#%end</span>
+<span class="linenos">24</span><span class="c1">#%option</span>
+<span class="linenos">25</span><span class="c1">#% key: nprocs</span>
+<span class="linenos">26</span><span class="c1">#% description: Number of processes</span>
+<span class="linenos">27</span><span class="c1">#% answer: 1</span>
+<span class="linenos">28</span><span class="c1">#% type: integer</span>
+<span class="linenos">29</span><span class="c1">#%end</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="linenos">32</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="linenos">33</span><span class="kn">import</span><span class="w"> </span><span class="nn">atexit</span>
+<span class="linenos">34</span><span class="kn">import</span><span class="w"> </span><span class="nn">grass.script</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gcore</span>
+<span class="linenos">35</span><span class="kn">from</span><span class="w"> </span><span class="nn">grass.pygrass.modules</span><span class="w"> </span><span class="kn">import</span> <span class="n">Module</span><span class="p">,</span> <span class="n">MultiModule</span><span class="p">,</span> <span class="n">ParallelModuleQueue</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span><span class="n">date_format</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span><span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">dat</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">out_rast</span><span class="p">,</span> <span class="n">met</span><span class="p">):</span>
+<span class="linenos">40</span>	<span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos">41</span>	
+<span class="linenos">42</span>	<span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="linenos">43</span>	    <span class="n">Module</span><span class="p">(</span><span class="s1">&#39;t.rast.series&#39;</span><span class="p">,</span>
+<span class="linenos">44</span>	        <span class="nb">input</span><span class="o">=</span><span class="n">inp</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+<span class="linenos">45</span>	        <span class="n">method</span><span class="o">=</span><span class="n">met</span><span class="p">,</span>
+<span class="linenos">46</span>	        <span class="n">output</span><span class="o">=</span><span class="n">out_rast</span><span class="p">,</span>
+<span class="linenos">47</span>	        <span class="n">where</span><span class="o">=</span><span class="s2">&quot;start_time &gt;= &#39;</span><span class="si">{st}</span><span class="s2">&#39; and end_time &lt;= &#39;</span><span class="si">{se}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="linenos">48</span>                        <span class="n">st</span><span class="o">=</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_format</span><span class="p">),</span>
+<span class="linenos">49</span>	                <span class="n">se</span><span class="o">=</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_format</span><span class="p">)),</span>
+<span class="linenos">50</span>	        <span class="n">run_</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="linenos">51</span>	    <span class="p">)</span>
+<span class="linenos">52</span>	<span class="p">)</span>
+<span class="linenos">53</span>	<span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">MultiModule</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="linenos">54</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="linenos">57</span>    <span class="kn">import</span><span class="w"> </span><span class="nn">grass.temporal</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tgis</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span>    <span class="n">tgis</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="linenos">60</span>    
+<span class="linenos">61</span>    <span class="n">dbif</span> <span class="o">=</span> <span class="n">tgis</span><span class="o">.</span><span class="n">SQLDatabaseInterfaceConnection</span><span class="p">()</span>
+<span class="linenos">62</span>    <span class="n">dbif</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="linenos">63</span>
+<span class="linenos">64</span>    <span class="n">inp</span> <span class="o">=</span> <span class="n">tgis</span><span class="o">.</span><span class="n">open_old_stds</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="s1">&#39;raster&#39;</span><span class="p">)</span>
+<span class="linenos">65</span>    <span class="n">temp_type</span><span class="p">,</span> <span class="n">sem_type</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">descr</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get_initial_values</span><span class="p">()</span>
+<span class="linenos">66</span>    <span class="n">out</span> <span class="o">=</span> <span class="n">tgis</span><span class="o">.</span><span class="n">open_new_stds</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">],</span> <span class="s1">&#39;strds&#39;</span><span class="p">,</span> <span class="n">temp_type</span><span class="p">,</span>
+<span class="linenos">67</span>                             <span class="n">title</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">sem_type</span><span class="p">,</span> <span class="n">dbif</span><span class="o">=</span><span class="n">dbif</span><span class="p">,</span> 
+<span class="linenos">68</span>                             <span class="n">overwrite</span><span class="o">=</span><span class="n">gcore</span><span class="o">.</span><span class="n">overwrite</span><span class="p">())</span>
+<span class="linenos">69</span>    <span class="n">dates</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos">70</span>    <span class="k">for</span> <span class="n">mapp</span> <span class="ow">in</span> <span class="n">inp</span><span class="o">.</span><span class="n">get_registered_maps_as_objects</span><span class="p">():</span>
+<span class="linenos">71</span>		<span class="k">if</span> <span class="n">mapp</span><span class="o">.</span><span class="n">get_absolute_time</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+<span class="linenos">72</span>		    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mapp</span><span class="o">.</span><span class="n">get_absolute_time</span><span class="p">())</span>
+<span class="linenos">73</span>    <span class="n">dates</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="linenos">74</span>    <span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">75</span>    <span class="n">out_maps</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos">76</span>
+<span class="linenos">77</span>    <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+<span class="linenos">78</span>        <span class="n">outraster</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{ba}</span><span class="s2">_</span><span class="si">{su}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ba</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;basename&#39;</span><span class="p">],</span> <span class="n">su</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+<span class="linenos">79</span>        <span class="n">out_maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">outraster</span><span class="p">)</span>
+<span class="linenos">80</span>        <span class="n">calculate</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">dat</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">outraster</span><span class="p">,</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">])</span>
+<span class="linenos">81</span>        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos">82</span>    <span class="n">queue</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="linenos">83</span>    <span class="n">times</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get_absolute_time</span><span class="p">()</span>
+<span class="linenos">84</span>
+<span class="linenos">85</span>    <span class="n">tgis</span><span class="o">.</span><span class="n">register_maps_in_space_time_dataset</span><span class="p">(</span><span class="s1">&#39;raster&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+<span class="linenos">86</span>                                             <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_maps</span><span class="p">),</span>
+<span class="linenos">87</span>                                             <span class="n">start</span><span class="o">=</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_format</span><span class="p">),</span>
+<span class="linenos">88</span>                                             <span class="n">end</span><span class="o">=</span><span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_format</span><span class="p">),</span>
+<span class="linenos">89</span>                                             <span class="n">dbif</span><span class="o">=</span><span class="n">dbif</span><span class="p">)</span>
+<span class="linenos">90</span>	
+<span class="linenos">91</span>    
+<span class="linenos">92</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="linenos">93</span>    <span class="n">options</span><span class="p">,</span> <span class="n">flags</span> <span class="o">=</span> <span class="n">gcore</span><span class="o">.</span><span class="n">parser</span><span class="p">()</span>
+<span class="linenos">94</span>
+<span class="linenos">95</span>    <span class="c1"># queue for parallel jobs</span>
+<span class="linenos">96</span>    <span class="n">queue</span> <span class="o">=</span> <span class="n">ParallelModuleQueue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;nprocs&#39;</span><span class="p">]))</span>
+<span class="linenos">97</span>
+<span class="linenos">98</span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Sample script to download: <a class="reference external" href="../_static/scripts/lst_average.py">lst_average.py</a></p>
+<p>Example of usage:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lst_average.py<span class="w"> </span><span class="nv">input</span><span class="o">=</span>modis_c<span class="w"> </span><span class="nv">output</span><span class="o">=</span>modis_c_days<span class="w"> </span><span class="nv">basename</span><span class="o">=</span>modis_days
+</pre></div>
+</div>
+<p>At this point select four raster maps close to the NDVI maps:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>t.rast.list<span class="w"> </span>modis_c_days<span class="w"> </span><span class="nv">where</span><span class="o">=</span><span class="s2">&quot;start_time &gt;= &#39;2017-05-01 00:00:00&#39; and end_time &lt;= &#39;2017-07-20 00:00:00&#39;&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">|</span><span class="n">mapset</span><span class="o">|</span><span class="n">start_time</span><span class="o">|</span><span class="n">end_time</span>
+<span class="n">modis_days_16</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_17</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">09</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">17</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_18</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">17</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">25</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_19</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">25</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_20</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">10</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_21</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">10</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">18</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_22</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">18</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">26</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_23</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">26</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_24</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">12</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">modis_days_25</span><span class="o">|</span><span class="n">PERMANENT</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">12</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">|</span><span class="mi">2017</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">20</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<p>Finally it is possible to run <a class="reference external" href="https://grass.osgeo.org/grass83/manuals/addons/r.regression.series.html">r.regression.series</a>
+using several methods to get various outputs.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>r.regression.series<span class="w"> </span><span class="nv">xseries</span><span class="o">=</span>ndvi_cloud_1,ndvi_cloud_2,ndvi_cloud_3,ndvi_cloud_4<span class="w"> </span><span class="se">\</span>
+<span class="nv">yseries</span><span class="o">=</span>modis_days_16,modis_days_18,modis_days_19,modis_days_24<span class="w"> </span><span class="se">\</span>
+<span class="nv">method</span><span class="o">=</span>offset,slope,rsq<span class="w"> </span><span class="nv">output</span><span class="o">=</span>temp_offset,temp_slope,temp_rsq
+</pre></div>
+</div>
+<figure class="align-center" id="id4">
+<img alt="../_images/series.png" src="../_images/series.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 127 </span><span class="caption-text">The output RSQ value.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">Unit 01 - About GRASS GIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">Unit 02 - First steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">Unit 03 - Data Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.html">Unit 04 - Modules, Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05.html">Unit 05 - Simple computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06.html">Unit 06 - Data export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07.html">Unit 07 - QGIS loves GRASS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08.html">Unit 08 - Modeler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09.html">Unit 09 - Model tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10.html">Unit 10 - Python intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11.html">Unit 11 - PyGRASS scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12.html">Unit 12 - Script User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13.html">Unit 13 - PyGRASS Raster Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14.html">Unit 14 - PyGRASS Vector Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15.html">Unit 15 - DMT reprojection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16.html">Unit 16 - Lidar, DTM interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17.html">Unit 17 - DTM script parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18.html">Unit 18 - Sentinel downloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19.html">Unit 19 - Sentinel preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20.html">Unit 20 - MODIS LST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21.html">Unit 21 - Spatio-temporal intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="22.html">Unit 22 - Spatio-temporal basic analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="23.html">Unit 23 - Spatio-temporal NDVI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="24.html">Unit 24 - Spatio-temporal scripting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="25.html">Unit 25 - Spatio-temporal parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="26.html">Unit 26 - Spatio-temporal LST script</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit 27 - Regression analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#r-regression-line">r.regression.line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#r-regression-multi">r.regression.multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#r-gwr">r.gwr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#r-regression-series">r.regression.series</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="28.html">Unit 28 - Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="29.html">Unit 29 - GRASS GIS and R</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="26.html" title="Unit 26 - Spatio-temporal LST script"
+              >previous</a> |
+            <a href="28.html" title="Unit 28 - Classification"
+              >next</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025 GISMentors.eu.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
