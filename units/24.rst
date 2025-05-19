@@ -75,6 +75,6 @@ Example of usage:
 
 .. note:: Script will run for a while in the case of Oslo region.
 
-Sample script to download: `ndvi-tgrass-v1.py
+oSample script to download: `ndvi-tgrass-v1.py
 <../_static/scripts/ndvi-tgrass-v1.py>`__
    

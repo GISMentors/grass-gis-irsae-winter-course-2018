@@ -43,7 +43,7 @@ band are selected.
 
 .. _sentinel-go-to:
 
-In next step a new space time raster dataset will be created and
+oIn next step a new space time raster dataset will be created and
 imported maps registered. Unfortunately there are no timestamps for
 imported maps required by :grasscmd:`t.register` as shown in
 :ref:`Unit 21 <t-register-file>`. For this purpose a simple Python
@@ -164,7 +164,7 @@ When computation is finished *ndvi* color table can be by
 .. figure:: ../images/units/23/simple-animation.gif
    :class: large
 
-   Simple NDVI animation (no cloud mask applied) created by
+o   Simple NDVI animation (no cloud mask applied) created by
    :grasscmd:`g.gui.animation`.
 
 .. note:: Load data as multiple raster maps instead of space time
